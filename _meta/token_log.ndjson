@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-05-15T04:32:10Z",
+  "session_id": "0786da66-2c86-4e4e-869a-e6874b6156c2",
+  "input_tokens": 181,
+  "output_tokens": 52492,
+  "cache_read_tokens": 4401447,
+  "cache_creation_tokens": 259367,
+  "tools_used_summary": {
+    "ToolSearch": 2,
+    "Bash": 31,
+    "WebSearch": 3,
+    "Skill": 1
+  }
+}
+{
+  "timestamp": "2026-05-15T15:02:09Z",
+  "session_id": "0786da66-2c86-4e4e-869a-e6874b6156c2",
+  "input_tokens": 182,
+  "output_tokens": 54039,
+  "cache_read_tokens": 4502652,
+  "cache_creation_tokens": 259966,
+  "tools_used_summary": {
+    "ToolSearch": 2,
+    "Bash": 31,
+    "WebSearch": 3,
+    "Skill": 1
+  }
+}
+{
+  "timestamp": "2026-05-15T15:08:49Z",
+  "session_id": "0786da66-2c86-4e4e-869a-e6874b6156c2",
+  "input_tokens": 215,
+  "output_tokens": 66725,
+  "cache_read_tokens": 5718287,
+  "cache_creation_tokens": 445689,
+  "tools_used_summary": {
+    "ToolSearch": 2,
+    "Bash": 37,
+    "WebSearch": 3,
+    "Skill": 1
+  }
+}
+{
+  "timestamp": "2026-05-15T15:22:03Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 185,
+  "output_tokens": 167216,
+  "cache_read_tokens": 8764668,
+  "cache_creation_tokens": 841936,
+  "tools_used_summary": {
+    "Bash": 22,
+    "Read": 27,
+    "Skill": 3,
+    "ToolSearch": 1,
+    "TaskCreate": 5,
+    "TaskUpdate": 6,
+    "Write": 10,
+    "Edit": 4
+  }
+}
+{
+  "timestamp": "2026-05-15T16:13:32Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 230,
+  "output_tokens": 224930,
+  "cache_read_tokens": 13163522,
+  "cache_creation_tokens": 892057,
+  "tools_used_summary": {
+    "Bash": 29,
+    "Read": 28,
+    "Skill": 3,
+    "ToolSearch": 1,
+    "TaskCreate": 5,
+    "TaskUpdate": 9,
+    "Write": 15,
+    "Edit": 5
+  }
+}
