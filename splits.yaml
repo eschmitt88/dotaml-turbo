@@ -1,0 +1,81 @@
+# Authoritative split spec for the active snapshot.
+#
+# This project is single-task (one frozen dataset, one optimization target),
+# so per ~/claude-system/claude/rules/evaluation.md the splits.yaml lives at
+# the project root and every experiment inherits it. The test window is
+# OFF-LIMITS to search-phase skills (/propose, /implement, /iterate,
+# /expand, /ensemble); only an explicit final-scoring pass at chain end
+# may read it, and that pass writes to final_metrics.json, not metrics.json.
+#
+# Changing this file is a breaking change for all comparable experiments
+# already in the repo. Such a change must be recorded as an ADR under
+# docs/decisions/NNNN-split-change.md.
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16/"
+patch: "7.40"
+game_mode: 23   # Turbo
+
+# Time-based, chronological. Partition on start_time_date (NOT match_seq_num);
+# see concepts/match-id-vs-seq-num-ordering.md for why.
+partition_field: start_time_date
+date_format: "YYYY-MM-DD"
+
+# Full snapshot window. 98 days inclusive; ~19.6M Turbo matches expected
+# at ~200k/day.
+snapshot_start_date: "2025-12-16"
+snapshot_end_date:   "2026-03-23"
+
+# 70-14-14 chronological split. Train comes first, validation in the middle,
+# held-out test at the very end. The test window is closest to the end of
+# the patch and therefore most representative of late-meta play, which is
+# the regime any downstream production model would actually be deployed in.
+train_start_date: "2025-12-16"
+train_end_date:   "2026-02-23"
+val_start_date:   "2026-02-24"
+val_end_date:     "2026-03-09"
+test_start_date:  "2026-03-10"
+test_end_date:    "2026-03-23"
+
+# Expected row counts at ~200k matches/day. These are sanity-check
+# anchors, not contracts. The real counts after fake-match filtering
+# will be lower; update via ADR if the filtered counts diverge by
+# more than 10%.
+expected_match_counts:
+  train: 14000000   # 70 days * 200k
+  val:    2800000   # 14 days * 200k
+  test:   2800000   # 14 days * 200k
+  total: 19600000   # 98 days * 200k
+
+# Dedup. Apply at read time; covers any residual seq-num-range overlap
+# in the Azure Parquet filenames (see DUPLICATION_REPORT in the DotaML
+# prior-art capture).
+dedup_key: match_id
+
+# Filter pipeline applied uniformly across train/val/test before splitting.
+# Spec only — implementation lives in code, but the spec is here so the
+# split is reproducible from this file alone.
+filters:
+  - name: turbo_only
+    rule: "game_mode == 23"
+    note: "Already guaranteed upstream by DotaDB but verified at read."
+  - name: forfeit_filter
+    rule: "NOT (losing-team T4a AND T4b standing)"
+    note: "Bits 9 and 10 of tower_status_radiant/dire; see concepts/fake-match-filtering.md."
+  - name: empty_inventory_filter
+    rule: "count(players with all six item_0..item_5 == 0) <= 2"
+    note: "Boosting-service signature; see concepts/fake-match-filtering.md."
+
+# Feature-extraction spec relevant to the split (not an implementation
+# contract — just the load-bearing decisions).
+hero_id_range: [1, 150]   # Per DotaML v3 fix; not all IDs in [1,150] are valid heroes.
+
+# Final-scoring discipline.
+#
+# - `metrics.json` per experiment = validation-split metrics (the search signal).
+# - `final_metrics.json` = test-split metrics, written ONLY by the final-scoring
+#   pass at chain end. The test window above is sealed to /iterate, /propose,
+#   /implement, /expand, /ensemble.
+sealed_test: true
+final_metrics_file: final_metrics.json
+search_metrics_file: metrics.json
