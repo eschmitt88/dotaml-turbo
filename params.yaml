@@ -1,0 +1,2 @@
+# Shared parameters referenced by DVC stages and experiment configs.
+seed: 42

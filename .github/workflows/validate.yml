@@ -1,0 +1,69 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo curl -fsSL -o /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
+      - name: Install DVC
+        run: |
+          pipx install 'dvc[all]' || pip install --user 'dvc[all]'
+          dvc --version
+
+      - name: Inspect DVC config
+        run: dvc config --list || true
+
+      - name: Validate experiment metrics.json
+        run: |
+          set -e
+          shopt -s nullglob
+          fail=0
+          for f in experiments/*/metrics.json; do
+            if ! python -c "import json,sys; json.load(open(sys.argv[1]))" "$f"; then
+              echo "::error file=$f::$f is not valid JSON"
+              fail=1
+            fi
+          done
+          for f in experiments/*/final_metrics.json; do
+            if ! python -c "import json,sys; json.load(open(sys.argv[1]))" "$f"; then
+              echo "::error file=$f::$f is not valid JSON"
+              fail=1
+            fi
+          done
+          exit "$fail"
+
+      - name: Validate experiment README frontmatter
+        run: |
+          set -e
+          shopt -s nullglob
+          fail=0
+          for f in experiments/*/README.md; do
+            # Extract YAML frontmatter (between first two '---' lines).
+            block=$(awk '/^---$/{c++; next} c==1' "$f")
+            if [ -z "$block" ]; then
+              echo "::error file=$f::missing YAML frontmatter"
+              fail=1
+              continue
+            fi
+            status=$(printf '%s\n' "$block" | yq -r '.status // ""')
+            case "$status" in
+              running|done|abandoned|implemented|failed) : ;;
+              *) echo "::error file=$f::frontmatter status=$status not in allowed set"; fail=1 ;;
+            esac
+          done
+          exit "$fail"

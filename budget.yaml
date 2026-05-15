@@ -1,0 +1,21 @@
+# Hard ceilings for autonomous runs. Chain halts when any is hit.
+# Sized for a Max plan box running Opus 4.7 ideator + Opus 4.6 implementer.
+max_wall_hours: 24
+max_tokens: 5000000
+max_experiments: 20
+max_consecutive_no_improvement: 3
+max_disk_gb: 500
+
+# Model roles. Skills read these as the defaults; CLI flags override per-call.
+models:
+  ideator: "claude-opus-4-7"
+  implementer: "claude-opus-4-6"
+
+# Hardware hints (read by /implement, surfaced to the subagent).
+hardware:
+  gpu_model: "NVIDIA RTX 5080"
+  gpu_memory_gb: 16
+  gpu_count: 1
+  system_ram_gb: 64    # edit to match
+  storage_path: "/mnt/projects"
+  storage_free_gb: 3400

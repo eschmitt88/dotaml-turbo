@@ -1,0 +1,35 @@
+# DVC pipeline. Add stages as the project develops.
+#
+# Two evaluation stages are reserved by the HCE rule
+# (~/.claude/rules/evaluation.md):
+#
+#   eval        — validation-split metrics. Search signal. Part of the
+#                 default `dvc repro`. May read train/ and val/ only.
+#   final_eval  — held-out test-split metrics. NOT part of default
+#                 `dvc repro`. The only stage permitted to read test/.
+#                 Run explicitly at chain end:  `dvc repro final_eval`.
+#
+# The placeholder below keeps `dvc repro` green on a fresh project.
+# Replace it with real stages; do not collapse eval and final_eval into
+# one. Do not add test/ to the deps of any stage other than final_eval.
+stages:
+  placeholder:
+    cmd: echo "no stages yet"
+    always_changed: false
+  # eval:
+  #   cmd: python -m {{PROJECT_SLUG}}.eval --split val --out metrics.json
+  #   deps:
+  #     - {{PROJECT_SLUG}}/
+  #     - val/
+  #   metrics:
+  #     - metrics.json:
+  #         cache: false
+  # final_eval:
+  #   cmd: python -m {{PROJECT_SLUG}}.eval --split test --out final_metrics.json
+  #   deps:
+  #     - {{PROJECT_SLUG}}/
+  #     - test/
+  #   metrics:
+  #     - final_metrics.json:
+  #         cache: false
+  #   frozen: true    # never auto-triggered by `dvc repro`; run explicitly.
