@@ -1,4 +1,4 @@
-# dotaml-research
+# dotaml-turbo
 
 Personal research project. See `CLAUDE.md` for the agent-facing orientation
 and `~/.claude/CLAUDE.md` for the framework's durable principles.

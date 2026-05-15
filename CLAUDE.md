@@ -1,4 +1,4 @@
-# Project: dotaml-research
+# Project: dotaml-turbo
 
 Short orientation only. User-level `~/.claude/CLAUDE.md` holds the durable
 principles; this file refines them for this project.
