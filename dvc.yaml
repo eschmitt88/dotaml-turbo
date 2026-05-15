@@ -16,6 +16,35 @@ stages:
   placeholder:
     cmd: echo "no stages yet"
     always_changed: false
+
+  # Per-experiment DVC stages live under experiments/<slug>/. The first
+  # real stages belong to the patch-7.40 plateau-baseline experiment.
+  build_features_plateau_baseline_740:
+    cmd: .venv/bin/python experiments/2026-05-15-plateau-baseline-740/build_features.py
+    deps:
+      - experiments/2026-05-15-plateau-baseline-740/build_features.py
+      - splits.yaml
+      - data/snapshots/7.40-2025-12-16/raw
+    outs:
+      - data/snapshots/7.40-2025-12-16/processed/train.parquet
+      - data/snapshots/7.40-2025-12-16/processed/val.parquet
+      - data/snapshots/7.40-2025-12-16/processed/build_stats.json
+
+  train_plateau_baseline_740:
+    cmd: .venv/bin/python experiments/2026-05-15-plateau-baseline-740/train.py
+    deps:
+      - experiments/2026-05-15-plateau-baseline-740/train.py
+      - experiments/2026-05-15-plateau-baseline-740/config.yaml
+      - data/snapshots/7.40-2025-12-16/processed/train.parquet
+      - data/snapshots/7.40-2025-12-16/processed/val.parquet
+    metrics:
+      - experiments/2026-05-15-plateau-baseline-740/metrics.json:
+          cache: false
+    outs:
+      - experiments/2026-05-15-plateau-baseline-740/results/lightgbm.txt
+      - experiments/2026-05-15-plateau-baseline-740/results/calibration.png
+      - experiments/2026-05-15-plateau-baseline-740/results/roc.png
+      - experiments/2026-05-15-plateau-baseline-740/results/learning_curve.png
   # eval:
   #   cmd: python -m {{PROJECT_SLUG}}.eval --split val --out metrics.json
   #   deps:

@@ -47,9 +47,28 @@ this concept exists to lock it in.
 
 - [[draft-only-win-prediction]] — the task whose splits this concept
   constrains.
-- Related but unresolved: when the prior-art DotaML repo wrote
-  `DUPLICATION_REPORT.md` about overlapping `match_seq_num` ranges in
-  Azure filenames, the implicit assumption was that adjacent sequence
-  ranges should not overlap. They mostly don't, but the rare overlap
-  produced 4.9% match_id duplication. A safer downstream guarantee:
-  deduplicate by `match_id` at read time regardless of filename layout.
+
+## Empirical addendum (2026-05-15 pre-flight scan, patch-7.40 window)
+
+A full scan of all 97 day boundaries in `2025-12-16 → 2026-03-23` found
+**every single boundary has cross-day `match_seq_num` overlap** (typical
+span 15-25k seq_nums; outliers up to 255k on 2026-03-16→17). This looked
+alarming versus the prior-art `DUPLICATION_REPORT` finding of 4.9%
+`match_id` duplication. A direct probe of the 2025-12-16/17 boundary
+files shows:
+
+- 875 rows in `day16_last`, 10,000 in `day17_first`
+- **Zero `match_id` intersection**
+- **Zero `match_seq_num` intersection**
+
+So the seq_num "overlap" is **structural, not a bug**: the collector
+partitions by `start_time_date`, and matches that started near midnight
+get binned to their actual calendar day rather than to a seq_num bucket.
+The seq_num sequence interleaves at midnight (Steam doesn't pause its
+backend at UTC 00:00) but rows themselves don't duplicate.
+
+The prior-art's 4.9% duplication was a different upstream bug, since
+fixed. The downstream guarantee remains: **dedup by `match_id` at read
+time**, codified in `splits.yaml` (`dedup_key: match_id`). It's a
+near-no-op now but cheap insurance against any future collector
+regression.

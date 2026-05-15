@@ -1,0 +1,14 @@
+{
+  "n_read": 16923487,
+  "n_kept": 15437578,
+  "n_filtered_or_bad_extract": 1485909,
+  "n_dup_match_id": 0,
+  "n_bad_game_mode": 0,
+  "n_train": 13018393,
+  "n_val": 2419185,
+  "build_seconds": 880.5588667392731,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09"
+}

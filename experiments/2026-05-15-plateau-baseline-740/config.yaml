@@ -1,0 +1,50 @@
+# Config for plateau-baseline-740. Inputs, hyperparameters, seeds.
+# Mirrors DotaML v3 LightGBM recipe to keep the prior-art comparison clean.
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"   # project root, authoritative
+
+# Seeds. One value, propagated everywhere; overridden per CLI flag if needed.
+seed: 42
+
+# Data pull
+azure:
+  account: "dota2datalake"
+  container: "matches"
+  base_path: "turbo"
+  download_threads: 16
+
+# Features
+features:
+  hero_id_min: 1
+  hero_id_max: 150           # DotaML v3 fix; not all IDs in [1,150] are valid heroes
+  add_radiant_side_bit: true # 1-bit Radiant-side indicator per proposal
+  feature_dim: 301           # 150 radiant + 150 dire + 1 side bit
+
+# Filters (echo of splits.yaml; implemented in build_features.py)
+filters:
+  game_mode: 23
+  apply_forfeit_filter: true       # both T4s standing on losing side
+  apply_empty_inventory_filter: true  # >2 players with all six items == 0
+
+# Train subsetting (DotaML v3 used 5M; we mirror that for memory + comparability)
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Model: LightGBM, mirrors DotaML v3
+model:
+  type: "lightgbm"
+  objective: "binary"
+  metric: ["binary_logloss", "auc"]
+  num_boost_round: 500
+  learning_rate: 0.1
+  num_leaves: 31
+  feature_fraction: 1.0
+  bagging_fraction: 1.0
+  min_data_in_leaf: 20
+  reg_alpha: 0.0   # L1 default
+  reg_lambda: 0.0  # L2 default
+  num_threads: 16  # CPU
+  verbose: -1
+  early_stopping_round: 0   # Mirror v3: fixed 500 rounds, no early stop

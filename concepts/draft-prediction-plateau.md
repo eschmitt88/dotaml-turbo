@@ -1,14 +1,16 @@
 ---
 kind: concept
 name: "draft-prediction-plateau"
-status: seedling
+status: growing
 added: "2026-05-15"
 sources:
   - literature/repos/eschmitt88-DotaML.md
+  - experiments/2026-05-15-plateau-baseline-740/README.md
 related_concepts:
   - draft-only-win-prediction
   - hero-embedding-vs-onehot
-related_experiments: []
+related_experiments:
+  - 2026-05-15-plateau-baseline-740
 tags: [empirical-finding, capacity-vs-accuracy]
 ---
 
@@ -17,9 +19,19 @@ tags: [empirical-finding, capacity-vs-accuracy]
 ## Definition
 
 The observation that, on Dota 2 Turbo draft-only win prediction, test
-accuracy saturates around 59.9% and test AUC around 0.635 — independent
-of model capacity or architecture family — once the dataset is large
-enough (millions of matches) and basic representation issues are fixed.
+accuracy and test AUC saturate within a narrow band — once the dataset
+is large enough (millions of matches) and basic representation issues
+are fixed. Empirically, the band is ≈ 0.619-0.635 AUC across the prior
+art's six architectures, NOT a single 0.635 number for all of them.
+
+**Refinement (2026-05-15):** the 0.635 figure is the v5 Transformer's
+ceiling specifically. The v3 LightGBM ceiling sits lower at ≈ 0.619.
+Replication on the patch-7.40 snapshot under HCE confirmed the v3
+LightGBM number to within 0.003 (val_auc 0.6161 vs prior test_auc
+0.6189 — see [[2026-05-15-plateau-baseline-740]]). The
+**architecture-spread within the plateau** is itself a thing to model:
+~0.016 AUC of headroom between the LightGBM and the Transformer
+families on the prior art, not noise.
 
 ## Why it matters here
 
@@ -38,8 +50,11 @@ experiment should be evaluated against three implied tests:
    recent dataset?
 3. **Ceiling:** does any new technique meaningfully exceed it?
 
-A result inside ±0.01 AUC of 0.635 should be reported as "at the
-plateau," not as a successful new model.
+A result inside ±0.01 AUC of the **architecture-matched** prior-art
+ceiling (LightGBM ≈ 0.619, Transformer ≈ 0.635) should be reported as
+"at the plateau for that architecture," not as a successful new model.
+A result that exceeds the upper end of the architecture-spread (i.e.
+val_auc > ~0.645) is the genuinely interesting case.
 
 ## Connections
 

@@ -2,7 +2,8 @@
 kind: proposal
 slug: plateau-baseline-740
 date: 2026-05-15
-status: proposed
+status: implemented
+experiment: experiments/2026-05-15-plateau-baseline-740/
 hypothesis: "On the patch-7.40 Turbo snapshot (~19.6M matches, 2025-12-16 → 2026-03-23), a LightGBM one-hot draft-only classifier with prior-art-style features achieves validation AUC within 0.635 ± 0.010, confirming the ceiling observed across six prior architectures on a smaller pre-7.40 dataset."
 rationale: >
   In the DotaML prior art, six successive architectures spanning LightGBM,
