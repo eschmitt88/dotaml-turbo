@@ -5,6 +5,7 @@ status: growing
 added: "2026-05-15"
 sources:
   - literature/repos/eschmitt88-DotaML.md
+  - literature/papers/hodge2017win.md
 related_concepts:
   - draft-prediction-plateau
   - radiant-side-advantage

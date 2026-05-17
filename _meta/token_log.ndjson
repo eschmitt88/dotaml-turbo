@@ -834,3 +834,95 @@
     "WebFetch": 2
   }
 }
+{
+  "timestamp": "2026-05-17T01:56:46Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 1461,
+  "output_tokens": 924653,
+  "cache_read_tokens": 219087997,
+  "cache_creation_tokens": 7618947,
+  "tools_used_summary": {
+    "Bash": 166,
+    "Read": 78,
+    "Skill": 8,
+    "ToolSearch": 4,
+    "TaskCreate": 18,
+    "TaskUpdate": 40,
+    "Write": 25,
+    "Edit": 71,
+    "AskUserQuestion": 4,
+    "Agent": 4,
+    "TaskList": 3,
+    "WebSearch": 8,
+    "WebFetch": 2
+  }
+}
+{
+  "timestamp": "2026-05-17T01:59:55Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 1462,
+  "output_tokens": 924873,
+  "cache_read_tokens": 219672758,
+  "cache_creation_tokens": 7625046,
+  "tools_used_summary": {
+    "Bash": 166,
+    "Read": 78,
+    "Skill": 8,
+    "ToolSearch": 4,
+    "TaskCreate": 18,
+    "TaskUpdate": 40,
+    "Write": 25,
+    "Edit": 71,
+    "AskUserQuestion": 4,
+    "Agent": 4,
+    "TaskList": 3,
+    "WebSearch": 8,
+    "WebFetch": 2
+  }
+}
+{
+  "timestamp": "2026-05-17T02:18:36Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 1491,
+  "output_tokens": 942428,
+  "cache_read_tokens": 225015613,
+  "cache_creation_tokens": 7635887,
+  "tools_used_summary": {
+    "Bash": 170,
+    "Read": 78,
+    "Skill": 8,
+    "ToolSearch": 4,
+    "TaskCreate": 18,
+    "TaskUpdate": 40,
+    "Write": 25,
+    "Edit": 71,
+    "AskUserQuestion": 4,
+    "Agent": 4,
+    "TaskList": 3,
+    "WebSearch": 8,
+    "WebFetch": 2
+  }
+}
+{
+  "timestamp": "2026-05-17T03:33:33Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 1523,
+  "output_tokens": 968998,
+  "cache_read_tokens": 227478141,
+  "cache_creation_tokens": 9418451,
+  "tools_used_summary": {
+    "Bash": 170,
+    "Read": 79,
+    "Skill": 9,
+    "ToolSearch": 4,
+    "TaskCreate": 18,
+    "TaskUpdate": 40,
+    "Write": 25,
+    "Edit": 71,
+    "AskUserQuestion": 4,
+    "Agent": 4,
+    "TaskList": 3,
+    "WebSearch": 8,
+    "WebFetch": 2
+  }
+}

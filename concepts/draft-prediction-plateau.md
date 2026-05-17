@@ -5,6 +5,7 @@ status: growing
 added: "2026-05-15"
 sources:
   - literature/repos/eschmitt88-DotaML.md
+  - literature/papers/hodge2017win.md
   - experiments/2026-05-15-plateau-baseline-740/README.md
   - experiments/2026-05-15-plateau-architectures-740/README.md
   - experiments/2026-05-16-transformer-hp-sweep-740/README.md
@@ -98,6 +99,19 @@ After 2026-05-16: HP-search has been ruled out as a lever for the
 Transformer architecture vocabulary on this snapshot. Any val_auc > 0.640
 result must come from structural mutation, new features, or new data,
 not from re-tuning existing architectures.
+
+**Independent attestation (2026-05-17):** Hodge et al. 2017
+([[literature/papers/hodge2017win]]) report hero-only Dota 2 win
+prediction accuracy of 55-59% across LR and RF on mixed-rank data —
+matching our `plateau-baseline-740` val_acc=0.5866 (val_auc=0.6161)
+within 0.01. The same paper reports that adding in-game telemetry
+(team kills, damage, gold, net worth) lifts accuracy to 75-76% — a
+~17 pp gap that demonstrates the broader prediction task has
+substantial headroom once feature sets richer than hero-IDs are
+admitted. This is independent confirmation that the ~0.62 ceiling is
+an information bottleneck, not a model bottleneck, and motivates
+extending pre-game features (player identity, draft order) before
+investing in further architectural sophistication.
 
 ## Connections
 
