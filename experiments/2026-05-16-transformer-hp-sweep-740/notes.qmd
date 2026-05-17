@@ -1,0 +1,13 @@
+---
+title: "transformer-hp-sweep-740 — analysis"
+format:
+  html:
+    toc: true
+---
+
+# transformer-hp-sweep-740
+
+Placeholder. Notebook gets filled in after the full 60-trial sweep
+completes — main agent will read `metrics.json`, plot the val_auc
+distribution by completed trial, the ASHA prune ratio, and the top-3
+retrained models' learning curves from `results/trial_*_history.json`.

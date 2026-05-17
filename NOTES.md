@@ -147,3 +147,138 @@ under each existing subsection below.)*
   PNGs) are in git rather than DVC-tracked. Decide whether to
   formalise `dvc commit` for the existing outs or leave them
   git-tracked given their small size.
+
+## 2026-05-17
+
+(Spans 2026-05-15 18:35 → 2026-05-17 02:00 — the prior `/wrap` covered
+only through the LightGBM baseline; this entry catches up on three
+arcs: plateau-architectures-740, transformer-hp-sweep-740, and the
+Blackwell torch DataLoader bug investigation + upstream issue filing.)
+
+### Did
+
+- **plateau-architectures-740** (proposal 2026-05-15 18:35, implement
+  2026-05-15 20:20): three-architecture sweep mirroring DotaML v4-v6.
+  SimpleFFN (53k), ResidualFFN (225k), Transformer (82k) all sharing
+  64-dim hero embeddings. Reused the same 5M stratified subset
+  (seed=42) as the LightGBM baseline. Trained on RTX 5080 bf16
+  autocast. README + Diagnostics + experiment moved to `_done/`.
+  Concept `draft-prediction-plateau` got a second refinement.
+- **transformer-hp-sweep-740** (proposal 2026-05-16 02:22, implement
+  2026-05-16 08:13): Optuna TPE + ASHA 60-trial HP sweep over a
+  minimal-Transformer baseline (no side-token branch, binary team
+  embedding, single linear head). 5M train / 2.4M val, same subset
+  as prior experiments. Subagent scaffolded harness + smoke; main
+  agent ran the production sweep via per-trial subprocess isolation
+  (`run_sweep_loop.sh` looping `run_sweep.py --n-trials 1`).
+- **Blackwell torch DataLoader bug investigation** (2026-05-17): when
+  the user pushed back on the per-trial-subprocess wrapper as
+  potentially papering over a real bug, ran a focused investigation —
+  dmesg/journalctl Xid scan → web search for known issues → pinned
+  torch 2.9.1+cu128 to test torch-version hypothesis → diagnostic with
+  `CUDA_LAUNCH_BLOCKING=1` + `MALLOC_CHECK_=3` + `PYTHONFAULTHANDLER=1`
+  → confirmed it's CPU-side heap corruption inside torch's DataLoader
+  fetch + tensor GC. Updated `pyproject.toml` to keep torch pinned to
+  `>=2.9,<2.10` via the cu128 PyTorch index (most-baked stack).
+- Added per-trial cleanup (`del model; torch.cuda.empty_cache();
+  gc.collect()`) to `objective.py` for belt-and-suspenders on any
+  future in-process invocation.
+- Wrote `docs/decisions/0001-per-trial-subprocess-isolation.md` ADR.
+- Saved `~/.claude/projects/.../memory/blackwell-torch-dataloader-bug.md`
+  cross-session memory so future sessions skip the dead-end fixes.
+- Saved `~/.claude/projects/.../memory/feedback_date_grounding.md` —
+  user-feedback memory after I overstated "CUDA 13.0 just came out"
+  from training intuition (it had been out ~1 year). Future sessions
+  verify release dates via WebSearch / wheel headers / dpkg / uv.lock
+  before asserting.
+- Spawned subagent to produce a minimal reproducer + draft upstream
+  report. Subagent actually triggered the crash twice in ~3-4 min
+  with a 193-line synthetic script (no pyarrow, no parquet, no
+  Optuna), and surfaced a libtorch C++ trace through
+  `c10::TensorImpl::~TensorImpl()`. Subagent also discovered that
+  `MALLOC_CHECK_=3` does NOT mask the synthetic repro the way it
+  appeared to mask the real workload — corrected the ADR + memory.
+- **Filed upstream pytorch/pytorch#184062**
+  (https://github.com/pytorch/pytorch/issues/184062) with the report
+  + full reproducer inlined in a `<details>` block.
+- Updated the experiment README's Diagnostics block to cross-reference
+  the new ADR + upstream issue.
+
+### Findings
+
+- **plateau-architectures-740: Transformer val_auc=0.6322** (within
+  0.003 of v6's 0.6354), SimpleFFN 0.6217, ResidualFFN 0.6199 — all >
+  LightGBM 0.6161. Loose hypothesis (architecture-spread is real,
+  Transformer-led) **confirmed**. Strict hypothesis (rank order matches
+  prior art within ±0.005) **NOT confirmed** — ResidualFFN underperforms
+  SimpleFFN by 0.0018 (sign flip vs prior art's v5>v4). The
+  Transformer-vs-FFN gap (≥0.0105) is the architectural lever that
+  reliably works.
+- **transformer-hp-sweep-740: best val_auc=0.6318, +0.0007 vs control**.
+  Hypothesis NOT confirmed; the ~0.632 ceiling is **HP-robust** on this
+  snapshot. Top 4 COMPLETE trials cluster in val_auc [0.6311, 0.6319] —
+  TPE found a 0.0008 envelope around the control point. Architectural
+  simplification (no side-token, no 11-position embed, single linear
+  head) was free of capacity cost vs the previous Transformer. **HP
+  tuning is exhausted as a lever** for this architecture vocabulary;
+  further gains require structural mutation or new data features.
+- **Blackwell torch bug root cause: torch's DataLoader + tensor GC
+  interaction.** NOT a CUDA kernel bug (CUDA_LAUNCH_BLOCKING shows no
+  CUDA error). NOT torch-version-specific (reproduces on 2.9.1, 2.11.0,
+  2.12.0). NOT driver/cuDNN (same versions across all reproductions).
+  NOT pyarrow tp_traverse (explicit `del` + `gc.collect()` of all
+  pyarrow refs didn't help). NOT hardware (synthetic repro on a totally
+  different code path triggers the same crash). The libtorch C++ trace
+  from `c10::TensorImpl::~TensorImpl()` points at PyTorch's CPU tensor
+  destructor reached via cyclic GC. NVRM Xid 43 entries in dmesg are
+  secondary symptoms (GPU channel reset when process aborts mid-op).
+- **The MALLOC_CHECK_=3 "fix" was probably small-sample noise.** The
+  synthetic repro crashes under the same allocator settings — sometimes
+  even faster. The 3 clean trials in our real-workload diagnostic were
+  consistent with the ~21% crash-free fraction by chance.
+- **Per-trial subprocess isolation is architecturally clean.** It's how
+  Ray Tune, Kubeflow, SageMaker structure HP sweeps anyway. Treating it
+  as "the proper architecture for ML sweeps on this hardware" rather
+  than a hack avoids future rationalisation drift.
+- **Repro details (~3-4 min wall):** the synthetic script with 5M
+  random rows + a ~416k-param Transformer + manual `gc.collect()` every
+  25 batches triggers the crash at epoch 5, mostly inside
+  `fetch.py:52` (the list-comp over `__getitem__`) but sometimes inside
+  `default_collate` at `collate.py:208`. Same root corruption, two
+  observed crash sites.
+
+### Next
+
+- **Watch pytorch/pytorch#184062 for upstream triage.** If a fix is
+  merged and a torch release ships claiming DataLoader/tensor GC fix
+  on Blackwell, re-test in-process Optuna and — if stable — retire
+  the subprocess wrapper. Record the change as a new ADR.
+- **LLM-driven islands evolution experiment** (FunSearch / AlphaEvolve-
+  style structural mutation) is the natural next step now that HP
+  search is exhausted as a lever. The user explicitly wanted this
+  before we detoured into HP-search. Programs = `config.yaml` + small
+  Python files describing model/features; LLM mutates structurally;
+  evaluator is val_auc on the existing 5M subset; islands evolve
+  independently with periodic migration. Reference reads already
+  ingested in `agentic-research` (AlphaEvolve, FunSearch,
+  evolutionary-expansion concept).
+- **Data-side feature additions** (draft order from `picks_bans[]`,
+  lane/role inference, hero-pair history, player MMR if obtainable) —
+  cheaper than islands evolution and could isolate "what fraction of
+  the gap is model vs data." Worth doing in parallel to or before
+  islands evolution.
+- **Filter sensitivity audit** (carryover): run a known-good config
+  with each filter (forfeit / empty-inventory) toggled off. If
+  val_auc shifts >0.005 the filter is doing real work; if <0.001
+  the filter is mostly cosmetic.
+- **Multi-seed re-evaluation** of the top 4 HP-sweep trials to confirm
+  the 0.0008 spread is within seed noise (carryover; lower priority
+  now).
+- **Promote `run_sweep_loop.sh` + `cleanup_failed_trials.py`** to a
+  reusable template under `_meta/templates/` for any future sweep
+  experiment on this server.
+- (Carryover, deferred) HCE-vs-prior-art-splits ADR. Still optional.
+- (Carryover, deferred) 5M-subset-vs-full-13M sanity check. Still
+  optional.
+- (Carryover, deferred) DVC formalisation for the existing experiment
+  outs. Still optional.

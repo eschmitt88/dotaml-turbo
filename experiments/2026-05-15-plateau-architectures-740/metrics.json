@@ -1,0 +1,183 @@
+{
+  "lightgbm_baseline_val_auc": 0.6160890687449119,
+  "per_arch": {
+    "simple_ffn": {
+      "arch": "simple_ffn",
+      "val_auc": 0.6216782658268302,
+      "val_acc": 0.5897316658296079,
+      "val_log_loss": 0.6665269692372866,
+      "val_brier": 0.23728202283382416,
+      "train_auc": 0.6415000951235476,
+      "train_acc": 0.6037736,
+      "train_log_loss": 0.6578336620390496,
+      "train_val_auc_gap": 0.019821829296717386,
+      "best_epoch": 8,
+      "epochs_run": 13,
+      "train_seconds": 224.00810408592224,
+      "param_counts": {
+        "total": 52865,
+        "trainable": 52865,
+        "embedding": 9664,
+        "non_embedding": 43201
+      },
+      "model": "simple_ffn",
+      "smoke": false,
+      "val_majority_class_acc": 0.5326144695281982,
+      "n_train_pre_subsample": 13018393,
+      "n_train_post_subsample": 5000000,
+      "n_val": 2419185,
+      "train_subset_size_target": 5000000,
+      "train_subset_seed": 42,
+      "train_date_min": "2025-12-16",
+      "train_date_max": "2026-02-23",
+      "val_date_min": "2026-02-24",
+      "val_date_max": "2026-03-09",
+      "radiant_base_rate_train_full": 0.5334817438680796,
+      "radiant_base_rate_train_subsampled": 0.533481776714325,
+      "radiant_base_rate_val": 0.5326144695281982
+    },
+    "residual_ffn": {
+      "arch": "residual_ffn",
+      "val_auc": 0.6199158308291263,
+      "val_acc": 0.5889900937712494,
+      "val_log_loss": 0.6673266952550784,
+      "val_brier": 0.23765863478183746,
+      "train_auc": 0.6412767915022414,
+      "train_acc": 0.6031758,
+      "train_log_loss": 0.6576351230565521,
+      "train_val_auc_gap": 0.021360960673115104,
+      "best_epoch": 6,
+      "epochs_run": 11,
+      "train_seconds": 188.53317999839783,
+      "param_counts": {
+        "total": 225089,
+        "trainable": 225089,
+        "embedding": 9664,
+        "non_embedding": 215425
+      },
+      "model": "residual_ffn",
+      "smoke": false,
+      "val_majority_class_acc": 0.5326144695281982,
+      "n_train_pre_subsample": 13018393,
+      "n_train_post_subsample": 5000000,
+      "n_val": 2419185,
+      "train_subset_size_target": 5000000,
+      "train_subset_seed": 42,
+      "train_date_min": "2025-12-16",
+      "train_date_max": "2026-02-23",
+      "val_date_min": "2026-02-24",
+      "val_date_max": "2026-03-09",
+      "radiant_base_rate_train_full": 0.5334817438680796,
+      "radiant_base_rate_train_subsampled": 0.533481776714325,
+      "radiant_base_rate_val": 0.5326144695281982
+    },
+    "transformer": {
+      "arch": "transformer",
+      "val_auc": 0.6322127697871704,
+      "val_acc": 0.5957051651692615,
+      "val_log_loss": 0.6622581867576973,
+      "val_brier": 0.23531971871852875,
+      "train_auc": 0.6432035754272726,
+      "train_acc": 0.6039204,
+      "train_log_loss": 0.6574422448062103,
+      "train_val_auc_gap": 0.01099080564010213,
+      "best_epoch": 9,
+      "epochs_run": 11,
+      "train_seconds": 602.699709892273,
+      "param_counts": {
+        "total": 81857,
+        "trainable": 81857,
+        "embedding": 9664,
+        "non_embedding": 72193
+      },
+      "model": "transformer",
+      "smoke": false,
+      "val_majority_class_acc": 0.5326144695281982,
+      "n_train_pre_subsample": 13018393,
+      "n_train_post_subsample": 5000000,
+      "n_val": 2419185,
+      "train_subset_size_target": 5000000,
+      "train_subset_seed": 42,
+      "train_date_min": "2025-12-16",
+      "train_date_max": "2026-02-23",
+      "val_date_min": "2026-02-24",
+      "val_date_max": "2026-03-09",
+      "radiant_base_rate_train_full": 0.5334817438680796,
+      "radiant_base_rate_train_subsampled": 0.533481776714325,
+      "radiant_base_rate_val": 0.5326144695281982
+    }
+  },
+  "comparison_table": [
+    [
+      "arch",
+      "params_total",
+      "val_auc",
+      "val_acc",
+      "val_log_loss",
+      "\u0394_vs_lgbm",
+      "prior_art_test_auc",
+      "\u0394_vs_prior"
+    ],
+    [
+      "simple_ffn",
+      52865,
+      0.6217,
+      0.5897,
+      0.6665,
+      0.0056,
+      0.6285,
+      -0.0068
+    ],
+    [
+      "residual_ffn",
+      225089,
+      0.6199,
+      0.589,
+      0.6673,
+      0.0038,
+      0.631,
+      -0.0111
+    ],
+    [
+      "transformer",
+      81857,
+      0.6322,
+      0.5957,
+      0.6623,
+      0.0161,
+      0.6354,
+      -0.0032
+    ]
+  ],
+  "pair_gaps": {
+    "transformer_vs_residual": 0.0123,
+    "residual_vs_simple": -0.0018,
+    "transformer_vs_simple": 0.0105,
+    "simple_vs_lgbm": 0.0056,
+    "rank_order_strict_holds": false,
+    "rank_order_loose_holds": true
+  },
+  "prior_art": {
+    "simple_ffn": {
+      "label": "DotaML v4 SimpleFFN",
+      "test_auc": 0.6285,
+      "params": 47000
+    },
+    "residual_ffn": {
+      "label": "DotaML v5 ResidualFFN",
+      "test_auc": 0.631,
+      "params": 228000
+    },
+    "transformer": {
+      "label": "DotaML v6 Transformer",
+      "test_auc": 0.6354,
+      "params": 150000
+    }
+  },
+  "val_auc_simple_ffn": 0.6216782658268302,
+  "val_auc_residual_ffn": 0.6199158308291263,
+  "val_auc_transformer": 0.6322127697871704,
+  "val_auc": 0.6322127697871704,
+  "best_arch": "transformer",
+  "notes": "Aggregated post-hoc from per-arch metrics. Transformer trained capped at 11 epochs to work around torch 2.11 + Blackwell intermittent crashes; best epoch was 9 (val_loss=0.6623), so the cap did not affect convergence. ResidualFFN process exited rc=-11 (SIGSEGV) AFTER writing its metrics.json \u2014 same Blackwell shutdown issue, result intact."
+}

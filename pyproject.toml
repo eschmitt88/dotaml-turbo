@@ -15,4 +15,24 @@ dependencies = [
     "matplotlib>=3.9",
     "scipy>=1.13",
     "orjson>=3.10",
+    # torch pinned to 2.9.x via the PyTorch cu128 index (see [tool.uv.sources]).
+    # Why: torch 2.12.0+cu130 (PyPI default) has a CPU-side heap-corruption bug
+    # that surfaces after ~5 epochs of training on Blackwell sm_120 (RTX 5080).
+    # Diagnosed 2026-05-16: free(): invalid pointer with CUDA_LAUNCH_BLOCKING=1
+    # showing no CUDA error; MALLOC_CHECK_=3 masks the bug, confirming
+    # heap-corruption rather than a CUDA kernel issue. The Xid 43 entries in
+    # dmesg were secondary (NVRM channel reset when the process aborted mid-op).
+    # torch 2.9.1+cu128 has ~7 months of bake time and pre-dates the 2.12
+    # allocator changes. cu128 (CUDA 12.8) is the first toolkit with sm_120
+    # support and the most mature Blackwell stack.
+    "torch>=2.9,<2.10",
+    "optuna>=4.0",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

@@ -1,0 +1,116 @@
+# Config for transformer-hp-sweep-740. Optuna TPE+ASHA sweep over a
+# MinimalTransformer (shared 64-dim hero embed + binary team embed +
+# self-attention + linear head; no side token, no 11th position embed).
+#
+# All trials share the 5M-row stratified subsample (seed=42) of
+# data/snapshots/7.40-2025-12-16/processed/train.parquet, evaluated on the
+# full val.parquet. Test window [2026-03-10, 2026-03-23] is sealed (HCE).
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+study_name: "transformer-hp-sweep-740"
+
+# Hero ID handling. IDs in train/val are uint16 in [1, 150]. Embedding
+# table has size 151 so id 0 is reserved (padding); valid IDs index 1..150.
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151          # 0 reserved as padding; 1..150 valid
+
+# Train subsetting — must match plateau-baseline-740 / plateau-architectures-740
+# (same seed=42, same 5M-row stratified subsample).
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Validation: full val.parquet every trial (~2.4M rows).
+
+# Optimizer / training defaults applied unless overridden by sampled HPs.
+optim:
+  num_workers: 0           # torch 2.11 + Blackwell sm_120 stability workaround
+  pin_memory: true
+  mixed_precision: true    # bf16 on RTX 5080
+  patience: 5              # for top-3 retraining; intra-trial uses ASHA
+
+# Optuna search space spec. Mirrors the proposal exactly.
+# d_model and n_heads are jointly sampled as a categorical of valid pairs
+# (d_model % n_heads == 0).
+search_space:
+  d_model_n_heads_pairs:
+    - [32, 1]
+    - [32, 2]
+    - [32, 4]
+    - [32, 8]
+    - [64, 1]
+    - [64, 2]
+    - [64, 4]
+    - [64, 8]
+    - [96, 1]
+    - [96, 2]
+    - [96, 4]
+    - [96, 8]   # 96/8 = 12, valid
+    - [128, 1]
+    - [128, 2]
+    - [128, 4]
+    - [128, 8]
+  n_layers: [1, 2, 3]
+  ff_mult: [2, 4]
+  embed_dim: [32, 64, 128]
+  lr_low: 1.0e-4
+  lr_high: 5.0e-3          # log-uniform
+  weight_decay_low: 1.0e-7
+  weight_decay_high: 1.0e-3   # log-uniform
+  dropout_low: 0.0
+  dropout_high: 0.3
+  batch_size: [4096, 8192, 16384]
+
+# Optuna sampler / pruner.
+optuna:
+  sampler: "tpe"
+  n_startup_trials: 10
+  multivariate: true
+  pruner: "asha"
+  asha_min_resource: 3        # epochs
+  asha_max_resource: 14       # epochs
+  asha_reduction_factor: 3
+  storage_url: "sqlite:///results/optuna.db"
+
+# Control trial — first trial, force-pinned via study.enqueue_trial().
+# Mirrors current Transformer HPs (d_model=64, n_heads=4, n_layers=2,
+# ff_mult=2, lr=1e-3, dropout=0). embed_dim chosen to match d_model so
+# the optional projection is skipped (matching prior architecture).
+control_trial:
+  d_model_n_heads: [64, 4]
+  n_layers: 2
+  ff_mult: 2
+  embed_dim: 64
+  lr: 1.0e-3
+  weight_decay: 0.0
+  dropout: 0.0
+  batch_size: 8192
+
+# Sweep settings.
+sweep:
+  n_trials: 60
+  trial_max_epochs: 14
+  top_k_retrain: 3
+  top_k_retrain_max_epochs: 14
+  top_k_retrain_patience: 5
+
+# Smoke-test settings — used when run_sweep.py is invoked with --smoke.
+# n_trials: 1 (control), epochs capped at 3, train 100k, val 10k.
+smoke:
+  n_trials: 1
+  trial_max_epochs: 3
+  n_train: 100000
+  n_val: 10000
+
+# Output paths (relative to experiment dir).
+output:
+  optuna_db: "results/optuna.db"
+  per_trial_history_glob: "results/trial_{trial_number}_history.json"
+  top_k_metrics: "results/top_k_metrics.json"
+  top_k_checkpoint_glob: "results/top_{rank}.pt"
+  combined_metrics: "metrics.json"

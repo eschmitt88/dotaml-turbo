@@ -1,0 +1,56 @@
+---
+title: "plateau-architectures-740 — analysis"
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+# Plateau architectures (DotaML v4–v6 mirror)
+
+Quarto notebook for post-run analysis. Populated after `run_all.py`
+completes. Outputs (plots, tables) live in `results/`.
+
+```{python}
+#| label: load-metrics
+import json
+from pathlib import Path
+
+EXP = Path(".").resolve()
+metrics = json.loads((EXP / "metrics.json").read_text()) if (EXP / "metrics.json").stat().st_size else {}
+metrics.get("comparison_table", "(no run yet)")
+```
+
+## Per-arch learning curves
+
+```{python}
+#| label: plot-learning
+#| eval: false
+import json, matplotlib.pyplot as plt
+from pathlib import Path
+fig, ax = plt.subplots(figsize=(7, 4))
+for arch in ["simple_ffn", "residual_ffn", "transformer"]:
+    h_path = Path(f"results/{arch}_history.json")
+    if not h_path.exists():
+        continue
+    h = json.loads(h_path.read_text())
+    epochs = [r["epoch"] for r in h]
+    val_auc = [r["val_auc"] for r in h]
+    ax.plot(epochs, val_auc, label=arch, marker="o", lw=1.5)
+ax.set_xlabel("epoch")
+ax.set_ylabel("val_auc")
+ax.axhline(0.6161, color="k", ls="--", lw=1, label="LightGBM baseline")
+ax.legend()
+ax.grid(alpha=0.3)
+fig.tight_layout()
+fig.savefig("results/learning_curves.png", dpi=110)
+fig
+```
+
+## Pairwise rank-order check
+
+```{python}
+#| label: rank-order
+#| eval: false
+metrics["pair_gaps"]
+```

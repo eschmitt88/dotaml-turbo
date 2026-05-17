@@ -1,0 +1,73 @@
+# Config for plateau-architectures-740. Three deep-learning architectures
+# (SimpleFFN, ResidualFFN, Transformer) trained on the same 5M-row stratified
+# subsample as plateau-baseline-740, mirroring DotaML v4-v6.
+#
+# All architectures share: 64-dim hero embeddings (151 heroes incl. id 0
+# padding slot), Radiant-side bit, val-only metrics (HCE rule).
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+# Hero ID handling. IDs in train/val are uint16 in [1, 150]. Embedding
+# table has size 151 so id 0 is reserved (padding); valid IDs index 1..150.
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151          # 0 reserved as padding; 1..150 valid
+  embed_dim: 64
+
+# Train subsetting — must match plateau-baseline-740 for fair comparison.
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Optimizer / training shared across all three architectures.
+optim:
+  lr: 1.0e-3
+  batch_size: 8192
+  max_epochs: 30
+  patience: 5            # early-stop on val_log_loss
+  weight_decay: 0.0
+  mixed_precision: true  # bf16 on RTX 5080 (Blackwell)
+  num_workers: 4
+  pin_memory: true
+
+# Three architecture variants. Param-count targets are loose;
+# what matters is family (no residuals / residuals / attention).
+architectures:
+  simple_ffn:
+    # Mirrors DotaML v4. Hero-embedding lookup → concat(10*64=640) +
+    # side bit → MLP. Sized to be clearly the smallest of the three;
+    # 641 -> 64 -> 32 -> 1 keeps total params ~55k (incl. 9.7k embed).
+    hidden_sizes: [64, 32]
+    dropout: 0.0
+  residual_ffn:
+    # Mirrors DotaML v5. Same input, residual MLP blocks. Target O(150k-300k).
+    # 641 -> 128 (proj_in) + 4 residual blocks at 128 dim ~ 165k params total.
+    hidden_size: 128
+    n_blocks: 4
+    dropout: 0.0
+  transformer:
+    # Mirrors DotaML v6 with masking OFF. 10 hero tokens + 1 side token,
+    # learned position/team embedding, then self-attention. Target O(150k-300k).
+    d_model: 64
+    n_heads: 4
+    n_layers: 2
+    ff_mult: 2
+    dropout: 0.0
+    pool: "mean"     # mean over the 11 tokens
+
+# Output paths (relative to experiment dir).
+output:
+  per_arch_metrics_glob: "results/{arch}_metrics.json"
+  per_arch_checkpoint_glob: "results/{arch}.pt"
+  combined_metrics: "metrics.json"
+
+# Smoke-test settings — used when train.py is invoked with --smoke.
+smoke:
+  n_train: 50000
+  n_val: 5000
+  max_epochs: 1
+  batch_size: 4096
