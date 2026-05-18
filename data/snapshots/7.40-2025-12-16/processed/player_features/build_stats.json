@@ -1,0 +1,26 @@
+{
+  "smoke": false,
+  "n_raw_read": 16923487,
+  "n_bad_json": 0,
+  "n_emitted": 15437578,
+  "n_train_emitted": 13018393,
+  "n_val_emitted": 2419185,
+  "build_seconds": 4123.206109523773,
+  "days_processed": [
+    "2025-12-16",
+    "2026-03-09"
+  ],
+  "n_unique_account_ids_tracked": 1329669,
+  "anonymous_per_match_hist": {
+    "min": 0,
+    "max": 10,
+    "mean": 6.66363862258704,
+    "p50": 7,
+    "p95": 10
+  },
+  "config": {
+    "alpha": 5.0,
+    "hero_alpha": 5.0,
+    "recent_window": 10
+  }
+}

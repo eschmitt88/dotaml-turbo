@@ -1,0 +1,15 @@
+---
+title: "player-features-prepatch-740 analysis"
+format:
+  html:
+    toc: true
+    code-fold: true
+---
+
+Placeholder notebook. Populated after the full run completes with:
+
+- coverage-bucket val_auc table (compare to player-features-740)
+- history-source-breakdown table (mean prepatch fraction per bucket)
+- feature importance top-20 vs player-features-740
+- side-by-side calibration plots
+- anonymous-per-match histogram (unchanged by definition; sanity)

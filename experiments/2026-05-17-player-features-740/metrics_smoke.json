@@ -1,0 +1,208 @@
+{
+  "ablation": "heroes_plus_features",
+  "smoke": true,
+  "val_auc": 0.6131050451023647,
+  "val_acc": 0.5832235628852943,
+  "val_log_loss": 0.670533686179283,
+  "val_brier": 0.23892489685335877,
+  "train_auc": 0.660673285453365,
+  "train_acc": 0.61731,
+  "train_log_loss": 0.6555970185957726,
+  "train_val_auc_gap": 0.04756824035100027,
+  "n_train_pre_subsample": 341627,
+  "n_train_post_subsample": 100000,
+  "n_val": 37958,
+  "train_subset_size_target": 100000,
+  "train_subset_seed": 42,
+  "radiant_base_rate_train_full": 0.5344278994341782,
+  "radiant_base_rate_train_subsampled": 0.53443,
+  "radiant_base_rate_val": 0.5358817640550082,
+  "val_majority_class_acc": 0.5358817640550082,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2025-12-18",
+  "val_date_min": "2025-12-18",
+  "val_date_max": "2025-12-18",
+  "model": "lightgbm",
+  "num_boost_round": 50,
+  "learning_rate": 0.1,
+  "num_leaves": 31,
+  "feature_dim": 391,
+  "train_seconds": 0.44782519340515137,
+  "calibration_quantile_bins": 20,
+  "calibration": {
+    "mean_pred": [
+      0.35528321456914597,
+      0.4028530814663597,
+      0.4278437077476962,
+      0.44734563822306056,
+      0.4636886680876579,
+      0.47866551809604607,
+      0.49250011285899764,
+      0.5055564875253089,
+      0.5176730787380313,
+      0.5296242117697839,
+      0.5414036423012292,
+      0.5534014600122475,
+      0.5655406768357609,
+      0.5778930549823389,
+      0.5913898810734479,
+      0.6058453754331045,
+      0.6216122052747457,
+      0.6399639306671946,
+      0.6633569672791783,
+      0.7065833074404179
+    ],
+    "frac_pos": [
+      0.3308746048472076,
+      0.3804004214963119,
+      0.43308746048472074,
+      0.4351949420442571,
+      0.47102212855637515,
+      0.45626975763962063,
+      0.5139694254085398,
+      0.5021074815595363,
+      0.5068493150684932,
+      0.5516332982086407,
+      0.5437302423603794,
+      0.5395152792413066,
+      0.5674394099051633,
+      0.5877701634159199,
+      0.5927291886195996,
+      0.5848261327713382,
+      0.6290832455216017,
+      0.6554267650158061,
+      0.7049525816649105,
+      0.7307692307692307
+    ]
+  },
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6160890687449119,
+    "plateau_baseline_740_val_acc": 0.5865996192932744,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "proposal_target_val_auc": 0.6361
+  },
+  "delta_vs_plateau_baseline_740_val_auc": -0.002984023642547129,
+  "delta_vs_plateau_architectures_740_val_auc": -0.01909495489763524,
+  "delta_vs_transformer_hp_sweep_740_val_auc": -0.018694954897635285,
+  "delta_vs_proposal_target_val_auc": -0.022994954897635256,
+  "feature_importance_top20": [
+    {
+      "name": "p0_smoothed_winrate_hero",
+      "gain": 2810.260404586792
+    },
+    {
+      "name": "p1_smoothed_winrate_hero",
+      "gain": 2585.5071058273315
+    },
+    {
+      "name": "p7_smoothed_winrate_hero",
+      "gain": 2563.9514484405518
+    },
+    {
+      "name": "p8_smoothed_winrate_hero",
+      "gain": 2555.1954488754272
+    },
+    {
+      "name": "p5_smoothed_winrate_hero",
+      "gain": 2467.185685157776
+    },
+    {
+      "name": "p9_smoothed_winrate_hero",
+      "gain": 2407.5004024505615
+    },
+    {
+      "name": "p4_smoothed_winrate_hero",
+      "gain": 2345.394506454468
+    },
+    {
+      "name": "p3_smoothed_winrate_hero",
+      "gain": 2308.4155130386353
+    },
+    {
+      "name": "p6_smoothed_winrate_hero",
+      "gain": 2297.8946018218994
+    },
+    {
+      "name": "p2_smoothed_winrate_hero",
+      "gain": 2271.1076126098633
+    },
+    {
+      "name": "d_hero_29",
+      "gain": 961.4516878128052
+    },
+    {
+      "name": "r_hero_29",
+      "gain": 782.7486991882324
+    },
+    {
+      "name": "r_hero_6",
+      "gain": 396.4828042984009
+    },
+    {
+      "name": "d_hero_83",
+      "gain": 358.27520084381104
+    },
+    {
+      "name": "p2_n_games_hero_log1p",
+      "gain": 296.06309604644775
+    },
+    {
+      "name": "p1_smoothed_winrate",
+      "gain": 293.68560218811035
+    },
+    {
+      "name": "d_hero_6",
+      "gain": 272.948299407959
+    },
+    {
+      "name": "p9_n_games_hero_log1p",
+      "gain": 219.35799980163574
+    },
+    {
+      "name": "p0_n_games_hero_log1p",
+      "gain": 216.41229820251465
+    },
+    {
+      "name": "r_hero_120",
+      "gain": 212.25850296020508
+    }
+  ],
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.3218875825405121,
+      0.7677863836288452
+    ],
+    "buckets": {
+      "low": {
+        "n": 12602,
+        "val_auc": 0.6113811488170844,
+        "mean_coverage_log1p": 0.12149906903505325
+      },
+      "medium": {
+        "n": 12676,
+        "val_auc": 0.6140594344260848,
+        "mean_coverage_log1p": 0.5378124713897705
+      },
+      "high": {
+        "n": 12680,
+        "val_auc": 0.6142359550749836,
+        "mean_coverage_log1p": 1.1479787826538086
+      }
+    }
+  },
+  "anonymous_per_match_hist_val": {
+    "0": 57,
+    "1": 336,
+    "2": 960,
+    "3": 1878,
+    "4": 3203,
+    "5": 4439,
+    "6": 5413,
+    "7": 5915,
+    "8": 5868,
+    "9": 5452,
+    "10": 4437
+  },
+  "heroes_only_sanity_check": null
+}

@@ -1,0 +1,33 @@
+{
+  "smoke": false,
+  "n_raw_read": 36548292,
+  "n_bad_json": 0,
+  "n_emitted": 15437578,
+  "n_train_emitted": 13018393,
+  "n_val_emitted": 2419185,
+  "build_seconds": 7010.248351812363,
+  "days_processed": [
+    "2025-08-15",
+    "2026-03-09"
+  ],
+  "n_days_total": 196,
+  "n_prepatch_days_walked": 112,
+  "n_inpatch_days_walked": 84,
+  "n_unique_account_ids_tracked": 1784199,
+  "raw_roots": [
+    "/mnt/projects/research/dotaml-turbo/data/history/turbo",
+    "/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/raw/turbo"
+  ],
+  "anonymous_per_match_hist": {
+    "min": 0,
+    "max": 10,
+    "mean": 6.66363862258704,
+    "p50": 7,
+    "p95": 10
+  },
+  "config": {
+    "alpha": 5.0,
+    "hero_alpha": 5.0,
+    "recent_window": 10
+  }
+}

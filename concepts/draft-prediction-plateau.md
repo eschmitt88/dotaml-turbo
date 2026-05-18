@@ -9,6 +9,8 @@ sources:
   - experiments/2026-05-15-plateau-baseline-740/README.md
   - experiments/2026-05-15-plateau-architectures-740/README.md
   - experiments/2026-05-16-transformer-hp-sweep-740/README.md
+  - experiments/2026-05-17-player-features-740/README.md
+  - experiments/2026-05-18-player-features-prepatch-740/README.md
 related_concepts:
   - draft-only-win-prediction
   - hero-embedding-vs-onehot
@@ -112,6 +114,97 @@ admitted. This is independent confirmation that the ~0.62 ceiling is
 an information bottleneck, not a model bottleneck, and motivates
 extending pre-game features (player identity, draft order) before
 investing in further architectural sophistication.
+
+**Refinement (2026-05-17, fourth experiment): the information lever
+exists but is bounded by Turbo's anonymous-account fraction.** See
+[[2026-05-17-player-features-740]]. Adding ~90 per-player history
+features (smoothed overall + hero-specific winrate, recent form,
+co-play premade detection, days-since, anonymous flag) to the
+LightGBM baseline raised val_auc by only **+0.0067** (0.6161 →
+0.6227). This is real signal (heroes-only sanity rebuild matches
+plateau-baseline within 0.0001) but **well below the +0.020 target
+and well below the architectural Transformer ceiling of 0.6322**. So
+on patch-7.40 Turbo, **architecture is a stronger lever than this
+specific set of player features**, reversing the ranked-MOBA
+intuition from Hodge 2017.
+
+Why the small effect:
+- **66% of player-slots are anonymous** (Steam-private profiles;
+  account_id ∈ {0, 4294967295}); 12.7% of val matches have ALL 10
+  players anonymous. Mean = 6.66 anonymous/match.
+- The dominant feature (top-10 importances ALL `pX_smoothed_winrate_hero`)
+  depends on per-player-per-hero samples that are inherently sparse
+  on a 98-day snapshot.
+- Coverage-bucket diagnostic shows monotonic lift (low/med/high val_auc
+  = 0.6159/0.6230/0.6296), confirming cold-start is binding. A
+  pre-patch ingest would help — but the binding feature is exactly
+  the one most affected by metagame drift across patches, so pre-patch
+  for hero-specific winrate is risky per Hodge's metagame warnings.
+
+Architecture-matched ceilings on patch-7.40 are therefore:
+
+- LightGBM one-hot:               0.6161 (`plateau-baseline-740`)
+- LightGBM + 90 player features:  0.6227 (`player-features-740`)
+- SimpleFFN (52k):                0.6217 (`plateau-architectures-740`)
+- ResidualFFN (225k):             0.6199 (same)
+- Transformer (82k):              **0.6322** (same)
+- Transformer HP-tuned (60-trial Optuna): 0.6318 (`transformer-hp-sweep-740`)
+- LightGBM + player features, high-coverage val subset: 0.6296
+
+Any val_auc > **~0.640** on this snapshot must come from a NEW
+information axis that is neither hero-IDs nor patch-7.40-only player
+history (e.g., draft order from `picks_bans[]`, lane/role inference,
+hero-pair history, structural mutation of the Transformer, or
+larger pre-patch player-coverage with metagame-drift handling).
+
+**Refinement (2026-05-18, fifth experiment): cold-start was NOT the
+binding constraint — the casual/anonymous-player tail IS.** See
+[[2026-05-18-player-features-prepatch-740]]. Extending the per-player
+aggregator with ~127 days of pre-7.40 history (Aug–Dec 15 2025)
+raised val_auc by only **+0.0028** (0.6227 → 0.6256), short of the
++0.005 target. The user's pre-experiment prediction that
+hero-specific player skill is patch-stable was correct (top-10
+features unchanged, no metagame-drift artifact), but the cold-start
+hypothesis (low-bucket coverage val matches would gain most from
+extended history) FAILED. Instead:
+
+- LOW bucket gained **+0.0014** (least) — because low-bucket players
+  had only 2.3% prepatch fraction (4 prepatch games avg). They're
+  genuinely casual/new accounts, not active-but-uncached players in
+  a cold-start window. Pre-patch data couldn't rescue them because
+  they weren't around then either.
+- MEDIUM bucket gained +0.0026
+- HIGH bucket gained **+0.0043** (most) — active players who already
+  had pre-patch presence (24.9% prepatch fraction, 81 games avg) got
+  proportionally more new history.
+
+**Big-deal observation:** the HIGH-coverage val_auc reached **0.6339**,
+which **beats the architecture-only Transformer ceiling (0.6322)** for
+the first time. For the active 1/3 of patch-7.40 val matches, player
+features now extract more signal than 82k attention parameters can.
+The whole-val ceiling is still bound by the casual/anonymous tail
+(66% anonymous-per-match unchanged, 12.6% of val matches have all-10
+anonymous).
+
+So the architecture-matched ceiling table now reads:
+
+| approach (whole val) | val_auc |
+|---|---|
+| LightGBM bag-of-heroes (`plateau-baseline-740`) | 0.6161 |
+| LightGBM + patch features (`player-features-740`) | 0.6227 |
+| LightGBM + prepatch features (`player-features-prepatch-740`) | **0.6256** |
+| SimpleFFN 52k | 0.6217 |
+| ResidualFFN 225k | 0.6199 |
+| Transformer 82k (`plateau-architectures-740`) | **0.6322** |
+| Transformer HP-tuned (`transformer-hp-sweep-740`) | 0.6318 |
+| LightGBM + prepatch features, HIGH-coverage subset | **0.6339** ← new |
+
+The architecture-vs-information comparison flipped on the active
+subset. The natural next experiment is the COMBINATION
+(Transformer + prepatch player features) which has not been tried.
+For the casual/anonymous tail, no amount of historical data helps;
+that subproblem requires anonymous-aware modeling (per-team
+aggregates over the known-player subset, or a separate head).
 
 ## Connections
 

@@ -1,0 +1,83 @@
+# Config for player-features-prepatch-740. Extends player-features-740 by
+# pulling ~127 days of pre-7.40 Turbo raw (Aug 1 → Dec 15 2025) and
+# walking the aggregator chronologically across the patch boundary before
+# emitting features over the patch-7.40 train+val window.
+#
+# HCE-strict: the aggregator never reads test-window dates
+# [2026-03-10, 2026-03-23] or post-snapshot [2026-03-24, ...].
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+# Anonymous account_ids (Steam convention).
+anonymous_account_ids: [0, 4294967295]
+
+# Pre-patch history corpus location and date range to pull.
+# Lands at data/history/turbo/year=YYYY/month=MM/day=DD/matches_*.parquet
+# (semantically distinct from data/snapshots/.../raw/).
+pull_history:
+  out_root: "data/history/turbo"
+  start_date: "2025-08-01"
+  end_date:   "2025-12-15"
+  threads: 16
+
+# Player feature build
+player_features:
+  smoothing_alpha: 5.0
+  hero_smoothing_alpha: 5.0
+  recent_form_window: 10
+  # NEW output dir — does NOT overwrite player-features-740's parquet.
+  out_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch"
+  # Roots to walk chronologically. History first, then snapshot raw.
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+
+# Features (mirror player-features-740 / plateau-baseline-740 for A/B).
+features:
+  hero_id_min: 1
+  hero_id_max: 150
+  add_radiant_side_bit: true
+  feature_dim: 391  # 300 hero one-hot + 1 side bit + 90 player feats
+
+# Train subsetting (mirror baseline for direct A/B)
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Model: identical to player-features-740 to isolate the data-extension lever.
+model:
+  type: "lightgbm"
+  objective: "binary"
+  metric: ["binary_logloss", "auc"]
+  num_boost_round: 500
+  learning_rate: 0.1
+  num_leaves: 31
+  feature_fraction: 1.0
+  bagging_fraction: 1.0
+  min_data_in_leaf: 20
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  num_threads: 16
+  verbose: -1
+  early_stopping_round: 0
+
+# Smoke knobs (used by --smoke).
+# Pulls only 2 history days (2025-12-14, 2025-12-15) + 3 patch days; emits
+# features for those last 3 patch days only. Pipeline test, not a real run.
+smoke:
+  n_days: 3            # 3 patch-7.40 days to emit from (matches player-features-740 smoke)
+  history_days: ["2025-12-14", "2025-12-15"]  # pre-patch days included in walk
+  max_matches: 100000  # cap training rows in smoke train
+  num_boost_round: 50
+
+# Comparison anchors (literal — for metrics.json delta fields)
+anchors:
+  plateau_baseline_740_val_auc: 0.6160890687449119
+  plateau_baseline_740_val_acc: 0.5865996192932744
+  plateau_architectures_740_val_auc: 0.6322
+  transformer_hp_sweep_740_val_auc: 0.6318
+  player_features_740_val_auc: 0.6227
+  proposal_target_val_auc: 0.6277  # baseline (player-features-740) + 0.005

@@ -1,0 +1,222 @@
+{
+  "ablation": "heroes_only",
+  "smoke": false,
+  "val_auc": 0.6159732723509557,
+  "val_acc": 0.5864466752232673,
+  "val_log_loss": 0.6697864956063531,
+  "val_brier": 0.23857479190575387,
+  "train_auc": 0.6288348607510557,
+  "train_acc": 0.595492,
+  "train_log_loss": 0.6650579706525402,
+  "train_val_auc_gap": 0.012861588400099988,
+  "n_train_pre_subsample": 13018393,
+  "n_train_post_subsample": 5000000,
+  "n_val": 2419185,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "radiant_base_rate_train_full": 0.5334817438680796,
+  "radiant_base_rate_train_subsampled": 0.5334818,
+  "radiant_base_rate_val": 0.5326144962043002,
+  "val_majority_class_acc": 0.5326144962043002,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "model": "lightgbm",
+  "num_boost_round": 500,
+  "learning_rate": 0.1,
+  "num_leaves": 31,
+  "feature_dim": 301,
+  "train_seconds": 123.8563187122345,
+  "calibration_quantile_bins": 20,
+  "calibration": {
+    "mean_pred": [
+      0.3364247454992139,
+      0.388026432046977,
+      0.41584141243227357,
+      0.4373805536115099,
+      0.45572315200420915,
+      0.4721808028095746,
+      0.48739936698202074,
+      0.5016693198651376,
+      0.5154294475383392,
+      0.5288502882813945,
+      0.5420781144987531,
+      0.5552938746666516,
+      0.5687192248695565,
+      0.5825370666688187,
+      0.596989022375203,
+      0.6124912427627128,
+      0.629604894167552,
+      0.649425372953885,
+      0.6747013347863194,
+      0.720360464286501
+    ],
+    "frac_pos": [
+      0.32065145502645503,
+      0.3822121545317008,
+      0.4159343248538761,
+      0.4332459759091924,
+      0.454348544973545,
+      0.4699856976330823,
+      0.48592498284542696,
+      0.5015335774932002,
+      0.5150918906406303,
+      0.5268601190476191,
+      0.5393645780801759,
+      0.553873626600749,
+      0.5681925280466935,
+      0.5823130151538951,
+      0.5949156746031746,
+      0.6136790152034987,
+      0.6296017658876149,
+      0.6506254185302458,
+      0.6808753379244207,
+      0.7330605158730159
+    ]
+  },
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6160890687449119,
+    "plateau_baseline_740_val_acc": 0.5865996192932744,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "proposal_target_val_auc": 0.6277
+  },
+  "delta_vs_plateau_baseline_740_val_auc": -0.00011579639395620234,
+  "delta_vs_player_features_740_val_auc": -0.006726727649044362,
+  "delta_vs_plateau_architectures_740_val_auc": -0.016226727649044315,
+  "delta_vs_transformer_hp_sweep_740_val_auc": -0.01582672764904436,
+  "delta_vs_proposal_target_val_auc": -0.011726727649044366,
+  "feature_importance_top20": [
+    {
+      "name": "r_hero_6",
+      "gain": 34342.20569562912
+    },
+    {
+      "name": "d_hero_6",
+      "gain": 26873.117514133453
+    },
+    {
+      "name": "d_hero_67",
+      "gain": 25402.060383796692
+    },
+    {
+      "name": "r_hero_67",
+      "gain": 24682.22491979599
+    },
+    {
+      "name": "r_hero_12",
+      "gain": 24676.95459461212
+    },
+    {
+      "name": "d_hero_12",
+      "gain": 24619.230403900146
+    },
+    {
+      "name": "r_hero_53",
+      "gain": 23826.046782016754
+    },
+    {
+      "name": "d_hero_53",
+      "gain": 21853.34803056717
+    },
+    {
+      "name": "d_hero_81",
+      "gain": 21090.210109710693
+    },
+    {
+      "name": "r_hero_29",
+      "gain": 19878.371026039124
+    },
+    {
+      "name": "d_hero_29",
+      "gain": 19694.776452064514
+    },
+    {
+      "name": "r_hero_42",
+      "gain": 18930.51725435257
+    },
+    {
+      "name": "d_hero_42",
+      "gain": 18927.193343639374
+    },
+    {
+      "name": "r_hero_81",
+      "gain": 17800.527826309204
+    },
+    {
+      "name": "r_hero_14",
+      "gain": 16409.49121427536
+    },
+    {
+      "name": "r_hero_84",
+      "gain": 14932.49092578888
+    },
+    {
+      "name": "r_hero_56",
+      "gain": 14564.834879398346
+    },
+    {
+      "name": "d_hero_105",
+      "gain": 14356.212481975555
+    },
+    {
+      "name": "r_hero_44",
+      "gain": 13984.541003704071
+    },
+    {
+      "name": "d_hero_56",
+      "gain": 13616.42538690567
+    }
+  ],
+  "coverage_bucket_val_auc": null,
+  "history_source_breakdown": {
+    "overall_mean_prepatch_fraction": 0.12870323396313507,
+    "overall_mean_n_games_prepatch_per_slot": 37.79533685931419,
+    "overall_mean_n_games_inpatch_per_slot": 42.02506554893487,
+    "overall_mean_n_games_total_per_slot": 79.82040240824907,
+    "per_bucket": {
+      "low": {
+        "n": 805580,
+        "mean_prepatch_fraction": 0.023362284453736504,
+        "mean_n_games_prepatch_per_slot": 4.171611882122198,
+        "mean_n_games_inpatch_per_slot": 5.969495642890837,
+        "mean_n_games_total_per_slot": 10.141107525013034
+      },
+      "medium": {
+        "n": 808016,
+        "mean_prepatch_fraction": 0.11398397636279393,
+        "mean_n_games_prepatch_per_slot": 28.40921528781608,
+        "mean_n_games_inpatch_per_slot": 33.70728277657868,
+        "mean_n_games_total_per_slot": 62.11649806439476
+      },
+      "high": {
+        "n": 805589,
+        "mean_prepatch_fraction": 0.2488066089533329,
+        "mean_n_games_prepatch_per_slot": 80.83308535742171,
+        "mean_n_games_inpatch_per_slot": 86.42307442132403,
+        "mean_n_games_total_per_slot": 167.25615977874574
+      }
+    }
+  },
+  "anonymous_per_match_hist_val": {
+    "0": 5884,
+    "1": 24997,
+    "2": 63623,
+    "3": 124763,
+    "4": 199138,
+    "5": 273430,
+    "6": 331271,
+    "7": 363583,
+    "8": 372577,
+    "9": 354042,
+    "10": 305877
+  },
+  "heroes_only_sanity_check": {
+    "baseline_val_auc": 0.6160890687449119,
+    "this_val_auc": 0.6159732723509557,
+    "delta": -0.00011579639395620234,
+    "passed_within_0.001": true
+  }
+}

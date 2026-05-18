@@ -282,3 +282,173 @@ Blackwell torch DataLoader bug investigation + upstream issue filing.)
   optional.
 - (Carryover, deferred) DVC formalisation for the existing experiment
   outs. Still optional.
+
+## 2026-05-18
+
+(Spans 2026-05-17 19:00 → 2026-05-18 15:00 — the prior `/wrap` at
+2026-05-17 02:00 covered only through the upstream issue filing.
+This entry catches up on the player-features arc: literature ingest,
+two experiments, two server-stability incidents.)
+
+### Did
+
+- **Ingested Hodge 2017** (`literature/papers/hodge2017win.md`,
+  arXiv 1711.06498, "Win Prediction in Esports: Mixed-Rank Match
+  Prediction in MOBA Games") via `/fetch-paper` → `/ingest`. Relevance
+  4. Added as source to `concepts/draft-prediction-plateau.md` (third
+  refinement: independent attestation of the hero-only ceiling at
+  55-59% accuracy, matching our LightGBM baseline 58.66% within 0.01)
+  and `concepts/draft-only-win-prediction.md`. Triggered by user
+  feedback that I'd been citing "Yang 2014, Summerville 2016" from
+  training memory without grounding — saved
+  `memory/feedback_ingest_cited_literature.md` to enforce the discipline
+  forward.
+- **Proposed + implemented `player-features-740`** (
+  `experiments/2026-05-17-player-features-740/`): LightGBM baseline +
+  ~90 per-player history features (smoothed overall winrate,
+  smoothed hero-specific winrate, last-10 recent form, days-since,
+  hero diversity, premade-detection coplay, is-anonymous flag)
+  computed from chronological leading-window aggregation over the
+  19.6M patch-7.40 matches. Build wall ~69 min; LightGBM ~3 min.
+  val_auc=**0.6227** (+0.0067 over LightGBM baseline 0.6161, missed
+  +0.020 target by 0.0134, hypothesis NOT confirmed). Heroes-only
+  sanity rebuild matched plateau-baseline within 0.0001.
+- **Discussion arc on player features and pre-game scope.** User
+  pushed back correctly on my over-stated metagame-drift framing for
+  hero-specific winrate (Bayesian shrinkage to per-hero base rate
+  means the per-player deviation is patch-stable; only base rates
+  drift). Also discussed player-embedding scale (~1.3M-3M accounts
+  is NOT prohibitive: 333 MB at 64-dim, 167 MB at 32-dim) and
+  shrinkage strategies (anon embedding as best-trained = natural
+  shrinkage target via learned gate).
+- **Probed Azure for full date range:** 266 days, ~253 GB across
+  Aug 2025 → May 2026. Partial early collection (Aug 16/31 days,
+  Oct 21/31), continuous from Nov 2025+. Patch boundaries: 7.40
+  Dec 16 2025; 7.39 ~Oct 2025; 7.38 ~Aug 2025.
+- **Proposed + implemented `player-features-prepatch-740`** (
+  `experiments/2026-05-18-player-features-prepatch-740/`): extended
+  aggregator with 127 days of pre-7.40 history (Aug 1 → Dec 15 2025,
+  ~100 GB pulled into NEW `data/history/turbo/` directory tree).
+  Required **two OOM-fix iterations** (build hit 93.8 GB RSS — the
+  per-account `coplay` nested dict at ~5M accounts × 200 cap × ~75
+  bytes ≈ 75 GB; removed `coplay` + `unique_heroes` from aggregator,
+  neither in top-20 importance from `player-features-740`). val_auc=
+  **0.6256** (+0.0028 vs `player-features-740`, missed +0.005 target
+  by 0.0022, hypothesis NOT confirmed but diagnostic FLIPPED the
+  cold-start story — see Findings below).
+- **Two server-stability incidents documented:**
+  - Kernel RCU stall on 2026-05-17 ~20:38-20:52 (kernel thread
+    PID 3137061 stuck for 13 min, SSH timed out, user power-cycled);
+    distinct bug class from `blackwell-torch-dataloader-bug`. Saved
+    `memory/aiserver2026-kernel-rcu-stall-incident.md`.
+  - Two consecutive OOMs in `player-features-prepatch-740` build
+    (2026-05-18 ~07:38 and ~13:30 UTC); fixed by dropping
+    memory-hog features per above.
+- **Concept refinements:** `draft-prediction-plateau.md` got
+  refinements 3, 4, 5 (Hodge attestation; player-features lever
+  bounded by anonymous fraction; cold-start was misdiagnosis,
+  casual/anonymous tail is binding constraint; HIGH-coverage subset
+  beats Transformer). `draft-only-win-prediction.md` was refined
+  into two flavours: strict draft-only vs broadened
+  pre-game-win-prediction (account_id and derivatives allowed).
+
+### Findings
+
+- **Hero-only ceiling independently confirmed by Hodge 2017** at
+  55-59% accuracy (our LightGBM baseline: 58.66 % — match within
+  0.01). The paper's 75-76% in-game-telemetry ceiling confirms
+  substantial headroom in richer feature sets, BUT in-game features
+  are post-game — out of scope for pre-game prediction.
+- **Player features matter, but less than expected on Turbo.**
+  Patch-only +0.0067 AUC, prepatch +0.0095 AUC (both over LightGBM
+  baseline 0.6161). Both still below the architecture-only
+  Transformer ceiling 0.6322 on whole val.
+- **Per-player-per-hero winrate is THE marginal-value lever.**
+  Top-10 features by importance in BOTH player-features experiments
+  are exclusively `pX_smoothed_winrate_hero` (one per player slot,
+  gain 65-87k each). Overall winrate, recent form, premade-detection
+  coplay, days-since, hero diversity didn't crack the top 20.
+  Per-hero player skill is the signal; everything else is decoration.
+- **Cold-start hypothesis FAILED.** The coverage-bucket diagnostic
+  stayed monotonic after pre-patch extension, with HIGH bucket
+  gaining most (+0.0043) and LOW gaining least (+0.0014) — opposite
+  of the cold-start prediction. History-source breakdown explained
+  it: low-bucket players had only 2.3 % prepatch fraction (4
+  prepatch games avg). They're genuinely casual / new accounts, not
+  active-but-uncached players. Pre-patch data can't rescue players
+  who weren't around then either.
+- **The binding constraint is the casual / anonymous-player tail,
+  not lookback length.** 66 % of player-slots in Turbo are anonymous
+  (Steam-private profiles); 12.6 % of val matches have ALL 10
+  players anonymous. Both fractions are unchanged across the
+  experiments because anonymous status is a Steam privacy setting
+  independent of data we have.
+- **Big-deal observation: HIGH-coverage val_auc reached 0.6339,
+  BEATING the architecture-only Transformer ceiling (0.6322) for the
+  first time.** For the active 1/3 of patch-7.40 val matches, 80
+  player features beat 82k attention parameters. The
+  architecture-vs-information comparison flipped on the active
+  subset. The whole-val ceiling is still bound by the
+  casual/anonymous tail.
+- **The user's pre-experiment prediction on metagame drift held.**
+  Pre-patch hero-specific data transferred cleanly; top-10 features
+  unchanged in character, no metagame-drift artifact visible. The
+  Bayesian shrinkage to per-hero base rate isolated the per-player
+  deviation from balance shifts as predicted.
+- **Player embedding scale would be ~1.3-3M accounts, NOT prohibitive.**
+  64-dim float32 → 333 MB, 32-dim → 167 MB; both fit in 16 GB VRAM
+  easily. Long-tail: ~80% of accounts appear ≤5 times. Anon
+  embedding becomes the best-trained (66 % of player-slots,
+  100M+ training updates) and is a natural shrinkage target via a
+  learned gate based on `n_games`. Equating new-at-inference accounts
+  with `<anon>` is the clean default.
+- **Engineering insight: dict-of-dict aggregator state doesn't scale
+  to multi-million unique accounts.** The `coplay` nested dict at
+  5M accounts × 200-cap entries hit 75 GB. Future per-account
+  state needs to use flat representations or be eagerly evicted.
+- **Two distinct server-stability bug classes confirmed.** The
+  Blackwell torch DataLoader bug (filed as `pytorch/pytorch#184062`)
+  is userspace heap corruption; the May 17 kernel RCU stall is
+  kernel-side. Don't conflate. Memory entries enforce this.
+
+### Next
+
+- **`transformer-plus-player-features-740` (HIGHEST PRIORITY).** Combine
+  the two strongest individual levers — replace the LightGBM head with
+  the `plateau-architectures-740` Transformer (82k params, attention
+  over 10 hero tokens), feed it BOTH 10 hero IDs AND the 80-dim
+  per-player feature block from `player-features-prepatch-740`.
+  Hypothesis: HIGH-bucket val_auc 0.6339 (from this experiment) + the
+  architecture lever pushes whole-val past 0.633, possibly to 0.640+.
+  The two levers have never been combined; doing so directly tests
+  additivity.
+- **`anonymous-aware-modeling`.** Address the structural 12.6 % all-anon
+  tail. Two design candidates: (a) route all-anonymous matches to a
+  separate head that only sees hero one-hot + radiant-side base rate;
+  (b) build per-team aggregate features over the known-player subset
+  only (e.g. "mean smoothed_winrate over the K non-anonymous players
+  on team R"). Either reaches the 13 % of val that's currently
+  dead-weight.
+- **`player-features-decay-740`.** Now that pre-patch contributes ~13 %
+  of total game-history weight on average, test whether time-decayed
+  history (exponential τ ≈ 90 days) is better than uniform aggregation.
+  Smaller experiment than this arc — same data, different aggregator.
+- **`features_only` deep-dive (optional).** It completed cleanly this
+  time (val_auc=0.6065) — pure player features without heroes get
+  ~0.61. So player and hero features are complementary (not redundant)
+  — combined 0.6256 exceeds either alone. Worth understanding which
+  player features carry signal when heroes are absent.
+- (Carryover) Promote `run_sweep_loop.sh` + `cleanup_failed_trials.py`
+  to `_meta/templates/` for future GPU-sweep experiments.
+- (Carryover) **LLM-driven islands evolution.** Still on the menu;
+  was deferred when user redirected to player-features arc. Could be
+  approached now via the combined-Transformer-plus-features baseline
+  as the starting point for structural mutation.
+- (Carryover, deferred) HCE-vs-prior-art-splits ADR. Still optional.
+- (Carryover, deferred) 5M-subset-vs-full-13M sanity check. Still
+  optional.
+- (Carryover, deferred) DVC formalisation for existing experiment outs.
+  Still optional.
+- (NEW) **Consider time-decay or recency-weighted aggregator** before
+  the next player-features-style experiment. The dict-of-dict state
+  problem will recur unless we redesign.
