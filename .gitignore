@@ -28,3 +28,11 @@ __pycache__/
 *.tar
 *.tar.gz
 *.zip
+
+# Secrets / credentials — never commit
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.yaml

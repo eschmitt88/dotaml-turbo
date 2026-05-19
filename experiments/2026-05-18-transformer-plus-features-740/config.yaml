@@ -1,0 +1,95 @@
+# Config for transformer-plus-features-740.
+#
+# MinimalTransformer (architecture from plateau-architectures-740 / HP point
+# from transformer-hp-sweep-740 control trial) trained with optional
+# per-player feature injection via Linear(8, d_model) added per slot to
+# the hero + team embedding before self-attention.
+#
+# All data is reused from player-features-prepatch-740's augmented parquet
+# (data/snapshots/.../processed/player_features_prepatch/{train,val}.parquet).
+# Same 5M-row stratified subsample (seed=42) as every other plateau-740
+# experiment so the comparison is clean.
+#
+# HCE-strict: test window [2026-03-10, 2026-03-23] is sealed; assert at train time.
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+# Hero ID handling — vocab_size 151 with id 0 reserved for padding.
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# Train subsetting — 5M stratified rows, seed=42, matches all prior plateau experiments.
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Augmented parquet directory (player_features_prepatch).
+player_features:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch"
+  # ORDER MATTERS — must match player-features-prepatch-740's FEAT_NAMES_PER_PLAYER exactly.
+  # 8 features × 10 player slots = 80 total dense feature dims.
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+# MinimalTransformer HPs — control-trial point from transformer-hp-sweep-740.
+model:
+  embed_dim: 64
+  d_model: 64
+  n_heads: 4
+  n_layers: 2
+  ff_mult: 2
+  dropout: 0.0
+
+# Optimizer / training.
+optim:
+  batch_size: 8192
+  lr: 1.0e-3
+  weight_decay: 0.0
+  max_epochs: 14
+  num_workers: 0           # torch 2.9 + Blackwell sm_120 stability workaround
+  pin_memory: false
+  mixed_precision: true    # bf16 on RTX 5080
+  patience: 5
+
+# Ablations to run (in run_all.sh order).
+ablations:
+  - name: architecture_only
+    use_features: false
+    description: "Transformer without player-feature injection. Should reproduce plateau-architectures-740 (val_auc ~0.6322) within ±0.005."
+  - name: transformer_plus_features
+    use_features: true
+    description: "PRIMARY. Transformer + Linear(8, d_model) player-feature injection per slot."
+
+# Smoke knobs (used by train.py --smoke).
+smoke:
+  max_epochs: 1
+  n_train: 50000
+  n_val: 5000
+  metrics_suffix: "_smoke"
+
+# Comparison anchors for metrics.json delta fields.
+anchors:
+  plateau_baseline_740_val_auc: 0.6161
+  plateau_architectures_740_val_auc: 0.6322
+  transformer_hp_sweep_740_val_auc: 0.6318
+  player_features_740_val_auc: 0.6227
+  player_features_prepatch_740_features_only_val_auc: 0.6256
+  proposal_target_val_auc: 0.6372  # architecture_only + 0.005
+
+# Output paths (relative to experiment dir).
+output:
+  results_dir: "results"
+  metrics: "metrics.json"

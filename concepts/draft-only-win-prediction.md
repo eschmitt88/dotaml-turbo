@@ -16,6 +16,7 @@ related_experiments:
   - 2026-05-16-transformer-hp-sweep-740
   - 2026-05-17-player-features-740
   - 2026-05-18-player-features-prepatch-740
+  - 2026-05-18-transformer-plus-features-740
 tags: [task-definition, dota2, win-prediction]
 ---
 

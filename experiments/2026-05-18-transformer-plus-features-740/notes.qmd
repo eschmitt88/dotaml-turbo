@@ -1,0 +1,53 @@
+---
+title: "transformer-plus-features-740 — notes"
+date: 2026-05-18
+format:
+  html:
+    code-fold: true
+    toc: true
+jupyter: python3
+---
+
+# transformer-plus-features-740
+
+Combining MinimalTransformer (arch lever) with 80-dim per-player features
+(data lever) via per-slot `Linear(8, d_model)` injection. See `README.md`
+for the hypothesis and `metrics_*.json` for results.
+
+## Load metrics
+
+```{python}
+import json
+from pathlib import Path
+
+exp = Path(".").resolve()
+metrics_arch = json.loads((exp / "metrics_architecture_only.json").read_text()) \
+    if (exp / "metrics_architecture_only.json").exists() else None
+metrics_prim = json.loads((exp / "metrics_transformer_plus_features.json").read_text()) \
+    if (exp / "metrics_transformer_plus_features.json").exists() else None
+
+print("architecture_only val_auc:",
+      metrics_arch and metrics_arch.get("val_auc"))
+print("transformer_plus_features val_auc:",
+      metrics_prim and metrics_prim.get("val_auc"))
+```
+
+## Learning curves
+
+Plots are saved under `results/learning_curve_<ablation>.png` by `train.py`.
+Embed inline if useful for the write-up.
+
+## Coverage-bucket val_auc
+
+Compare `coverage_bucket_val_auc.buckets.high.val_auc` between the two
+ablations. The hypothesis predicts a lift in the HIGH-coverage tercile when
+features are injected — that's where per-player skill information is most
+discriminative.
+
+## Anchors
+
+- `plateau_baseline_740_val_auc`: 0.6161 (LightGBM, hero-one-hot only)
+- `plateau_architectures_740_val_auc`: 0.6322 (MinimalTransformer, no features)
+- `transformer_hp_sweep_740_val_auc`: 0.6318 (best HP-tuned MinimalTransformer)
+- `player_features_prepatch_740_features_only_val_auc`: 0.6256 (LightGBM + 80 player feats)
+- `proposal_target_val_auc`: 0.6372 (architecture_only + 0.005)

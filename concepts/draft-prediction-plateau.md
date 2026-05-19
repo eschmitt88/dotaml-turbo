@@ -11,6 +11,7 @@ sources:
   - experiments/2026-05-16-transformer-hp-sweep-740/README.md
   - experiments/2026-05-17-player-features-740/README.md
   - experiments/2026-05-18-player-features-prepatch-740/README.md
+  - experiments/2026-05-18-transformer-plus-features-740/README.md
 related_concepts:
   - draft-only-win-prediction
   - hero-embedding-vs-onehot
@@ -205,6 +206,56 @@ subset. The natural next experiment is the COMBINATION
 For the casual/anonymous tail, no amount of historical data helps;
 that subproblem requires anonymous-aware modeling (per-team
 aggregates over the known-player subset, or a separate head).
+
+**Refinement (2026-05-19, sixth experiment): combination is nearly
+additive — the architecture-vs-information dichotomy resolves to
+"use both".** See [[2026-05-18-transformer-plus-features-740]].
+Combining MinimalTransformer (alone: 0.6322) with the 80-dim
+per-player feature block (alone via LightGBM: 0.6256), via
+`Linear(8, d_model)` projection added per-slot to hero embeddings,
+gives val_auc=**0.6452** on whole val. That's +0.0133 over
+Transformer-only and +0.0196 over LightGBM-with-features — closely
+matching the additive sum of the two individual lifts (which would
+predict ~0.6417), confirming the two levers address minimally
+redundant information.
+
+Even more strikingly, ALL coverage buckets lifted:
+
+| coverage bucket | prev best (player-features-prepatch) | combined | Δ |
+|---|---|---|---|
+| low    | 0.6173 | 0.6347 | +0.0174 |
+| medium | 0.6256 | 0.6443 | +0.0187 |
+| high   | 0.6339 | **0.6560** | +0.0221 |
+
+The HIGH-coverage val_auc of 0.6560 is closing in on Hodge 2017's
+75-76% in-game-telemetry ceiling — achieved here with **pre-game info
+only**. The LOW-bucket val_auc 0.6347 (mostly-anonymous matches)
+**alone beats the architecture-only Transformer's whole-val ceiling
+0.6322** — meaning attention extracts substantially more signal even
+when most player features are anonymous-priors.
+
+**Updated whole-val scoreboard:**
+
+| approach | val_auc |
+|---|---|
+| LightGBM bag-of-heroes (`plateau-baseline-740`) | 0.6161 |
+| LightGBM + patch features (`player-features-740`) | 0.6227 |
+| LightGBM + prepatch features (`player-features-prepatch-740`) | 0.6256 |
+| SimpleFFN 52k (`plateau-architectures-740`) | 0.6217 |
+| ResidualFFN 225k (same) | 0.6199 |
+| Transformer 82k (same) | 0.6322 |
+| Transformer HP-tuned (`transformer-hp-sweep-740`) | 0.6318 |
+| **Transformer + player features (`transformer-plus-features-740`, 77k)** | **0.6452** ← new |
+| LightGBM + prepatch features, HIGH-coverage subset | 0.6339 |
+| Combined, HIGH-coverage subset | **0.6560** ← new |
+| Combined, n_anon ≤ 1 subset (extrapolated) | ~0.66+ |
+
+Any val_auc > **~0.66** on this snapshot must come from either
+(a) anonymous-aware modeling that lifts the bottom-tercile out of the
+~0.635 floor, (b) richer player representations (learned embeddings,
+hero-pair history), or (c) longer training / bigger architecture on
+the combined feature set (the combined model's `best_epoch=14=max`
+suggests room).
 
 ## Connections
 

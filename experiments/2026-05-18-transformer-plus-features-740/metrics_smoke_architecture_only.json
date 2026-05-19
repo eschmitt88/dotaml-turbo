@@ -1,0 +1,154 @@
+{
+  "ablation": "architecture_only",
+  "smoke": true,
+  "use_features": false,
+  "val_auc": 0.49819113712651464,
+  "val_loss": 0.818932275390625,
+  "val_metrics_at_best": {
+    "auc": 0.49819113712651464,
+    "acc": 0.5342,
+    "log_loss": 0.8189322645105531,
+    "brier": 0.30181974172592163,
+    "majority_class_acc": 0.5342000126838684
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.8928483696556091,
+      "val_loss": 0.818932275390625,
+      "val_auc": 0.49819113712651464,
+      "val_acc": 0.5342,
+      "wall_seconds": 0.6536352634429932
+    }
+  ],
+  "model_hp": {
+    "embed_dim": 64,
+    "d_model": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "ff_mult": 2,
+    "dropout": 0.0
+  },
+  "optim_hp": {
+    "batch_size": 8192,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "mixed_precision": true
+  },
+  "param_counts": {
+    "total": 77377,
+    "trainable": 77377,
+    "embedding": 9792,
+    "non_embedding": 67585
+  },
+  "train_seconds": 0.6541094779968262,
+  "data_seconds": 9.017097473144531,
+  "n_train_pre_subsample": 13018393,
+  "n_train_post_subsample": 50000,
+  "n_val": 5000,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "radiant_base_rate_train_full": 0.5334817438680796,
+  "radiant_base_rate_train_subsampled": 0.5345199704170227,
+  "radiant_base_rate_val": 0.5342000126838684,
+  "val_majority_class_acc": 0.5342000126838684,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "proposal_target_val_auc": 0.6372
+  },
+  "delta_vs_plateau_architectures_740": -0.13400886287348535,
+  "delta_vs_features_only_lgbm_prepatch": -0.1274088628734854,
+  "delta_vs_proposal_target": -0.13900886287348535,
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.8887008676528931,
+      2.033929636716843
+    ],
+    "buckets": {
+      "low": {
+        "n": 1665,
+        "val_auc": 0.5027138836882072,
+        "mean_coverage_log1p": 0.33113327622413635
+      },
+      "medium": {
+        "n": 1670,
+        "val_auc": 0.4994772291411539,
+        "mean_coverage_log1p": 1.4117852449417114
+      },
+      "high": {
+        "n": 1665,
+        "val_auc": 0.4920968147418245,
+        "mean_coverage_log1p": 2.9953112602233887
+      }
+    }
+  },
+  "calibration": {
+    "mean_pred": [
+      0.6872827731280687,
+      0.712173579454422,
+      0.7241918607809698,
+      0.7327681249075563,
+      0.7394077515963352,
+      0.7455342809359232,
+      0.7505878758329882,
+      0.7549250930547714,
+      0.7591833635027628,
+      0.7635225079042448,
+      0.7670580335169531,
+      0.7704519813969022,
+      0.7745925083452342,
+      0.7792981263014961,
+      0.7839315881331762,
+      0.7885277292558125,
+      0.7943552384215794,
+      0.8007286897033069,
+      0.8080157372961401,
+      0.8228741265062628
+    ],
+    "frac_pos": [
+      0.5298804780876494,
+      0.512,
+      0.5513307984790875,
+      0.5145985401459854,
+      0.5303030303030303,
+      0.5905797101449275,
+      0.540084388185654,
+      0.5083333333333333,
+      0.5341365461847389,
+      0.5611510791366906,
+      0.5642458100558659,
+      0.5158730158730159,
+      0.5428571428571428,
+      0.5282392026578073,
+      0.5462962962962963,
+      0.5,
+      0.5280898876404494,
+      0.5407725321888412,
+      0.5020746887966805,
+      0.5474137931034483
+    ]
+  },
+  "architecture_only_sanity_check": null
+}

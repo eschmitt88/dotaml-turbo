@@ -452,3 +452,152 @@ two experiments, two server-stability incidents.)
 - (NEW) **Consider time-decay or recency-weighted aggregator** before
   the next player-features-style experiment. The dict-of-dict state
   problem will recur unless we redesign.
+
+## 2026-05-19
+
+(Spans 2026-05-18 22:46 → 2026-05-19 01:35 — the prior `/wrap` at
+2026-05-18 15:18 covered through `player-features-prepatch-740`.
+This entry catches up on the player-features → architecture
+combination arc: account-id lookup, active-subset analysis,
+`transformer-plus-features-740` (CONFIRMED), upstream issue triage,
+and `player-features-prepatch-740` upstream data-quality finding.)
+
+### Did
+
+- **User account_id lookup** — pulled match 8815544558 from Azure
+  (one-off, into `/tmp/`, no permanent ingest). Identified
+  account_id 3303652 (eschmitt's Steam ID, non-anonymous) plus
+  friend 2231002. Saved both to
+  `~/.claude/projects/.../memory/user_account_ids.md` for use in
+  any future personal-data analysis.
+- **Verified user's hero pool against canonical data** —
+  `odota/dotaconstants/build/heroes.json`. Caught one mis-guess:
+  hero_id=94 is **Medusa**, not Riki. Corrected interpretation: user
+  is a support-leaning flex player (~73% support, ~27% hard carry).
+- **Scanned all 261 days of local raw turbo for matches containing
+  account 3303652** — 212 matches across 74 distinct days. Found
+  user's matches have **47.7% anonymous "other" players** (vs the
+  project-wide 66.6% mean) — confirming user's hypothesis that
+  active players cluster with other active players, but only ~19 pp
+  off the project mean rather than dramatically lower.
+- **Active-player-subset val_auc analysis** (#6) — re-scored
+  `player-features-prepatch-740` LightGBM model on different
+  data-availability slices of val. Key results: `n_anon ≤ 1` subset
+  val_auc=**0.6447** (1.3% of val), `≥5 active players` subset=
+  **0.6359** (21.4% of val), `≥3 active players` subset=0.6325 (48%
+  of val). Established the active-subset ceiling for the
+  LightGBM-only model is ~0.645 at the most-public extreme.
+- **Proposed + implemented `transformer-plus-features-740`** (#2) —
+  combined the architecture lever (MinimalTransformer from
+  `plateau-architectures-740`) with the 80-dim per-player feature
+  block from `player-features-prepatch-740` via
+  `Linear(8, d_model)` projection added per-slot to hero embeddings
+  before self-attention. **val_auc=0.6452 — HYPOTHESIS CONFIRMED,
+  +0.0080 over the target 0.6372**. Sanity ablation
+  (`architecture_only`) matched `plateau-architectures-740` within
+  0.0003 — pipeline correct.
+- **Caught upstream data corruption mid-experiment** —
+  `player-features-prepatch-740/train.parquet` has 6,482 fp32-max
+  (±3.4e38) sentinels (0.005% of cells) in `smoothed_winrate_hero`,
+  almost certainly a divide-by-zero in `build_features.py`'s
+  Bayesian smoothing formula. val.parquet clean. Sanitized
+  defensively in `data.py:load_arrays` for this experiment;
+  upstream patch noted for follow-up. Did NOT modify the prior
+  experiment's parquet (hard rule).
+- **Checked upstream pytorch/pytorch#184062** — assigned to
+  `albanD` (PyTorch maintainer), labels `triaged` +
+  `needs reproduction`. Comment from albanD: couldn't repro on
+  RTX 4080 (sm_89), asking for C++ stack traces. **Consistent with
+  our Blackwell-specific (sm_120) diagnosis** — different
+  generation, different code path. User is handling the C++ stack
+  capture in another agent.
+- **Concept refinements**:
+  - `concepts/draft-prediction-plateau.md` 6th refinement:
+    combination is nearly additive; whole-val ceiling moves from
+    ~0.632 to 0.6452; HIGH-coverage bucket reaches 0.6560.
+  - `concepts/draft-only-win-prediction.md` related_experiments
+    extended.
+- **`_meta/index.md`** lists six completed experiments now.
+
+### Findings
+
+- **The architecture-vs-information dichotomy resolves to "use
+  both"**. Architecture (Transformer) and per-player-per-hero
+  features address minimally-redundant information axes. Combined
+  val_auc 0.6452 is nearly the sum of individual lifts (Transformer
+  +0.0161 over LGBM-baseline; features +0.0095 over LGBM-baseline;
+  naive sum predicted 0.6417, actual 0.6452 — slight synergy not
+  redundancy).
+- **The HIGH-coverage val_auc 0.6560 is closing in on Hodge 2017's
+  75-76% in-game-telemetry ceiling — using PRE-GAME info only.**
+  That's striking; it means for active-player lobbies, hero+player
+  info nearly matches what you get with full live telemetry.
+- **The LOW-bucket val_auc 0.6347 (mostly-anonymous matches) alone
+  beats the architecture-only Transformer's whole-val ceiling
+  (0.6322).** Attention extracts substantially more signal even on
+  mostly-anonymous matches when given partial per-player info.
+- **The whole-val LOW-vs-HIGH gap is now 0.0213** — the largest
+  internal asymmetry in our best model. This is the biggest
+  remaining whole-val lever.
+- **User's "active-players-cluster" hypothesis confirmed but
+  partial** — their matches have 47.7% anon "other" players vs
+  project-wide 66.6%. About ~19 pp better, not zero or near-zero.
+  Active-lobby data-quality story is real but bounded.
+- **First Transformer experiment with zero Blackwell torch
+  retries** — `transformer-plus-features-740` both ablations
+  succeeded first attempt. Either the dataset shape or the per-
+  trial subprocess pattern happened to dodge the bug this time,
+  or the bug is genuinely intermittent at low frequency.
+- **Upstream pytorch maintainer is treating the issue seriously**
+  — assigned, triaged, asking for C++ stacks. Confirms the issue is
+  considered actionable.
+- **Engineering caveat: `player-features-prepatch-740` was trained
+  on slightly-corrupted data** (6,482 fp32-max cells in one feature
+  column, 0.005% of cells). val_auc=0.6256 may have been minutely
+  affected. Worth re-running after upstream patch but probably
+  noise-level.
+
+### Next
+
+- **(Highest priority) `anonymous-aware-modeling-740`** — address
+  the 0.0213 LOW-vs-HIGH coverage asymmetry now that the
+  combined-model has resolved the architecture-vs-information
+  question. Two concrete design candidates: (a) router head that
+  routes all-10-anonymous matches (12.6% of val) to a separate small
+  model using only hero one-hot + radiant-side base rate, or
+  (b) per-team aggregate features over the known-player subset
+  ("mean smoothed_winrate of the K known players on team R", plus
+  K_radiant, K_dire as features). (a) is simpler; (b) is more
+  principled. Either could lift the LOW bucket by 0.005-0.015.
+  Expected: meaningful whole-val gain.
+- **`transformer-plus-features-extended-training`** (almost-free
+  follow-up) — both ablations had `best_epoch=14=max_epochs`,
+  val_loss still improving at cap. Bump to 25-30 epochs with early
+  stopping (patience=5). Expected +0.001-0.005 essentially free.
+- **`upstream-data-cleanup`** — patch the divide-by-zero edge case
+  in `player-features-prepatch-740/build_features.py` that produces
+  6,482 fp32-max sentinels. Re-build the prepatch parquet (~3 h
+  re-run), then re-run player-features-prepatch and
+  transformer-plus-features. Effect likely tiny but matters for
+  downstream cleanliness.
+- **`player-embedding-prelim-740`** (user-flagged conceptual
+  direction) — learned per-player embeddings (~1.3M accounts ×
+  32-64 dim = 167-333 MB, fits VRAM easily). Now that we have a
+  strong reference at 0.6452, the embedding experiment has a sharp
+  comparison point. Long-tail concern: ~80% of accounts appear ≤5
+  times; anon embedding (66% of slots) becomes the best-trained
+  and serves as a natural shrinkage target via a learned gate.
+- **`player-features-decay-740`** — exponential time-weighting
+  (τ ≈ 90 days) for the aggregator. Smaller experiment; tests
+  whether recent skill matters more than uniformly-weighted
+  history. May or may not help.
+- (Tracked) **pytorch/pytorch#184062** — user handling the C++ stack
+  capture in another agent. If maintainer needs further info, follow
+  up via that channel.
+- (Carryover, deferred) Promote `run_sweep_loop.sh` +
+  `cleanup_failed_trials.py` to `_meta/templates/`.
+- (Carryover, deferred) LLM-driven islands evolution. Higher-leverage
+  in principle but bigger investment than the cheap follow-ups
+  above — defer until the data-side wins are exhausted.
+- (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M
+  sanity check; DVC formalisation. Still optional.

@@ -1,0 +1,4 @@
+{
+  "status": "pending",
+  "note": "Placeholder. Full-run metrics land in metrics_architecture_only.json and metrics_transformer_plus_features.json after run_all.sh completes."
+}
