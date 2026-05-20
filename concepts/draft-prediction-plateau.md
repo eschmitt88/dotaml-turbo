@@ -12,6 +12,9 @@ sources:
   - experiments/2026-05-17-player-features-740/README.md
   - experiments/2026-05-18-player-features-prepatch-740/README.md
   - experiments/2026-05-18-transformer-plus-features-740/README.md
+  - experiments/2026-05-19-transformer-plus-features-extended-740/README.md
+  - experiments/2026-05-19-upstream-data-cleanup-740/README.md
+  - experiments/2026-05-19-player-embedding-prelim-740/README.md
 related_concepts:
   - draft-only-win-prediction
   - hero-embedding-vs-onehot
@@ -256,6 +259,143 @@ Any val_auc > **~0.66** on this snapshot must come from either
 hero-pair history), or (c) longer training / bigger architecture on
 the combined feature set (the combined model's `best_epoch=14=max`
 suggests room).
+
+**Refinement (2026-05-19, seventh experiment): longer training is
+~free signal but uniformly distributed across coverage buckets.** See
+[[2026-05-19-transformer-plus-features-extended-740]]. Same combined
+model, training cap raised 14 → 30 epochs with early-stopping
+patience=5 on val_log_loss. val_auc rose **0.6452 → 0.6477**
+(+0.0025) at `best_epoch=22`, early-stopped at epoch 27. The
+"max_epochs=cap" red flag in the prior experiment was real — the
+combined model was genuinely under-trained — but the
+return-on-epochs has now plateaued.
+
+Coverage-bucket lifts were uniform:
+
+| coverage bucket | parent (epoch 14) | extended (epoch 22) | Δ |
+|---|---|---|---|
+| low    | 0.6347 | 0.6367 | +0.0020 |
+| medium | 0.6443 | 0.6467 | +0.0024 |
+| high   | 0.6560 | **0.6588** | +0.0028 |
+
+The LOW-vs-HIGH gap closed only fractionally (0.0213 → 0.0221), which
+re-confirms that extended training is NOT a targeted fix for the
+casual/anonymous tail — the binding constraint there remains
+information availability, not optimization. Train-val log-loss gap
+at best epoch was 0.0052 (vs parent's 0.0035), modestly wider but
+not pathological; early-stopping fired at the right place.
+
+**Updated whole-val scoreboard:**
+
+| approach | val_auc |
+|---|---|
+| LightGBM bag-of-heroes (`plateau-baseline-740`) | 0.6161 |
+| LightGBM + patch features (`player-features-740`) | 0.6227 |
+| LightGBM + prepatch features (`player-features-prepatch-740`) | 0.6256 |
+| Transformer 82k (`plateau-architectures-740`) | 0.6322 |
+| Transformer HP-tuned (`transformer-hp-sweep-740`) | 0.6318 |
+| Transformer + player features, 14 ep (`transformer-plus-features-740`, 77k) | 0.6452 |
+| **Transformer + player features, 22 ep (`transformer-plus-features-extended-740`)** | **0.6477** ← new |
+| Combined, HIGH-coverage subset (extended) | **0.6588** ← new |
+
+The marginal-per-epoch gain in the 14 → 22 window never inverted but
+shrank steadily; suggests that yet-longer training is unlikely to
+yield further wins without a different lever (LR schedule, larger
+model, different loss). The next ceiling-breakers are not "more
+epochs" but new information axes: learned player embeddings, draft
+order, hero-pair history, or anonymous-aware modeling.
+
+**Refinement (2026-05-19, ninth experiment, NULL on learned player
+embeddings): the 8 aggregated features capture the per-player axis;
+identity-level latent signal beyond aggregates does not exist in
+meaningful quantity for this task.** See
+[[2026-05-19-player-embedding-prelim-740]]. A 16M-param learned
+per-player embedding (vocab = top-500K most-frequent non-anonymous
+accounts + 1 'rare' + 1 'anon' bucket, dim=32, 208× the baseline's
+77K params) added to the cleanup-confirmed Transformer+features
+model produced **zero net signal**:
+
+- baseline_extended_clean (sanity replication): val_auc = **0.6477054**
+  (matches `upstream-data-cleanup-740` to FIVE decimal places).
+- with_player_embedding: val_auc = **0.6476302** @ best_epoch=23
+  (Δ = -7.5e-5 vs baseline; -2.07e-3 vs the +0.0020 target).
+
+Crucially, the HIGH coverage bucket — where 50.9% of slots resolve to
+a frequent vocab entry (the maximum embedding leverage) and only 42%
+are anonymous — gained just **+0.0001**. The MED bucket DROPPED -0.0004.
+If learned identity vectors carried any signal beyond aggregates, the
+HIGH bucket would have moved.
+
+Train-val log-loss gap at best epoch: baseline 0.0052, with-embedding
+**0.0050** (SMALLER). Not overfitting; just not learning.
+
+The 0.6477 ceiling is now anchored across **three independent runs**
+(`extended-740`, `cleanup-740`, `baseline_extended_clean`) within
+2e-5 — a very trustworthy reference. The 8 features
+(smoothed_winrate, smoothed_winrate_hero, last10_winrate,
+days_since_last_log1p, n_games_log1p, n_games_hero_log1p,
+hero_diversity_log1p, is_anonymous) are essentially **complete** for
+the per-player identity axis on this prediction task.
+
+**Implication for the next ceiling-breakers:** richer player
+representations (deeper embeddings, hierarchical priors, co-play
+attention) are NOT where the gains will come from. The remaining
+levers are:
+
+1. **New information axes** — draft order via `picks_bans[]` sequence
+   (untouched), hero-pair history (per-account-per-hero-pair winrates,
+   not in current aggregator), lane/role inference, team-aggregate
+   restructuring that changes the input structure not just the
+   per-slot encoding.
+2. **Anonymous-aware modeling** — the persistent 0.0220 LOW-HIGH
+   bucket gap. Router head OR per-team aggregates over known players.
+   The embedding null result strengthens this case (since identity
+   richness doesn't help, attacking the bucket asymmetry structurally
+   is the residual axis).
+3. **Time-decay weighting** on the existing aggregator (smaller
+   experiment; tests whether recent skill matters more than
+   uniformly-weighted history).
+4. **Structural mutation** (LLM-driven islands evolution; deferred,
+   bigger investment).
+
+The "richer per-player representation" line is now closed (or at
+least, the simplest, most-likely-to-work version of it is). Re-opening
+would require either (a) a hierarchical-prior shrinkage architecture
+with explicit anonymity-aware gating, or (b) co-play / partner-aware
+embeddings where the lookup itself is match-context-conditioned —
+both substantially more complex than the prelim, and arguably better
+attacked through the structural-mutation path.
+
+**Refinement (2026-05-19, eighth experiment, NO-REGRESSION cleanup):
+the 0.6477 reference is confirmed trustworthy.** See
+[[2026-05-19-upstream-data-cleanup-740]]. The prior two experiments
+that produced the 0.6256 (LightGBM features_only) and 0.6477
+(Transformer + features extended) headline numbers had been run
+on a parquet containing 6,482 fp32-max sentinel cells (0.005% of
+130M) in `p1_smoothed_winrate_hero`. Re-running both on a freshly
+rebuilt clean parquet with defensive multi-checkpoint clamping:
+
+- LightGBM features_only: clean 0.6063985, dirty 0.6064643,
+  **Δ = -6.6e-5** (within noise floor).
+- Transformer+features extended: clean 0.6477054, dirty 0.6477298,
+  **Δ = -2.4e-5** (within noise floor). Training curves differ by
+  ≤ 0.0008 per epoch, median 0.0001.
+
+The equality band [0.6467, 0.6487] holds dead-center. **Sentinels
+were genuinely noise-level**, not biasing prior results, so the
+plateau scoreboard above stands unchanged with the clean numbers
+treated as canonical. The substantive payoff was downstream: the
+clean parquet is now the canonical input at
+`data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/`,
+and downstream consumers (`player-embedding-prelim-740` and beyond)
+no longer carry the `data.py` sanitization workaround. The root
+cause of the original corruption could not be deterministically
+reproduced; investigation pointed at transient memory / buffer-fill
+anomaly in PyArrow's fp32 column conversion on one specific row
+group (single date 2025-12-29, mixed NaN/denormal/negative
+signature consistent with torn 16-bit memory writes), NOT a math
+bug. The defense (snapshot-time clamp + numpy-routed pyarrow write
++ pre/post-write bounds-check) is mechanism-agnostic.
 
 ## Connections
 

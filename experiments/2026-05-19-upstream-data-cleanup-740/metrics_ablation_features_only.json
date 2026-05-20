@@ -1,0 +1,242 @@
+{
+  "ablation": "features_only",
+  "smoke": false,
+  "val_auc": 0.606398476179507,
+  "val_acc": 0.579758059015743,
+  "val_log_loss": 0.6729410991781954,
+  "val_brier": 0.24011721123978963,
+  "train_auc": 0.6224323647597623,
+  "train_acc": 0.590798,
+  "train_log_loss": 0.6673680579245392,
+  "train_val_auc_gap": 0.01603388858025523,
+  "n_train_pre_subsample": 13018393,
+  "n_train_post_subsample": 5000000,
+  "n_val": 2419185,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "radiant_base_rate_train_full": 0.5334817438680796,
+  "radiant_base_rate_train_subsampled": 0.5334818,
+  "radiant_base_rate_val": 0.5326144962043002,
+  "val_majority_class_acc": 0.5326144962043002,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "model": "lightgbm",
+  "num_boost_round": 500,
+  "learning_rate": 0.1,
+  "num_leaves": 31,
+  "feature_dim": 80,
+  "train_seconds": 144.12041068077087,
+  "calibration_quantile_bins": 20,
+  "calibration": {
+    "mean_pred": [
+      0.3401630156473284,
+      0.39549269838729895,
+      0.4230408386694772,
+      0.44387778663926736,
+      0.46128617088742446,
+      0.476634243187437,
+      0.4907269076650313,
+      0.50395231007026,
+      0.5165976806759555,
+      0.5289167849953952,
+      0.5410720709652845,
+      0.553292144886724,
+      0.5657122866486166,
+      0.5785444256318772,
+      0.5921551366046673,
+      0.6068375833011147,
+      0.6232633727789484,
+      0.6426629214644798,
+      0.6679282702321943,
+      0.7172076965436006
+    ],
+    "frac_pos": [
+      0.3359705687830688,
+      0.39646491786473104,
+      0.4232260518026769,
+      0.4454980613265652,
+      0.46100363756613755,
+      0.47620268024702583,
+      0.49124083367091326,
+      0.5025008473945717,
+      0.5184401326069163,
+      0.5255621693121693,
+      0.5384882480840616,
+      0.5516745343463487,
+      0.5637860762737787,
+      0.5757240056548086,
+      0.58974041005291,
+      0.6055936308997264,
+      0.6206648533800709,
+      0.6420439983796162,
+      0.6673087575128762,
+      0.7211557539682539
+    ]
+  },
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "transformer_plus_features_extended_740_val_auc": 0.6477,
+    "equality_band_lower": 0.6467,
+    "equality_band_upper": 0.6487,
+    "n_sanitized_cells_in_prior_parquet": 6482
+  },
+  "delta_vs_plateau_baseline_740_val_auc": -0.009701523820492941,
+  "delta_vs_player_features_740_val_auc": -0.01630152382049299,
+  "delta_vs_plateau_architectures_740_val_auc": -0.025801523820492944,
+  "delta_vs_transformer_hp_sweep_740_val_auc": -0.02540152382049299,
+  "delta_features_only_vs_player_features_prepatch_740": -0.019201523820493005,
+  "feature_importance_top20": [
+    {
+      "name": "p0_smoothed_winrate_hero",
+      "gain": 94075.34014511108
+    },
+    {
+      "name": "p5_smoothed_winrate_hero",
+      "gain": 91373.89467477798
+    },
+    {
+      "name": "p6_smoothed_winrate_hero",
+      "gain": 89863.64924812317
+    },
+    {
+      "name": "p7_smoothed_winrate_hero",
+      "gain": 89718.35187196732
+    },
+    {
+      "name": "p1_smoothed_winrate_hero",
+      "gain": 89049.63175868988
+    },
+    {
+      "name": "p2_smoothed_winrate_hero",
+      "gain": 88590.4058766365
+    },
+    {
+      "name": "p3_smoothed_winrate_hero",
+      "gain": 88503.61073541641
+    },
+    {
+      "name": "p8_smoothed_winrate_hero",
+      "gain": 84819.0636048317
+    },
+    {
+      "name": "p4_smoothed_winrate_hero",
+      "gain": 83430.46915769577
+    },
+    {
+      "name": "p9_smoothed_winrate_hero",
+      "gain": 80624.84593296051
+    },
+    {
+      "name": "p1_n_games_hero_log1p",
+      "gain": 19674.92944765091
+    },
+    {
+      "name": "p3_n_games_hero_log1p",
+      "gain": 18504.987731456757
+    },
+    {
+      "name": "p6_n_games_hero_log1p",
+      "gain": 18168.1159992218
+    },
+    {
+      "name": "p0_n_games_hero_log1p",
+      "gain": 17868.86591243744
+    },
+    {
+      "name": "p2_n_games_hero_log1p",
+      "gain": 17054.657344818115
+    },
+    {
+      "name": "p7_n_games_hero_log1p",
+      "gain": 16678.00063276291
+    },
+    {
+      "name": "p8_n_games_hero_log1p",
+      "gain": 16235.20882844925
+    },
+    {
+      "name": "p5_n_games_hero_log1p",
+      "gain": 16154.176681995392
+    },
+    {
+      "name": "p4_n_games_hero_log1p",
+      "gain": 15835.08238697052
+    },
+    {
+      "name": "p9_n_games_hero_log1p",
+      "gain": 15821.6904129982
+    }
+  ],
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.9004054069519043,
+      2.0906001930236826
+    ],
+    "buckets": {
+      "low": {
+        "n": 805580,
+        "val_auc": 0.5999902397781305,
+        "mean_coverage_log1p": 0.3289424479007721
+      },
+      "medium": {
+        "n": 808016,
+        "val_auc": 0.6080685206243003,
+        "mean_coverage_log1p": 1.4505949020385742
+      },
+      "high": {
+        "n": 805589,
+        "val_auc": 0.611213386266702,
+        "mean_coverage_log1p": 3.0644800662994385
+      }
+    }
+  },
+  "history_source_breakdown": {
+    "overall_mean_prepatch_fraction": 0.12870323396313507,
+    "overall_mean_n_games_prepatch_per_slot": 37.79533685931419,
+    "overall_mean_n_games_inpatch_per_slot": 42.02506554893487,
+    "overall_mean_n_games_total_per_slot": 79.82040240824907,
+    "per_bucket": {
+      "low": {
+        "n": 805580,
+        "mean_prepatch_fraction": 0.023362284453736504,
+        "mean_n_games_prepatch_per_slot": 4.171611882122198,
+        "mean_n_games_inpatch_per_slot": 5.969495642890837,
+        "mean_n_games_total_per_slot": 10.141107525013034
+      },
+      "medium": {
+        "n": 808016,
+        "mean_prepatch_fraction": 0.11398397636279393,
+        "mean_n_games_prepatch_per_slot": 28.40921528781608,
+        "mean_n_games_inpatch_per_slot": 33.70728277657868,
+        "mean_n_games_total_per_slot": 62.11649806439476
+      },
+      "high": {
+        "n": 805589,
+        "mean_prepatch_fraction": 0.2488066089533329,
+        "mean_n_games_prepatch_per_slot": 80.83308535742171,
+        "mean_n_games_inpatch_per_slot": 86.42307442132403,
+        "mean_n_games_total_per_slot": 167.25615977874574
+      }
+    }
+  },
+  "anonymous_per_match_hist_val": {
+    "0": 5884,
+    "1": 24997,
+    "2": 63623,
+    "3": 124763,
+    "4": 199138,
+    "5": 273430,
+    "6": 331271,
+    "7": 363583,
+    "8": 372577,
+    "9": 354042,
+    "10": 305877
+  },
+  "heroes_only_sanity_check": null
+}

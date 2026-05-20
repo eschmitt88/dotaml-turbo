@@ -1,0 +1,23 @@
+---
+title: "Player embedding prelim 740 — notes"
+format: html
+---
+
+# Setup
+
+Two ablations vs the cleanup-740 baseline:
+
+1. `baseline_extended_clean` — sanity replication, no embedding.
+2. `with_player_embedding` — PRIMARY.
+
+# Post-run analysis
+
+To be filled after the full run completes.
+
+```{python}
+# import json
+# m_b = json.load(open("metrics_baseline_extended_clean.json"))
+# m_p = json.load(open("metrics_with_player_embedding.json"))
+# print(f"baseline val_auc:  {m_b['val_auc']:.4f}")
+# print(f"primary  val_auc:  {m_p['val_auc']:.4f}  (delta {m_p['val_auc'] - m_b['val_auc']:+.4f})")
+```

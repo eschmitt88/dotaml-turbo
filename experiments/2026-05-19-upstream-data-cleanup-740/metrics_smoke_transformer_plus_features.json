@@ -1,0 +1,160 @@
+{
+  "ablation": "transformer_plus_features",
+  "smoke": true,
+  "use_features": true,
+  "val_auc": 0.4989996695832055,
+  "val_loss": 0.73477275390625,
+  "val_metrics_at_best": {
+    "auc": 0.4989996695832055,
+    "acc": 0.5332,
+    "log_loss": 0.7347727653449627,
+    "brier": 0.2684376835823059,
+    "majority_class_acc": 0.5332000255584717
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9258914184379577,
+      "val_loss": 0.73477275390625,
+      "val_auc": 0.4989996695832055,
+      "val_acc": 0.5332,
+      "wall_seconds": 0.7204220294952393
+    }
+  ],
+  "model_hp": {
+    "embed_dim": 64,
+    "d_model": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "ff_mult": 2,
+    "dropout": 0.0
+  },
+  "optim_hp": {
+    "batch_size": 8192,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "mixed_precision": true
+  },
+  "param_counts": {
+    "total": 77377,
+    "trainable": 77377,
+    "embedding": 9792,
+    "non_embedding": 67585
+  },
+  "train_seconds": 0.7209291458129883,
+  "data_seconds": 0.31829285621643066,
+  "n_train_pre_subsample": 341627,
+  "n_train_post_subsample": 50000,
+  "n_val": 5000,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2025-12-18",
+  "val_date_min": "2025-12-18",
+  "val_date_max": "2025-12-18",
+  "radiant_base_rate_train_full": 0.5344278994341782,
+  "radiant_base_rate_train_subsampled": 0.5364400148391724,
+  "radiant_base_rate_val": 0.5332000255584717,
+  "val_majority_class_acc": 0.5332000255584717,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "transformer_plus_features_extended_740_val_auc": 0.6477,
+    "equality_band_lower": 0.6467,
+    "equality_band_upper": 0.6487,
+    "n_sanitized_cells_in_prior_parquet": 6482
+  },
+  "delta_vs_plateau_architectures_740": -0.13320033041679447,
+  "delta_vs_features_only_lgbm_prepatch": -0.12660033041679453,
+  "delta_combined_vs_transformer_plus_features_extended_740": -0.14870033041679454,
+  "delta_combined_vs_proposal_band_lower": -0.14770033041679453,
+  "delta_combined_vs_proposal_band_upper": -0.14970033041679454,
+  "equality_band_holds": null,
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.4025351405143738,
+      0.9304193921089172
+    ],
+    "buckets": {
+      "low": {
+        "n": 1659,
+        "val_auc": 0.5131593625965851,
+        "mean_coverage_log1p": 0.15412096679210663
+      },
+      "medium": {
+        "n": 1676,
+        "val_auc": 0.5071191883013186,
+        "mean_coverage_log1p": 0.662177562713623
+      },
+      "high": {
+        "n": 1665,
+        "val_auc": 0.513013007936899,
+        "mean_coverage_log1p": 1.3774878978729248
+      }
+    }
+  },
+  "calibration": {
+    "mean_pred": [
+      0.5645231262995647,
+      0.5796060990314095,
+      0.5882297778419154,
+      0.5983562608256595,
+      0.6077572092475733,
+      0.616202430445173,
+      0.6249508140222082,
+      0.6342581723068581,
+      0.6429789388501966,
+      0.6515547952753432,
+      0.660318579840924,
+      0.6690140509907203,
+      0.6784464670706165,
+      0.6872638372083505,
+      0.6969047744595815,
+      0.7077192400322586,
+      0.7200222902410612,
+      0.7352798071562076,
+      0.7524692281763604,
+      0.7857780722250421
+    ],
+    "frac_pos": [
+      0.5307692307692308,
+      0.5346938775510204,
+      0.5101214574898786,
+      0.5419847328244275,
+      0.5850622406639004,
+      0.5587044534412956,
+      0.5358490566037736,
+      0.5409836065573771,
+      0.4594594594594595,
+      0.5659574468085107,
+      0.5276752767527675,
+      0.5147679324894515,
+      0.5155038759689923,
+      0.5416666666666666,
+      0.5119047619047619,
+      0.5204918032786885,
+      0.5354330708661418,
+      0.5529411764705883,
+      0.5617021276595745,
+      0.5261044176706827
+    ]
+  },
+  "equality_band_check": null
+}

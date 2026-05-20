@@ -1,0 +1,26 @@
+{
+  "headline": {
+    "features_only_val_auc": 0.606398476179507,
+    "transformer_plus_features_val_auc": 0.6477054481717861,
+    "transformer_plus_features_best_epoch": 22,
+    "transformer_plus_features_epochs_run": 27
+  },
+  "anchors": {
+    "player_features_prepatch_740_features_only_val_auc_DIRTY": 0.6064642706847518,
+    "transformer_plus_features_extended_740_val_auc_DIRTY": 0.6477298493888024,
+    "proposal_band_lower": 0.6467,
+    "proposal_band_upper": 0.6487
+  },
+  "deltas": {
+    "delta_features_only_vs_dirty": -0.00006579450524483,
+    "delta_combined_vs_dirty": -0.0000244012170163,
+    "delta_combined_vs_band_lower": 0.0010054481717861,
+    "delta_combined_vs_band_upper": -0.0009945518282139
+  },
+  "equality_band_holds": true,
+  "hypothesis_confirmed": true,
+  "interpretation": "Cleanup confirms no-regression: both LightGBM and Transformer val_auc are within 1e-4 of their dirty-parquet anchors. The 6,482 fp32-max sentinels in p1_smoothed_winrate_hero were NOT materially biasing prior results. Clean parquet is the new canonical input for downstream experiments.",
+  "n_sanitized_cells_in_clean_parquet": 0,
+  "n_sanitized_cells_in_prior_parquet": 6482,
+  "rollup_note": "per-ablation: metrics_ablation_features_only.json (LightGBM), metrics_transformer_plus_features.json (Transformer extended)"
+}

@@ -601,3 +601,146 @@ and `player-features-prepatch-740` upstream data-quality finding.)
   above — defer until the data-side wins are exhausted.
 - (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M
   sanity check; DVC formalisation. Still optional.
+
+---
+
+## 2026-05-20
+
+### Did
+
+- Proposed + implemented `transformer-plus-features-extended-740`
+  (`experiments/2026-05-19-transformer-plus-features-extended-740/`):
+  same architecture and feature set as `transformer-plus-features-740`,
+  training cap raised 14 → 30 epochs with early-stopping patience=5
+  on val_log_loss. val_auc=**0.6477** @ best_epoch=22, early-stopped
+  at epoch 27. **HYPOTHESIS CONFIRMED** (+0.0025 over parent 0.6452,
+  +0.0015 over target 0.6462). All three coverage buckets lifted
+  uniformly (~+0.0025). 25.1-min wall, zero Blackwell retries.
+- Proposed + implemented `upstream-data-cleanup-740`
+  (`experiments/2026-05-19-upstream-data-cleanup-740/`): patched the
+  upstream defect in `build_features.py` producing 6,482 fp32-max
+  sentinel cells in `p1_smoothed_winrate_hero` of the prepatch
+  parquet (0.005% of cells). Rebuilt cleanly with multi-checkpoint
+  defense (snapshot-time clamp + numpy-routed pyarrow write +
+  pre/post-write bounds-check). **No-regression CONFIRMED**:
+  Transformer+features val_auc on clean parquet = **0.6477054**
+  (Δ = -2.4e-5 vs dirty); LightGBM features_only = 0.6063985
+  (Δ = -6.6e-5 vs dirty). Equality band [0.6467, 0.6487] holds
+  dead-center. Root cause of the original corruption was traced to
+  transient memory / buffer-fill anomaly in PyArrow's fp32 column
+  conversion (NOT a math bug), not deterministically reproducible —
+  defense is mechanism-agnostic. Clean parquet at
+  `data/snapshots/.../player_features_prepatch_clean/` is the new
+  canonical input.
+- Proposed + implemented `player-embedding-prelim-740`
+  (`experiments/2026-05-19-player-embedding-prelim-740/`): learned
+  per-player embedding (vocab top-500K + 'rare' + 'anon' bucket,
+  dim=32, 16M params, 208× baseline). **HYPOTHESIS NOT CONFIRMED**
+  — clean null. baseline_extended_clean reproduced cleanup-740's
+  val_auc to FIVE decimal places (0.6477054); with_player_embedding
+  landed at 0.6476302 @ best_epoch=23 (Δ=-7.5e-5 vs baseline,
+  -2.07e-3 vs target). Coverage buckets all flat within noise
+  including HIGH bucket where 50.9% of slots get frequent vocab
+  entries. Train-val gap NARROWER for embedding model — not
+  overfitting, just no useful signal. Required a 45-min
+  `build_account_sidecar.py` pre-step because account_ids aren't in
+  the clean parquet (only raw JSON has them).
+- Server-stability events: **2× OOM-kill** during cleanup-740's
+  post-write parquet re-read validation step (1.38 GB re-read after
+  2h aggregation holding ~30 GB dict-of-dict state). First instance
+  cascaded to a full system reboot at 2026-05-19 08:23 UTC; second
+  was an isolated SIGKILL rc=137. Both times the on-disk parquet
+  was complete; verified clean via pyarrow row-group column
+  statistics (cheap, no full-read). Saved as personal memory:
+  `aiserver2026-postwrite-parquet-reread-oom.md`.
+- Bun (Claude Code CLI) v1.3.14 segfaulted mid-session at ~16:50
+  UTC. `nohup`-detached pipeline survived (logged to
+  `experiments/.../full_run.log`, not `/tmp`); resume succeeded
+  cleanly, no rework needed.
+- Updated `concepts/draft-prediction-plateau.md` with refinements
+  7+8+9 (extended-training uniform lift, no-regression cleanup,
+  player-embedding null result). Updated `_meta/index.md` and
+  `_meta/log.md` per experiment.
+
+### Findings
+
+- **The 0.6477 ceiling is anchored across THREE independent runs**
+  (`extended-740`, `cleanup-740`, `baseline_extended_clean`) within
+  2e-5 of each other. This is a much tighter pin than the typical
+  ~1e-4 reproducibility seen across the project's reruns; the
+  fixed seed=42 + identical data pipeline really do produce
+  bit-stable val_auc.
+- **The 8 aggregated player features are essentially complete for
+  the per-player identity axis on this task.** A 16M-param learned
+  embedding had access to the full identity history but extracted
+  ZERO additional signal over the 77K-param baseline. The HIGH
+  coverage bucket (50.9% in-vocab frac, the maximum embedding
+  leverage) gained only +0.0001. This is the strongest possible
+  negative finding for "richer player representations" as a lever.
+- **Extended training to ~22 epochs is essentially free signal but
+  is uniformly distributed across coverage buckets** — does NOT
+  target the cold-start/anonymous tail. The LOW-vs-HIGH gap closed
+  only fractionally (0.0213 → 0.0221) under extended training.
+- **The 6,482 fp32-max sentinels were genuinely noise-level** — clean
+  vs dirty val_auc differs by ≤ 1e-4 for both LightGBM and
+  Transformer reruns. Equality band holds dead-center. But fixing
+  the source matters: every downstream experiment from now on
+  consumes the clean parquet directly with no `data.py`
+  sanitization workaround.
+- **Root cause of the original parquet corruption was NOT a math
+  bug.** Investigation traced to PyArrow's fp32 column-buffer fill
+  on one specific row group (single date 2025-12-29, single column,
+  signature of torn 16-bit memory writes). Not reproducible. The
+  multi-checkpoint defense in `build_features.py` is the long-term
+  fix and is mechanism-agnostic.
+- **OOM during `build_features.py` post-write re-read is a
+  recurring pattern on this box** (2 events in this session, one
+  escalated to system reboot). Lesson: never re-read a multi-GB
+  parquet inside a process already holding heavy aggregator state;
+  use pyarrow row-group column statistics for validation instead.
+  Memory note saved.
+- **Identity-level latent signal beyond aggregate stats does not
+  exist in meaningful quantity for the radiant-win label.** This
+  closes off the "richer per-player representation" line for now.
+  The remaining ceiling-breakers are NEW information axes (draft
+  order, hero-pair history), anonymous-aware modeling (router or
+  team-aggregate), or structural mutation — not deeper embeddings.
+
+### Next
+
+- **`draft-order-features-740`** *(new; my recommendation given
+  the embedding null result)* — `picks_bans[]` sequence is the
+  largest untouched information axis. Encode pick/ban order plus
+  side (radiant/dire), inject as a sequence feature into the
+  Transformer. Hypothesis: draft order carries strategic
+  information the current per-slot encoding lacks. Likely +0.002
+  to +0.010 if pick-order signal is real.
+- **`anonymous-aware-modeling-740`** — previously user-deprioritized,
+  but the embedding null *strengthens* the case. Since identity
+  richness doesn't help, attacking the LOW-HIGH bucket asymmetry
+  structurally is the residual axis. Two design candidates: (a)
+  router head for all-10-anonymous matches (12.6% of val) to a
+  separate small model; (b) per-team aggregate features over the
+  known-player subset. Could lift LOW (0.6368) toward MED (0.6467),
+  whole-val gain ~0.005-0.015.
+- **`player-features-decay-740`** — exponential time-weighting
+  (τ ≈ 90 days) for the aggregator. Smaller experiment; tests
+  whether recent skill matters more than uniformly-weighted
+  history. May or may not help.
+- **Engineering: extend `build_features.py` to emit `pX_account_id`
+  columns alongside features.** Would have saved 45 min on the
+  embedding experiment's sidecar walk; would unify the data
+  pipeline for any future identity-flavored work.
+- **Engineering: DVC-track the new
+  `data/snapshots/.../player_features_prepatch_clean/` directory**
+  so re-fetches by downstream experiments are reproducible.
+- (Tracked) **pytorch/pytorch#184062** — user handling C++ stacks
+  in another agent. No change.
+- (Carryover, deferred) Promote `run_sweep_loop.sh` +
+  `cleanup_failed_trials.py` to `_meta/templates/`.
+- (Carryover, deferred) LLM-driven islands evolution. Higher-leverage
+  in principle but bigger investment than the cheap follow-ups
+  above — defer until the data-side wins are exhausted.
+- (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M
+  sanity check; DVC formalisation.
+

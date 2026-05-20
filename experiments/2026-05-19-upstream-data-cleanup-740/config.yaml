@@ -1,0 +1,142 @@
+# Config for upstream-data-cleanup-740.
+#
+# Forked from player-features-prepatch-740/config.yaml. Two differences:
+#
+# 1. player_features.out_dir → player_features_prepatch_clean/  (NEW)
+#    The dirty player_features_prepatch/ stays in place untouched.
+# 2. No pull_history block — the prepatch raw is already on disk from
+#    the prior run (data/history/turbo/year=2025/...). This experiment
+#    REUSES that corpus; rerun pull_history.py in the prior experiment
+#    only if dvc-pull-able copies are needed elsewhere.
+#
+# HCE-strict: aggregator never reads test-window dates [2026-03-10,
+# 2026-03-23] or post-snapshot [2026-03-24, ...].
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+anonymous_account_ids: [0, 4294967295]
+
+# Player feature build — IDENTICAL hyperparameters to prepatch-740 so the
+# only delta vs that run is the build_features.py patch.
+player_features:
+  smoothing_alpha: 5.0
+  hero_smoothing_alpha: 5.0
+  recent_form_window: 10
+  # NEW canonical clean parquet path.
+  out_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean"
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+
+# Features — identical to prepatch-740.
+features:
+  hero_id_min: 1
+  hero_id_max: 150
+  add_radiant_side_bit: true
+  feature_dim: 391
+
+# Train subsetting (mirror plateau-baseline for clean A/B)
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# LightGBM model spec — identical to prepatch-740/train.py expectations.
+model:
+  type: "lightgbm"
+  objective: "binary"
+  metric: ["binary_logloss", "auc"]
+  num_boost_round: 500
+  learning_rate: 0.1
+  num_leaves: 31
+  feature_fraction: 1.0
+  bagging_fraction: 1.0
+  min_data_in_leaf: 20
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  num_threads: 16
+  verbose: -1
+  early_stopping_round: 0
+
+# Smoke knobs (used by --smoke). Inherits prepatch-740's smoke spec.
+smoke:
+  n_days: 3
+  history_days: ["2025-12-14", "2025-12-15"]
+  max_matches: 100000
+  num_boost_round: 50
+
+# === Transformer-plus-features section (mirrors transformer-plus-features-extended-740) ===
+
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# Source dir for the Transformer trainer (data.py reads this).
+# Same physical directory as player_features.out_dir above; duplicated
+# for clarity since the Transformer data.py looks under a separate key.
+player_features_transformer:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean"
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+# MinimalTransformer HPs — IDENTICAL to transformer-plus-features-extended-740.
+transformer_model:
+  embed_dim: 64
+  d_model: 64
+  n_heads: 4
+  n_layers: 2
+  ff_mult: 2
+  dropout: 0.0
+
+transformer_optim:
+  batch_size: 8192
+  lr: 1.0e-3
+  weight_decay: 0.0
+  max_epochs: 30
+  num_workers: 0
+  pin_memory: false
+  mixed_precision: true
+  patience: 5
+  early_stopping_metric: val_log_loss
+
+transformer_ablations:
+  - name: transformer_plus_features
+    use_features: true
+    description: "PRIMARY. Transformer + Linear(8, d_model) feature injection. Same recipe as extended-740 but reads the CLEAN parquet — load-time sanitization is removed; load_arrays asserts zero clamps."
+
+transformer_smoke:
+  max_epochs: 1
+  n_train: 50000
+  n_val: 5000
+  metrics_suffix: "_smoke"
+
+# === Comparison anchors (literal — for metrics.json delta fields) ===
+anchors:
+  plateau_baseline_740_val_auc: 0.6161
+  plateau_architectures_740_val_auc: 0.6322
+  transformer_hp_sweep_740_val_auc: 0.6318
+  player_features_740_val_auc: 0.6227
+  # Direct prior anchors for the equality-band check:
+  player_features_prepatch_740_features_only_val_auc: 0.6256
+  transformer_plus_features_extended_740_val_auc: 0.6477
+  # Equality band ±0.001 around the current Transformer ceiling.
+  equality_band_lower: 0.6467
+  equality_band_upper: 0.6487
+  # Reference n_sanitized counts for context.
+  n_sanitized_cells_in_prior_parquet: 6482
+
+# Output paths (relative to experiment dir).
+output:
+  results_dir: "results"
+  metrics: "metrics.json"

@@ -1,0 +1,79 @@
+{
+  "smoke": true,
+  "max_matches_cap": 0,
+  "n_raw_read": 1260489,
+  "n_bad_json": 0,
+  "n_emitted": 379585,
+  "n_train_emitted": 379585,
+  "n_val_emitted": 0,
+  "build_seconds": 175.32890677452087,
+  "days_processed": [
+    "2025-12-14",
+    "2025-12-18"
+  ],
+  "n_days_total": 5,
+  "n_prepatch_days_walked": 2,
+  "n_inpatch_days_walked": 3,
+  "n_unique_account_ids_tracked": 576737,
+  "raw_roots": [
+    "/mnt/projects/research/dotaml-turbo/data/history/turbo",
+    "/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/raw/turbo"
+  ],
+  "aggregator_clamp_events_total": 0,
+  "aggregator_clamp_events_by_feat": {
+    "n_games_log1p": 0,
+    "smoothed_winrate": 0,
+    "smoothed_winrate_hero": 0,
+    "last10_winrate": 0,
+    "days_since_last_log1p": 0,
+    "n_games_hero_log1p": 0,
+    "hero_diversity_log1p": 0,
+    "is_anonymous": 0
+  },
+  "anonymous_per_match_hist": {
+    "min": 0,
+    "max": 10,
+    "mean": 6.5693586416744605,
+    "p50": 7,
+    "p95": 10
+  },
+  "config": {
+    "alpha": 5.0,
+    "hero_alpha": 5.0,
+    "recent_window": 10
+  },
+  "feat_bounds": {
+    "n_games_log1p": [
+      0.0,
+      25.0
+    ],
+    "smoothed_winrate": [
+      0.0,
+      1.0
+    ],
+    "smoothed_winrate_hero": [
+      0.0,
+      1.0
+    ],
+    "last10_winrate": [
+      0.0,
+      1.0
+    ],
+    "days_since_last_log1p": [
+      0.0,
+      25.0
+    ],
+    "n_games_hero_log1p": [
+      0.0,
+      25.0
+    ],
+    "hero_diversity_log1p": [
+      0.0,
+      10.0
+    ],
+    "is_anonymous": [
+      0.0,
+      1.0
+    ]
+  }
+}

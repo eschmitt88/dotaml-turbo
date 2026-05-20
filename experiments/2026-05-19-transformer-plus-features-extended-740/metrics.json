@@ -1,0 +1,46 @@
+{
+  "ablation": "transformer_plus_features",
+  "val_auc": 0.6477298493888024,
+  "val_loss": 0.6547126319465543,
+  "val_acc": 0.6074744180374796,
+  "val_brier": 0.23182301223278046,
+  "val_majority_class_acc": 0.5326144695281982,
+  "best_epoch": 22,
+  "epochs_run": 27,
+  "max_epochs": 30,
+  "train_loss_at_best": 0.6495018959014892,
+  "train_val_gap_log_loss": 0.005210735745089151,
+  "train_seconds": 1504.772053718567,
+  "data_seconds": 14.125920295715332,
+  "n_train_post_subsample": 5000000,
+  "n_val": 2419185,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "transformer_plus_features_740_val_auc": 0.6452,
+    "proposal_target_val_auc": 0.6462
+  },
+  "delta_vs_plateau_architectures_740": 0.01552984938880242,
+  "delta_vs_features_only_lgbm_prepatch": 0.02212984938880236,
+  "delta_vs_transformer_plus_features_740": 0.0025298493888024076,
+  "delta_vs_proposal_target": 0.0015298493888024067,
+  "coverage_bucket_val_auc": {
+    "low":    {"n": 805580, "val_auc": 0.6367441132533029, "mean_coverage_log1p": 0.3289424479007721, "delta_vs_parent": 0.0020441132533029},
+    "medium": {"n": 808016, "val_auc": 0.6467194962992575, "mean_coverage_log1p": 1.4505949020385742, "delta_vs_parent": 0.0024194962992575},
+    "high":   {"n": 805589, "val_auc": 0.6588469175436017, "mean_coverage_log1p": 3.0644800662994385, "delta_vs_parent": 0.0028469175436017}
+  },
+  "coverage_bucket_anchors_parent": {
+    "low":    0.6347,
+    "medium": 0.6443,
+    "high":   0.6560
+  },
+  "hypothesis_confirmed": true,
+  "rollup_note": "per-ablation file: metrics_transformer_plus_features.json"
+}

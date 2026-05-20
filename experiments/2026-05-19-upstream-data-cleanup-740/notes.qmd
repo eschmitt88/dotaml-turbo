@@ -1,0 +1,52 @@
+---
+title: "upstream-data-cleanup-740 — notes"
+date: 2026-05-19
+format: html
+---
+
+## Diagnostic — fp32 corruption in the prior parquet
+
+Loaded the dirty parquet, located bad cells, characterized the distribution.
+See README.md `Root cause` section for the verdict.
+
+```python
+import pyarrow.parquet as pq, numpy as np
+pf = pq.ParquetFile(
+    "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch/train.parquet"
+)
+# All bad cells live in row group 2 (rows 2,097,152–3,145,727).
+# All bad cells are in column p1_smoothed_winrate_hero.
+# All bad cells fall on date 2025-12-29 within match index range
+#   [2,344,604, 2,504,113), randomly distributed at ~4% density.
+# Values are uninitialized-memory-shaped (NaN, denormals, mixed-magnitude).
+```
+
+## Patch verification — clean parquet build
+
+Once `run_all.sh` finishes step 1, the post-write re-read assertion in
+`build_features.py:validate_table()` guarantees zero corrupted cells.
+
+```python
+import pyarrow.parquet as pq, numpy as np
+for split in ("train", "val"):
+    tbl = pq.read_table(
+        f"data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/{split}.parquet"
+    )
+    for p in range(10):
+        col = tbl.column(f"p{p}_smoothed_winrate_hero").to_numpy()
+        assert np.all(np.isfinite(col)) and col.min() >= 0 and col.max() <= 1, p
+print("clean parquet verified")
+```
+
+## Headline metric — equality-band check
+
+```python
+import json
+m = json.loads(open(
+    "experiments/2026-05-19-upstream-data-cleanup-740/metrics_transformer_plus_features.json"
+).read())
+print("val_auc:", m["val_auc"])
+print("band [0.6467, 0.6487] holds:", m["equality_band_holds"])
+print("delta vs parent (0.6477):",
+      m["delta_combined_vs_transformer_plus_features_extended_740"])
+```

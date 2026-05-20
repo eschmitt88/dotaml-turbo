@@ -1,0 +1,156 @@
+{
+  "ablation": "transformer_plus_features",
+  "smoke": true,
+  "use_features": true,
+  "val_auc": 0.49056666557891093,
+  "val_loss": 0.728861376953125,
+  "val_metrics_at_best": {
+    "auc": 0.49056666557891093,
+    "acc": 0.534,
+    "log_loss": 0.728861388763814,
+    "brier": 0.2661255896091461,
+    "majority_class_acc": 0.5342000126838684
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.915171355266571,
+      "val_loss": 0.728861376953125,
+      "val_auc": 0.49056666557891093,
+      "val_acc": 0.534,
+      "wall_seconds": 0.6124739646911621
+    }
+  ],
+  "model_hp": {
+    "embed_dim": 64,
+    "d_model": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "ff_mult": 2,
+    "dropout": 0.0
+  },
+  "optim_hp": {
+    "batch_size": 8192,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "mixed_precision": true
+  },
+  "param_counts": {
+    "total": 77377,
+    "trainable": 77377,
+    "embedding": 9792,
+    "non_embedding": 67585
+  },
+  "train_seconds": 0.6129324436187744,
+  "data_seconds": 9.146519184112549,
+  "n_train_pre_subsample": 13018393,
+  "n_train_post_subsample": 50000,
+  "n_val": 5000,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "radiant_base_rate_train_full": 0.5334817438680796,
+  "radiant_base_rate_train_subsampled": 0.5345199704170227,
+  "radiant_base_rate_val": 0.5342000126838684,
+  "val_majority_class_acc": 0.5342000126838684,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "transformer_plus_features_740_val_auc": 0.6452,
+    "proposal_target_val_auc": 0.6462
+  },
+  "delta_vs_plateau_architectures_740": -0.14163333442108905,
+  "delta_vs_features_only_lgbm_prepatch": -0.1350333344210891,
+  "delta_vs_transformer_plus_features_740": -0.15463333442108906,
+  "delta_vs_proposal_target": -0.15563333442108906,
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.8887008676528931,
+      2.033929636716843
+    ],
+    "buckets": {
+      "low": {
+        "n": 1665,
+        "val_auc": 0.49082556138290334,
+        "mean_coverage_log1p": 0.33113327622413635
+      },
+      "medium": {
+        "n": 1670,
+        "val_auc": 0.49140171907853697,
+        "mean_coverage_log1p": 1.4117852449417114
+      },
+      "high": {
+        "n": 1665,
+        "val_auc": 0.4978927247350916,
+        "mean_coverage_log1p": 2.9953112602233887
+      }
+    }
+  },
+  "calibration": {
+    "mean_pred": [
+      0.5781352888203035,
+      0.6029068176746368,
+      0.6120811973031112,
+      0.6181927614212036,
+      0.6233777681175543,
+      0.6279717737553167,
+      0.6324715130858951,
+      0.6370571495650651,
+      0.6421027503362516,
+      0.6467973432499609,
+      0.6516322701778995,
+      0.6570146900366961,
+      0.6624082395210568,
+      0.6686459462154786,
+      0.6764767560047832,
+      0.6842142308606264,
+      0.6937620921267403,
+      0.7075879263781732,
+      0.7288235246650572,
+      0.7695013792514801
+    ],
+    "frac_pos": [
+      0.47876447876447875,
+      0.564,
+      0.5590551181102362,
+      0.58,
+      0.5346938775510204,
+      0.5607843137254902,
+      0.5481481481481482,
+      0.5324675324675324,
+      0.5331010452961672,
+      0.5627705627705628,
+      0.5152838427947598,
+      0.5121951219512195,
+      0.5454545454545454,
+      0.4980694980694981,
+      0.5365853658536586,
+      0.5397489539748954,
+      0.5912698412698413,
+      0.5080645161290323,
+      0.45121951219512196,
+      0.532
+    ]
+  },
+  "architecture_only_sanity_check": null
+}

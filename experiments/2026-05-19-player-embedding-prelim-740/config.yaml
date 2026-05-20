@@ -1,0 +1,139 @@
+# Config for player-embedding-prelim-740.
+#
+# Forked from upstream-data-cleanup-740/config.yaml. Differences:
+#
+# 1. Adds [player_embedding] section: top-500K non-anonymous account vocab,
+#    embed_dim=32, anon/rare bucket indices, vocab_path, weight_decay on
+#    embedding params only.
+# 2. Adds account_id sidecar build step. The clean parquet at
+#    data/snapshots/.../player_features_prepatch_clean/ does NOT carry
+#    pX_account_id columns (only hero IDs + 8 features + sources +
+#    n_anonymous_in_match). This experiment derives an account-id sidecar
+#    parquet by re-walking the raw history once (filtered to the
+#    match_ids present in the clean parquet), keyed by match_id with 10
+#    int64 p{0..9}_account_id columns. Sidecar lives under sidecar/.
+# 3. Two ablations: baseline_extended_clean (sanity replication, no
+#    embedding) and with_player_embedding (PRIMARY).
+#
+# HCE-strict: aggregator never reads test-window dates [2026-03-10,
+# 2026-03-23] or post-snapshot [2026-03-24, ...]. The sidecar build
+# inherits the same date assertions from the upstream raw walk.
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+anonymous_account_ids: [0, 4294967295]
+
+# Source dir for the Transformer trainer (data.py reads this).
+# Identical to upstream-data-cleanup-740: the clean parquet.
+player_features_transformer:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean"
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+# Where the account-id sidecar parquets live. Built by build_account_sidecar.py.
+account_sidecar:
+  out_dir: "experiments/2026-05-19-player-embedding-prelim-740/sidecar"
+  train_filename: "account_ids_train.parquet"
+  val_filename: "account_ids_val.parquet"
+  smoke_train_filename: "account_ids_train_smoke.parquet"
+  smoke_val_filename: "account_ids_val_smoke.parquet"
+  # Raw roots — same as build_features.py
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+
+# Train subsetting (mirror parent for clean A/B)
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Hero vocab.
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# Player embedding (NEW for this experiment).
+player_embedding:
+  # Top-N most-frequent non-anonymous accounts get unique embeddings;
+  # everything else routes to 'rare' (idx=1). Anonymous (account_id in
+  # {0, 4294967295}) routes to 'anon' (idx=0).
+  vocab_top_n: 500000
+  embed_dim: 32
+  anon_idx: 0
+  rare_idx: 1
+  weight_decay_embedding: 1.0e-3   # applied ONLY to player_embedding params
+  vocab_path: "results/player_vocab.json"
+  init_std: 0.02
+
+# MinimalTransformer HPs — IDENTICAL to extended-740 / cleanup-740.
+transformer_model:
+  embed_dim: 64
+  d_model: 64
+  n_heads: 4
+  n_layers: 2
+  ff_mult: 2
+  dropout: 0.0
+
+transformer_optim:
+  batch_size: 8192
+  lr: 1.0e-3
+  weight_decay: 0.0           # base (non-embedding) param group
+  max_epochs: 30
+  num_workers: 0
+  pin_memory: false
+  mixed_precision: true
+  patience: 5
+  early_stopping_metric: val_log_loss
+
+transformer_ablations:
+  - name: baseline_extended_clean
+    use_features: true
+    use_player_embedding: false
+    description: "Sanity replication of the cleanup-confirmed combined model on the same data pipeline used for with_player_embedding. Should land in the 0.6477 equality band."
+  - name: with_player_embedding
+    use_features: true
+    use_player_embedding: true
+    description: "PRIMARY. Adds top-500K + rare + anon player embedding lookup, projected per slot into the hero+feature sum."
+
+transformer_smoke:
+  max_epochs: 1
+  n_train: 50000
+  n_val: 5000
+  metrics_suffix: "_smoke"
+
+# Smoke knobs for the account-id sidecar build. The smoke variant walks
+# only a tiny set of days and emits a smoke sidecar parquet.
+account_sidecar_smoke:
+  n_days: 3   # post-patch days to walk (matches build_features.py smoke spec)
+
+# Comparison anchors (literal — for metrics.json delta fields).
+anchors:
+  plateau_baseline_740_val_auc: 0.6161
+  plateau_architectures_740_val_auc: 0.6322
+  transformer_hp_sweep_740_val_auc: 0.6318
+  player_features_740_val_auc: 0.6227
+  player_features_prepatch_740_features_only_val_auc: 0.6256
+  transformer_plus_features_extended_740_val_auc: 0.6477298
+  upstream_data_cleanup_740_clean_val_auc: 0.6477054
+  proposal_target_val_auc: 0.6497
+  # Equality band ±0.001 around the cleanup-confirmed reference (used to
+  # sanity-check baseline_extended_clean replication).
+  equality_band_lower: 0.6467
+  equality_band_upper: 0.6487
+
+# Output paths (relative to experiment dir).
+output:
+  results_dir: "results"
+  metrics: "metrics.json"

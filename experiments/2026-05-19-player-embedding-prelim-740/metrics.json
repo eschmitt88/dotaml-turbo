@@ -1,0 +1,46 @@
+{
+  "headline": {
+    "baseline_extended_clean_val_auc": 0.6477054481717861,
+    "with_player_embedding_val_auc": 0.6476301887786312,
+    "with_player_embedding_best_epoch": 23,
+    "with_player_embedding_epochs_run": 28,
+    "delta_primary_vs_baseline": -0.0000752593931549,
+    "delta_primary_vs_proposal_target": -0.0020698112213688
+  },
+  "anchors": {
+    "transformer_plus_features_extended_740_dirty": 0.6477298493888024,
+    "upstream_data_cleanup_740_clean": 0.6477054481717861,
+    "proposal_target": 0.6497
+  },
+  "hypothesis_confirmed": false,
+  "interpretation": "NULL RESULT. Adding 16M params of learned per-player embedding produced no signal beyond the 77K-param baseline that uses 8 aggregated player features. The sanity replication (baseline_extended_clean) reproduces upstream-data-cleanup-740's val_auc to FIVE decimal places (identical 0.6477054), making the 0.6477 ceiling a very trustworthy reference. The HIGH-coverage bucket where embeddings have the most leverage (50.9% in-vocab frac) gained only +0.0002. The 8-feature aggregator is essentially complete for the per-player axis on this task.",
+  "vocab_meta": {
+    "vocab_size": 500002,
+    "n_unique_non_anonymous_accounts_train": 1229091,
+    "frequency_cutoff_at_topN": 20,
+    "coverage_of_topN_over_non_anon": 0.9061549564905269,
+    "anonymous_share_of_slots": 0.6638433484071344
+  },
+  "coverage_buckets": {
+    "baseline_extended_clean": {
+      "low":    {"n": 805580, "val_auc": 0.6367838766752381, "in_vocab_frac": 0.048773, "anon_share": 0.918538, "rare_share": 0.032689},
+      "medium": {"n": 808016, "val_auc": 0.6467178736146956, "in_vocab_frac": 0.237648, "anon_share": 0.698960, "rare_share": 0.063393},
+      "high":   {"n": 805589, "val_auc": 0.6587482765458925, "in_vocab_frac": 0.509183, "anon_share": 0.422231, "rare_share": 0.068586}
+    },
+    "with_player_embedding": {
+      "low":    {"n": 805580, "val_auc": 0.6368706049049634, "delta_vs_baseline": 0.0000867282297253},
+      "medium": {"n": 808016, "val_auc": 0.6463072851287542, "delta_vs_baseline": -0.0004105884859414},
+      "high":   {"n": 805589, "val_auc": 0.6588734394371938, "delta_vs_baseline": 0.0001251628913013}
+    }
+  },
+  "overfit_check": {
+    "baseline_train_val_loss_gap_at_best": 0.0052,
+    "with_player_embedding_train_val_loss_gap_at_best": 0.0050,
+    "interpretation": "Embedding model has SLIGHTLY SMALLER train-val gap. Not overfitting; just not learning anything useful that wasn't already in the features."
+  },
+  "param_counts": {
+    "baseline_extended_clean": {"total": 77377, "player_embedding": 0},
+    "with_player_embedding":   {"total": 16079553, "player_embedding": 16000064, "ratio": 207.8}
+  },
+  "rollup_note": "per-ablation: metrics_baseline_extended_clean.json, metrics_with_player_embedding.json"
+}
