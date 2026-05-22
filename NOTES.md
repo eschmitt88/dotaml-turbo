@@ -744,3 +744,130 @@ and `player-features-prepatch-740` upstream data-quality finding.)
 - (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M
   sanity check; DVC formalisation.
 
+
+---
+
+## 2026-05-22
+
+### Did
+
+- **Diagnosed and fixed the root cause of every reliability issue in this
+  project**: silent RAM bit-flips at DDR5 EXPO 6000 MT/s on non-ECC
+  memory. Investigation suite under
+  `_meta/hardware-investigation-2026-05-21/`: memtester (dozens of
+  single-bit failures), stress-ng (2,110 bit errors in 30 min across 4
+  workers), PyArrow round-trip stress (2 silent data corruptions in 100
+  iters under 25 GB pressure), kernel BUG + 5h RCU stall during stress.
+  After user disabled EXPO in BIOS → JEDEC 4800 MT/s → ALL tests clean.
+  Memory note: `aiserver2026-ram-bitflips-root-cause`.
+- **Retracted pytorch/pytorch#184062** publicly
+  (https://github.com/pytorch/pytorch/issues/184062#issuecomment-4508610051)
+  — the "Blackwell torch DataLoader segfault" was actually bit-flipped
+  heap state landing in torch's GC path. ADR 0001 marked superseded;
+  Blackwell memory note marked superseded; per-trial subprocess pattern
+  retained for unrelated reasons.
+- **Rebuilt both corrupted parquets on JEDEC RAM**: clean parquet at
+  `data/snapshots/.../player_features_prepatch_clean/` (2h11m) + rich-cols
+  sidecar at `data/snapshots/.../rich_cols/` (1h34m). Both fully clean,
+  all row groups read. Corrupted backups preserved at
+  `data/snapshots/.../processed/_corrupted_backup_2026-05-21/`.
+- **Implemented `rich-supervision-multitask-740`** end-to-end on stable
+  hardware (`experiments/2026-05-20-rich-supervision-multitask-740/`):
+  multi-task Transformer with shared encoder + 4 heads (win, duration
+  8-bucket, items 305-vocab multi-label, aux KDA/GPM/HD). α weights
+  1.0/0.15/0.3/0.1. **val_auc=0.6495 @ best_epoch=30, +0.0018 vs
+  cleanup anchor 0.6477054, +0.0022 vs same-data baseline_extended_clean
+  sanity at 0.6473.** HYPOTHESIS CONFIRMED. 4h 1m wall, 0 retries, 0
+  kernel events.
+- **Closeout**: README done, proposal → `_done/`, `_meta/log.md` +
+  `_meta/index.md` updated, `concepts/draft-prediction-plateau.md`
+  extended with tenth refinement (multitask CONFIRMED, scoreboard
+  updated). Investigation log `investigation.log` finalized.
+
+### Findings
+
+- **DDR5 EXPO 6000 MT/s on Ryzen 9950X + 96 GB Corsair CMK96GX5M2E6000C36
+  + ASUS X870E HERO with non-ECC RAM produces silent bit-flips** at high
+  enough rate (~2,110 errors / 30 min under stress) to cause every
+  reliability symptom in this project. Fix: BIOS → Ai Tweaker → Ai
+  Overclock Tuner → Auto (JEDEC 4800 MT/s). Loses ~15% memory bandwidth,
+  gains rock-solid reliability. Long-term upgrade path: ECC UDIMM kit
+  (board supports it).
+- **The "Blackwell torch DataLoader bug" was misdiagnosed.** Same RAM
+  bit-flips landing in torch's tensor refcount / heap metadata produced
+  segfaults inside `DataLoader.fetch` because that's where the most
+  per-batch allocation/freeing happens. The synthetic repro could never
+  reproduce on a 4080 Laptop because different RAM = different bit-flip
+  behavior. Retraction posted; upstream maintainer's time freed.
+- **The 0.6477 ceiling is broken**: multitask supervision lifts win
+  val_auc to 0.6495 (+0.0022 vs same-data sanity). The
+  gradient-density-bottleneck hypothesis (from the embedding-prelim
+  NULL) is correct. The encoder had room to learn more from richer
+  per-match supervision (~10× more bits than the binary radiant_win
+  label provides), and 4 jointly-trained heads (win + duration + items
+  + aux KDA-GPM-HD) deliver that.
+- **Aux heads are useful standalone products**: duration top1_acc=0.181
+  over 8 buckets (vs 0.125 random, ~45% above chance — useful for
+  "end early vs scale" intuition), item recommender mAP@10=0.301 with
+  mean_precision=0.333 / mean_recall=0.440 (picks 33-44% of actual
+  end-game inventory in top-10).
+- **Stdout buffering caught me out**: train.py doesn't use `flush=True`
+  and Python defaults to block-buffered stdout when redirected through
+  nohup. A 30-epoch multitask run produces only ~6 KB of per-epoch
+  output, under the 8 KB buffer threshold. The first multitask retry
+  was silently progressing for 3h 15min when I killed it thinking it
+  was stuck. Re-launched with `python -u`; lesson: **always use `-u`
+  for nohup-detached training runs.**
+- **No kernel events during ~10h of heavy ML work on JEDEC** today
+  (rebuild + multitask training + sanity). Hardware fix validated
+  end-to-end on real workload.
+- **Turbo drafts are hidden** (user correction): `draft-order-features-740`
+  is invalid for this game mode (game_mode=23 doesn't show enemy picks).
+  Removed from the queue. Memory note: `turbo-draft-is-hidden`.
+
+### Next
+
+- **`multitask-extended-740`** *(my recommendation: cheapest next win).*
+  best_epoch=30 was the cap; the win head was still trending upward.
+  Same recipe, raise `max_epochs` to 50 with patience=5 early-stop.
+  Wall: ~5-6h. Expected +0.001 to +0.003 free.
+- **`anonymous-aware-modeling-740`**. Even more attractive now that
+  multitask has established the ceiling moves. Attack the persistent
+  0.022 LOW-HIGH bucket gap via (a) router head for all-10-anonymous
+  matches (12.6% of val) → separate small model, OR (b) per-team
+  aggregate features over known-player subset. Should compound with
+  multitask supervision. Wall: ~5-6h.
+- **`multitask-alpha-tune-740`**. Small grid over α_dur ∈ {0.05, 0.10,
+  0.15, 0.20} × α_i ∈ {0.1, 0.3, 0.5}. May yield small additional
+  lift from better-balanced loss weights.
+- **`player-features-decay-740`**. Exponential time-weighting on
+  aggregator (τ ≈ 90 days). Smaller experiment; tests whether recent
+  skill matters more than uniformly-weighted history.
+- **Inference wrapper for personal use**: standalone CLI/notebook tool
+  that takes (draft + 10 player aggregates) and returns
+  (win_prob, duration_curve, per-slot item top-K). Productizes the
+  multitask model's three heads for actual personal Dota use.
+- **Engineering: extend `build_features.py` to emit `pX_account_id`
+  columns** alongside features. Would have saved 45 min on
+  embedding-prelim. Unifies the data pipeline for identity-flavored
+  work.
+- **Engineering: DVC-track** the new
+  `data/snapshots/.../player_features_prepatch_clean/` and
+  `data/snapshots/.../rich_cols/` directories so re-fetches by
+  downstream experiments are reproducible.
+- **Engineering: promote** `_meta/hardware-investigation-2026-05-21/test_pyarrow_roundtrip.py`
+  to a quarterly RAM-health regression check. Cheap, easy to schedule.
+- **(Long-term hardware)** Consider replacing with ECC UDIMM kit
+  (X870E HERO supports it). Kingston Server Premier
+  KSM56E46BD8KM-48HM is one option. ~$300-500 for 96 GB. Hardware-level
+  error detection/correction; would let you safely re-enable EXPO
+  6000 OR run more aggressive memory configs without silent bit-flips.
+- **Removed from queue**: `draft-order-features-740` — Turbo hides the
+  enemy draft, so pick-order encoding isn't valid for this project.
+- (Carryover, deferred) Promote `run_sweep_loop.sh` +
+  `cleanup_failed_trials.py` to `_meta/templates/`.
+- (Carryover, deferred) LLM-driven islands evolution. Higher-leverage
+  in principle but bigger investment than the cheap follow-ups above.
+- (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M sanity
+  check; DVC formalisation.
+

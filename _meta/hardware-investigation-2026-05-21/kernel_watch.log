@@ -1,0 +1,433 @@
+[04:47:50] [  +1.391493] BUG: Bad page map in process gmain  pte:8000800a81d94025 pmd:118fa7067
+[04:47:50] [  +0.000001] Disabling lock debugging due to kernel taint
+[04:47:50] [  +0.000003] BUG: Bad page map in process gmain  pte:8000000ac1d95025 pmd:118fa7067
+[04:47:50] [  +0.000002] BUG: Bad page map in process gmain  pte:80000011d51d1025 pmd:118fa7067
+[04:47:50] [  +0.000001] BUG: Bad page map in process gmain  pte:800000143a72c025 pmd:118fa7067
+[04:47:50] [  +0.000006] BUG: unable to handle page fault for address: ffffee5010a9cb48
+[04:47:50] [  +0.000100] Modules linked in: nvme_fabrics cpuid tls nvidia_uvm(O) xt_connmark xt_tcpudp xt_mark xt_conntrack xt_MASQUERADE bridge stp llc xfrm_user xfrm_algo xt_set ip_set nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xt_addrtype nft_compat nf_tables qrtr overlay cfg80211 binfmt_misc nls_iso8859_1 amdgpu amd_atl intel_rapl_msr intel_rapl_common snd_hda_codec_atihdmi snd_hda_codec_nvhdmi nvidia_drm(O) amdxcp snd_hda_codec_hdmi drm_panel_backlight_quirks edac_mce_amd nvidia_modeset(O) gpu_sched snd_hda_intel drm_buddy btusb drm_exec snd_usb_audio snd_hda_codec btrtl drm_suballoc_helper snd_usbmidi_lib btintel kvm_amd drm_display_helper snd_hda_core mfd_aaeon nvidia(O) snd_ump btbcm eeepc_wmi cec btmtk snd_intel_dspcfg snd_rawmidi asus_wmi snd_intel_sdw_acpi kvm snd_hwdep snd_seq_device sparse_keymap spd5118 irqbypass snd_pcm bluetooth rc_core mc platform_profile rapl wmi_bmof snd_timer i2c_piix4 i2c_algo_bit ccp k10temp i2c_smbus snd drm_ttm_helper joydev soundcore input_leds ttm gpio_amdpt mac_hid
+[04:47:50] [  +0.000038]  sch_fq_codel dm_multipath msr efi_pstore nfnetlink dmi_sysfs ip_tables x_tables autofs4 btrfs blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq raid1 raid0 linear ucsi_acpi typec_ucsi hid_generic typec nvme usbhid hid polyval_clmulni nvme_core r8169 ghash_clmulni_intel nvme_keyring ahci video realtek igc libahci nvme_auth wmi thunderbolt aesni_intel
+[04:47:50] [  +0.000130] BUG: scheduling while atomic: gmain/27218/0x00000000
+[04:47:50] [  +0.000132] Modules linked in: nvme_fabrics cpuid tls nvidia_uvm(O) xt_connmark xt_tcpudp xt_mark xt_conntrack xt_MASQUERADE bridge stp llc xfrm_user xfrm_algo xt_set ip_set nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xt_addrtype nft_compat nf_tables qrtr overlay cfg80211 binfmt_misc nls_iso8859_1 amdgpu amd_atl intel_rapl_msr intel_rapl_common snd_hda_codec_atihdmi snd_hda_codec_nvhdmi nvidia_drm(O) amdxcp snd_hda_codec_hdmi drm_panel_backlight_quirks edac_mce_amd nvidia_modeset(O) gpu_sched snd_hda_intel drm_buddy btusb drm_exec snd_usb_audio snd_hda_codec btrtl drm_suballoc_helper snd_usbmidi_lib btintel kvm_amd drm_display_helper snd_hda_core mfd_aaeon nvidia(O) snd_ump btbcm eeepc_wmi cec btmtk snd_intel_dspcfg snd_rawmidi asus_wmi snd_intel_sdw_acpi kvm snd_hwdep snd_seq_device sparse_keymap spd5118 irqbypass snd_pcm bluetooth rc_core mc platform_profile rapl wmi_bmof snd_timer i2c_piix4 i2c_algo_bit ccp k10temp i2c_smbus snd drm_ttm_helper joydev soundcore input_leds ttm gpio_amdpt mac_hid
+[04:47:50] [  +0.000039]  sch_fq_codel dm_multipath msr efi_pstore nfnetlink dmi_sysfs ip_tables x_tables autofs4 btrfs blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq raid1 raid0 linear ucsi_acpi typec_ucsi hid_generic typec nvme usbhid hid polyval_clmulni nvme_core r8169 ghash_clmulni_intel nvme_keyring ahci video realtek igc libahci nvme_auth wmi thunderbolt aesni_intel
+[04:47:50] [  +0.000001]  __schedule_bug+0x64/0x80
+[04:47:50] [  +0.003828] Voluntary context switch within RCU read-side critical section!
+[04:47:50] [  +0.000007] WARNING: CPU: 20 PID: 27218 at kernel/rcu/tree_plugin.h:332 rcu_note_context_switch+0x2b1/0x2d0
+[04:47:50] [  +0.000357] Modules linked in: nvme_fabrics cpuid tls nvidia_uvm(O) xt_connmark xt_tcpudp xt_mark xt_conntrack xt_MASQUERADE bridge stp llc xfrm_user xfrm_algo xt_set ip_set nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xt_addrtype nft_compat nf_tables qrtr overlay cfg80211 binfmt_misc nls_iso8859_1 amdgpu amd_atl intel_rapl_msr intel_rapl_common snd_hda_codec_atihdmi snd_hda_codec_nvhdmi nvidia_drm(O) amdxcp snd_hda_codec_hdmi drm_panel_backlight_quirks edac_mce_amd nvidia_modeset(O) gpu_sched snd_hda_intel drm_buddy btusb drm_exec snd_usb_audio snd_hda_codec btrtl drm_suballoc_helper snd_usbmidi_lib btintel kvm_amd drm_display_helper snd_hda_core mfd_aaeon nvidia(O) snd_ump btbcm eeepc_wmi cec btmtk snd_intel_dspcfg snd_rawmidi asus_wmi snd_intel_sdw_acpi kvm snd_hwdep snd_seq_device sparse_keymap spd5118 irqbypass snd_pcm bluetooth rc_core mc platform_profile rapl wmi_bmof snd_timer i2c_piix4 i2c_algo_bit ccp k10temp i2c_smbus snd drm_ttm_helper joydev soundcore input_leds ttm gpio_amdpt mac_hid
+[04:47:50] [  +0.000029]  sch_fq_codel dm_multipath msr efi_pstore nfnetlink dmi_sysfs ip_tables x_tables autofs4 btrfs blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq raid1 raid0 linear ucsi_acpi typec_ucsi hid_generic typec nvme usbhid hid polyval_clmulni nvme_core r8169 ghash_clmulni_intel nvme_keyring ahci video realtek igc libahci nvme_auth wmi thunderbolt aesni_intel
+[04:47:50] [  +0.000199] RIP: 0010:rcu_note_context_switch+0x2b1/0x2d0
+[04:48:50] [May21 04:48] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[04:48:50] [  +0.000301] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[04:48:50] [  +0.000232] rcu: 	(detected by 19, t=60002 jiffies, g=18194885, q=51722 ncpus=32)
+[04:51:50] [May21 04:51] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[04:51:50] [  +0.000416] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[04:51:50] [  +0.000309] rcu: 	(detected by 19, t=240007 jiffies, g=18194885, q=248069 ncpus=32)
+[04:51:50] [  +0.909282] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 62208 jiffies s: 1697 root: 0x2/.
+[04:51:50] [  +0.000274] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[04:54:50] [May21 04:54] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[04:54:50] [  +0.000261] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[04:54:50] [  +0.000192] rcu: 	(detected by 14, t=420012 jiffies, g=18194885, q=362741 ncpus=32)
+[04:54:50] [  +1.128553] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 242432 jiffies s: 1697 root: 0x2/.
+[04:54:50] [  +0.000410] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[04:57:50] [May21 04:57] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[04:57:50] [  +0.000254] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[04:57:50] [  +0.000229] rcu: 	(detected by 17, t=600017 jiffies, g=18194885, q=366758 ncpus=32)
+[05:00:50] [May21 05:00] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:00:50] [  +0.000262] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:00:50] [  +0.000230] rcu: 	(detected by 0, t=780022 jiffies, g=18194885, q=370362 ncpus=32)
+[05:03:50] [May21 05:03] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:03:50] [  +0.000257] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:03:50] [  +0.000204] rcu: 	(detected by 22, t=960027 jiffies, g=18194885, q=373884 ncpus=32)
+[05:06:50] [May21 05:06] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:06:50] [  +0.000356] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:06:50] [  +0.000260] rcu: 	(detected by 8, t=1140032 jiffies, g=18194885, q=377809 ncpus=32)
+[05:09:50] [May21 05:09] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:09:50] [  +0.000252] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:09:50] [  +0.000213] rcu: 	(detected by 23, t=1320037 jiffies, g=18194885, q=381377 ncpus=32)
+[05:12:51] [May21 05:12] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:12:51] [  +0.000228] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:12:51] [  +0.000187] rcu: 	(detected by 2, t=1500042 jiffies, g=18194885, q=384904 ncpus=32)
+[05:15:51] [May21 05:15] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:15:51] [  +0.000211] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:15:51] [  +0.000188] rcu: 	(detected by 5, t=1680047 jiffies, g=18194885, q=388768 ncpus=32)
+[05:18:51] [May21 05:18] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:18:51] [  +0.000228] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:18:51] [  +0.000201] rcu: 	(detected by 18, t=1860052 jiffies, g=18194885, q=392642 ncpus=32)
+[05:21:51] [May21 05:21] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:21:51] [  +0.000237] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:21:51] [  +0.000208] rcu: 	(detected by 23, t=2040057 jiffies, g=18194885, q=396158 ncpus=32)
+[05:24:51] [May21 05:24] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:24:51] [  +0.000249] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:24:51] [  +0.000218] rcu: 	(detected by 7, t=2220062 jiffies, g=18194885, q=399673 ncpus=32)
+[05:27:51] [May21 05:27] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:27:51] [  +0.000365] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:27:51] [  +0.000275] rcu: 	(detected by 15, t=2400067 jiffies, g=18194885, q=403543 ncpus=32)
+[05:30:51] [May21 05:30] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:30:51] [  +0.000260] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:30:51] [  +0.000227] rcu: 	(detected by 17, t=2580072 jiffies, g=18194885, q=407051 ncpus=32)
+[05:33:51] [May21 05:33] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:33:51] [  +0.000252] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:33:51] [  +0.000222] rcu: 	(detected by 18, t=2760077 jiffies, g=18194885, q=410559 ncpus=32)
+[05:36:51] [May21 05:36] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:36:51] [  +0.000249] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:36:51] [  +0.000232] rcu: 	(detected by 18, t=2940082 jiffies, g=18194885, q=414444 ncpus=32)
+[05:39:51] [May21 05:39] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:39:51] [  +0.000252] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:39:51] [  +0.000215] rcu: 	(detected by 1, t=3120087 jiffies, g=18194885, q=417957 ncpus=32)
+[05:42:51] [May21 05:42] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:42:51] [  +0.000243] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:42:51] [  +0.000217] rcu: 	(detected by 22, t=3300092 jiffies, g=18194885, q=421460 ncpus=32)
+[05:45:51] [May21 05:45] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:45:51] [  +0.000253] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:45:51] [  +0.000227] rcu: 	(detected by 6, t=3480097 jiffies, g=18194885, q=425337 ncpus=32)
+[05:48:51] [May21 05:48] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:48:51] [  +0.000256] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:48:51] [  +0.000227] rcu: 	(detected by 20, t=3660102 jiffies, g=18194885, q=428838 ncpus=32)
+[05:51:51] [May21 05:51] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:51:51] [  +0.000254] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:51:51] [  +0.000233] rcu: 	(detected by 7, t=3840107 jiffies, g=18194885, q=432349 ncpus=32)
+[05:54:51] [May21 05:54] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:54:51] [  +0.000381] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:54:51] [  +0.000243] rcu: 	(detected by 18, t=4020112 jiffies, g=18194885, q=435859 ncpus=32)
+[05:57:51] [May21 05:57] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[05:57:51] [  +0.000258] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[05:57:51] [  +0.000222] rcu: 	(detected by 0, t=4200117 jiffies, g=18194885, q=439729 ncpus=32)
+[05:58:01] [May21 05:57] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4027136 jiffies s: 1697 root: 0x2/.
+[05:58:01] [  +0.000208] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:00:51] [May21 06:00] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:00:51] [  +0.000331] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:00:51] [  +0.000256] rcu: 	(detected by 31, t=4380122 jiffies, g=18194885, q=443325 ncpus=32)
+[06:01:01] [May21 06:00] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4207360 jiffies s: 1697 root: 0x2/.
+[06:01:01] [  +0.000396] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:03:51] [May21 06:03] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:03:51] [  +0.000263] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:03:51] [  +0.000235] rcu: 	(detected by 18, t=4560127 jiffies, g=18194885, q=446913 ncpus=32)
+[06:04:01] [May21 06:03] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4387585 jiffies s: 1697 root: 0x2/.
+[06:04:01] [  +0.000207] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:06:51] [May21 06:06] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:06:51] [  +0.000269] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:06:51] [  +0.000245] rcu: 	(detected by 6, t=4740132 jiffies, g=18194885, q=450882 ncpus=32)
+[06:07:01] [May21 06:06] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4567808 jiffies s: 1697 root: 0x2/.
+[06:07:01] [  +0.000214] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:09:51] [May21 06:09] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:09:51] [  +0.000245] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:09:51] [  +0.000227] rcu: 	(detected by 23, t=4920137 jiffies, g=18194885, q=454481 ncpus=32)
+[06:10:01] [May21 06:09] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4748033 jiffies s: 1697 root: 0x2/.
+[06:10:01] [  +0.000222] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:12:51] [May21 06:12] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:12:51] [  +0.000351] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:12:51] [  +0.000251] rcu: 	(detected by 14, t=5100142 jiffies, g=18194885, q=458071 ncpus=32)
+[06:13:01] [May21 06:12] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 4928256 jiffies s: 1697 root: 0x2/.
+[06:13:01] [  +0.000391] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:15:51] [May21 06:15] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:15:51] [  +0.000278] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:15:51] [  +0.000244] rcu: 	(detected by 6, t=5280147 jiffies, g=18194885, q=462035 ncpus=32)
+[06:16:01] [May21 06:15] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 5108481 jiffies s: 1697 root: 0x2/.
+[06:16:01] [  +0.000216] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:18:51] [May21 06:18] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:18:51] [  +0.000262] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:18:51] [  +0.000238] rcu: 	(detected by 19, t=5460152 jiffies, g=18194885, q=465987 ncpus=32)
+[06:19:01] [May21 06:18] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 5288705 jiffies s: 1697 root: 0x2/.
+[06:19:01] [  +0.000269] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:21:51] [May21 06:21] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:21:51] [  +0.000252] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:21:51] [  +0.000224] rcu: 	(detected by 20, t=5640157 jiffies, g=18194885, q=469579 ncpus=32)
+[06:22:01] [May21 06:21] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 5468928 jiffies s: 1697 root: 0x2/.
+[06:22:01] [  +0.000252] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:24:51] [May21 06:24] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:24:51] [  +0.000239] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:24:51] [  +0.000214] rcu: 	(detected by 17, t=5820162 jiffies, g=18194885, q=473171 ncpus=32)
+[06:25:01] [May21 06:24] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 5649153 jiffies s: 1697 root: 0x2/.
+[06:25:01] [  +0.000216] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:27:51] [May21 06:27] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:27:51] [  +0.000248] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:27:51] [  +0.000225] rcu: 	(detected by 4, t=6000167 jiffies, g=18194885, q=477860 ncpus=32)
+[06:28:01] [May21 06:27] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 5829376 jiffies s: 1697 root: 0x2/.
+[06:28:01] [  +0.000218] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:30:51] [May21 06:30] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:30:51] [  +0.000373] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:30:51] [  +0.000271] rcu: 	(detected by 24, t=6180172 jiffies, g=18194885, q=481466 ncpus=32)
+[06:31:01] [May21 06:30] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6009601 jiffies s: 1697 root: 0x2/.
+[06:31:01] [  +0.000399] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:33:52] [May21 06:33] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:33:52] [  +0.000267] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:33:52] [  +0.000237] rcu: 	(detected by 5, t=6360177 jiffies, g=18194885, q=485053 ncpus=32)
+[06:34:02] [May21 06:33] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6189824 jiffies s: 1697 root: 0x2/.
+[06:34:02] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:36:52] [May21 06:36] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:36:52] [  +0.000259] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:36:52] [  +0.000229] rcu: 	(detected by 5, t=6540182 jiffies, g=18194885, q=489068 ncpus=32)
+[06:37:02] [May21 06:36] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6370048 jiffies s: 1697 root: 0x2/.
+[06:37:02] [  +0.000205] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:39:52] [May21 06:39] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:39:52] [  +0.000239] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:39:52] [  +0.000225] rcu: 	(detected by 19, t=6720187 jiffies, g=18194885, q=492664 ncpus=32)
+[06:40:02] [May21 06:39] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6550272 jiffies s: 1697 root: 0x2/.
+[06:40:02] [  +0.000215] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:42:52] [May21 06:42] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:42:52] [  +0.000255] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:42:52] [  +0.000225] rcu: 	(detected by 1, t=6900192 jiffies, g=18194885, q=496248 ncpus=32)
+[06:43:02] [May21 06:42] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6730497 jiffies s: 1697 root: 0x2/.
+[06:43:02] [  +0.000211] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:45:52] [May21 06:45] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:45:52] [  +0.000375] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:45:52] [  +0.000263] rcu: 	(detected by 10, t=7080197 jiffies, g=18194885, q=500212 ncpus=32)
+[06:46:02] [May21 06:45] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 6910720 jiffies s: 1697 root: 0x2/.
+[06:46:02] [  +0.000405] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:48:52] [May21 06:48] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:48:52] [  +0.000260] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:48:52] [  +0.000245] rcu: 	(detected by 23, t=7260202 jiffies, g=18194885, q=503834 ncpus=32)
+[06:49:02] [May21 06:48] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7090944 jiffies s: 1697 root: 0x2/.
+[06:49:02] [  +0.000210] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:51:52] [May21 06:51] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:51:52] [  +0.000261] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:51:52] [  +0.000231] rcu: 	(detected by 20, t=7440207 jiffies, g=18194885, q=507430 ncpus=32)
+[06:52:02] [May21 06:52] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7271169 jiffies s: 1697 root: 0x2/.
+[06:52:02] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:54:52] [May21 06:54] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:54:52] [  +0.000363] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:54:52] [  +0.000261] rcu: 	(detected by 27, t=7620212 jiffies, g=18194885, q=511010 ncpus=32)
+[06:55:02] [May21 06:55] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7451393 jiffies s: 1697 root: 0x2/.
+[06:55:02] [  +0.000414] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[06:57:52] [May21 06:57] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[06:57:52] [  +0.000254] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[06:57:52] [  +0.000227] rcu: 	(detected by 7, t=7800217 jiffies, g=18194885, q=514928 ncpus=32)
+[06:58:02] [May21 06:58] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7631617 jiffies s: 1697 root: 0x2/.
+[06:58:02] [  +0.000208] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:00:52] [May21 07:00] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:00:52] [  +0.000349] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:00:52] [  +0.000249] rcu: 	(detected by 14, t=7980222 jiffies, g=18194885, q=518502 ncpus=32)
+[07:01:02] [May21 07:01] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7811840 jiffies s: 1697 root: 0x2/.
+[07:01:02] [  +0.000406] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:03:52] [May21 07:03] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:03:52] [  +0.000269] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:03:52] [  +0.000245] rcu: 	(detected by 2, t=8160227 jiffies, g=18194885, q=522059 ncpus=32)
+[07:04:02] [May21 07:04] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 7992064 jiffies s: 1697 root: 0x2/.
+[07:04:02] [  +0.000227] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:06:52] [May21 07:06] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:06:52] [  +0.000243] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:06:52] [  +0.000220] rcu: 	(detected by 16, t=8340232 jiffies, g=18194885, q=526004 ncpus=32)
+[07:07:02] [May21 07:07] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 8172289 jiffies s: 1697 root: 0x2/.
+[07:07:02] [  +0.000211] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:09:52] [May21 07:09] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:09:52] [  +0.000354] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:09:52] [  +0.000265] rcu: 	(detected by 9, t=8520237 jiffies, g=18194885, q=529574 ncpus=32)
+[07:10:02] [May21 07:10] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 8352512 jiffies s: 1697 root: 0x2/.
+[07:10:02] [  +0.000413] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:12:52] [May21 07:12] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:12:52] [  +0.000260] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:12:52] [  +0.000234] rcu: 	(detected by 19, t=8700242 jiffies, g=18194885, q=533147 ncpus=32)
+[07:13:02] [May21 07:13] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 8532736 jiffies s: 1697 root: 0x2/.
+[07:13:02] [  +0.000221] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:15:52] [May21 07:15] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:15:52] [  +0.000241] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:15:52] [  +0.000230] rcu: 	(detected by 1, t=8880247 jiffies, g=18194885, q=537088 ncpus=32)
+[07:16:02] [May21 07:16] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 8712960 jiffies s: 1697 root: 0x2/.
+[07:16:02] [  +0.000214] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:18:52] [May21 07:18] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:18:52] [  +0.000253] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:18:52] [  +0.000224] rcu: 	(detected by 6, t=9060252 jiffies, g=18194885, q=541022 ncpus=32)
+[07:19:02] [May21 07:19] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 8893185 jiffies s: 1697 root: 0x2/.
+[07:19:02] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:21:52] [May21 07:21] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:21:52] [  +0.000252] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:21:52] [  +0.000222] rcu: 	(detected by 17, t=9240257 jiffies, g=18194885, q=544596 ncpus=32)
+[07:22:02] [May21 07:22] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 9073408 jiffies s: 1697 root: 0x2/.
+[07:22:02] [  +0.000206] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:24:52] [May21 07:24] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:24:52] [  +0.000249] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:24:52] [  +0.000228] rcu: 	(detected by 22, t=9420262 jiffies, g=18194885, q=548162 ncpus=32)
+[07:25:02] [May21 07:25] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 9253632 jiffies s: 1697 root: 0x2/.
+[07:25:02] [  +0.000214] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:27:52] [May21 07:27] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:27:52] [  +0.000249] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:27:52] [  +0.000217] rcu: 	(detected by 5, t=9600267 jiffies, g=18194885, q=552098 ncpus=32)
+[07:28:02] [May21 07:28] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 9433856 jiffies s: 1697 root: 0x2/.
+[07:28:02] [  +0.000202] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:30:52] [May21 07:30] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:30:52] [  +0.000237] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:30:52] [  +0.000222] rcu: 	(detected by 5, t=9780272 jiffies, g=18194885, q=555708 ncpus=32)
+[07:31:02] [May21 07:31] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 9614081 jiffies s: 1697 root: 0x2/.
+[07:31:02] [  +0.000207] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:33:52] [May21 07:33] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:33:52] [  +0.000251] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:33:52] [  +0.000222] rcu: 	(detected by 2, t=9960277 jiffies, g=18194885, q=559259 ncpus=32)
+[07:34:02] [May21 07:34] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 9794304 jiffies s: 1697 root: 0x2/.
+[07:34:02] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[07:36:52] [May21 07:36] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:36:52] [  +0.000240] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:36:52] [  +0.000228] rcu: 	(detected by 18, t=10140282 jiffies, g=18194885, q=563202 ncpus=32)
+[07:39:52] [May21 07:39] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:39:52] [  +0.000384] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:39:52] [  +0.000268] rcu: 	(detected by 24, t=10320287 jiffies, g=18194885, q=566684 ncpus=32)
+[07:42:52] [May21 07:42] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:42:52] [  +0.000265] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:42:52] [  +0.000228] rcu: 	(detected by 0, t=10500292 jiffies, g=18194885, q=570172 ncpus=32)
+[07:45:52] [May21 07:45] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:45:52] [  +0.000259] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:45:52] [  +0.000232] rcu: 	(detected by 6, t=10680297 jiffies, g=18194885, q=574023 ncpus=32)
+[07:48:53] [May21 07:48] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:48:53] [  +0.000231] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:48:53] [  +0.000214] rcu: 	(detected by 5, t=10860302 jiffies, g=18194885, q=577511 ncpus=32)
+[07:51:53] [May21 07:51] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:51:53] [  +0.000243] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:51:53] [  +0.000213] rcu: 	(detected by 0, t=11040307 jiffies, g=18194885, q=580987 ncpus=32)
+[07:54:53] [May21 07:54] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:54:53] [  +0.000370] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:54:53] [  +0.000263] rcu: 	(detected by 25, t=11220312 jiffies, g=18194885, q=584471 ncpus=32)
+[07:57:53] [May21 07:57] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[07:57:53] [  +0.000272] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[07:57:53] [  +0.000226] rcu: 	(detected by 16, t=11400317 jiffies, g=18194885, q=588323 ncpus=32)
+[08:00:53] [May21 08:00] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:00:53] [  +0.000253] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:00:53] [  +0.000217] rcu: 	(detected by 21, t=11580322 jiffies, g=18194885, q=591810 ncpus=32)
+[08:03:53] [May21 08:03] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:03:53] [  +0.000352] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:03:53] [  +0.000262] rcu: 	(detected by 24, t=11760327 jiffies, g=18194885, q=595277 ncpus=32)
+[08:06:53] [May21 08:06] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:06:53] [  +0.000280] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:06:53] [  +0.000234] rcu: 	(detected by 17, t=11940332 jiffies, g=18194885, q=599138 ncpus=32)
+[08:09:53] [May21 08:09] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:09:53] [  +0.000255] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:09:53] [  +0.000215] rcu: 	(detected by 2, t=12120337 jiffies, g=18194885, q=602609 ncpus=32)
+[08:12:53] [May21 08:12] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:12:53] [  +0.000268] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:12:53] [  +0.000235] rcu: 	(detected by 22, t=12300342 jiffies, g=18194885, q=606105 ncpus=32)
+[08:15:53] [May21 08:15] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:15:53] [  +0.000264] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:15:53] [  +0.000225] rcu: 	(detected by 0, t=12480347 jiffies, g=18194885, q=609959 ncpus=32)
+[08:18:53] [May21 08:18] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:18:53] [  +0.000263] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:18:53] [  +0.000223] rcu: 	(detected by 20, t=12660352 jiffies, g=18194885, q=613813 ncpus=32)
+[08:21:53] [May21 08:21] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:21:53] [  +0.000255] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:21:53] [  +0.000215] rcu: 	(detected by 21, t=12840357 jiffies, g=18194885, q=617296 ncpus=32)
+[08:24:53] [May21 08:24] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:24:53] [  +0.000268] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:24:53] [  +0.000233] rcu: 	(detected by 6, t=13020362 jiffies, g=18194885, q=620774 ncpus=32)
+[08:27:53] [May21 08:27] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:27:53] [  +0.000247] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:27:53] [  +0.000223] rcu: 	(detected by 16, t=13200367 jiffies, g=18194885, q=624641 ncpus=32)
+[08:30:53] [May21 08:30] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:30:53] [  +0.000254] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:30:53] [  +0.000228] rcu: 	(detected by 6, t=13380372 jiffies, g=18194885, q=628184 ncpus=32)
+[08:33:53] [May21 08:33] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:33:53] [  +0.000254] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:33:53] [  +0.000222] rcu: 	(detected by 23, t=13560377 jiffies, g=18194885, q=631668 ncpus=32)
+[08:36:53] [May21 08:36] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:36:53] [  +0.000258] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:36:53] [  +0.000233] rcu: 	(detected by 7, t=13740382 jiffies, g=18194885, q=635523 ncpus=32)
+[08:39:53] [May21 08:39] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:39:53] [  +0.000250] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:39:53] [  +0.000236] rcu: 	(detected by 6, t=13920387 jiffies, g=18194885, q=639007 ncpus=32)
+[08:40:13] [May21 08:40] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 13759232 jiffies s: 1697 root: 0x2/.
+[08:40:13] [  +0.000216] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:42:53] [May21 08:42] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:42:53] [  +0.000257] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:42:53] [  +0.000219] rcu: 	(detected by 21, t=14100392 jiffies, g=18194885, q=642582 ncpus=32)
+[08:43:13] [May21 08:43] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 13939457 jiffies s: 1697 root: 0x2/.
+[08:43:13] [  +0.000206] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:45:53] [May21 08:45] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:45:53] [  +0.000362] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:45:53] [  +0.000264] rcu: 	(detected by 12, t=14280397 jiffies, g=18194885, q=646501 ncpus=32)
+[08:46:13] [May21 08:46] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 14119680 jiffies s: 1697 root: 0x2/.
+[08:46:13] [  +0.000401] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:48:53] [May21 08:48] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:48:53] [  +0.000283] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:48:53] [  +0.000237] rcu: 	(detected by 6, t=14460402 jiffies, g=18194885, q=650076 ncpus=32)
+[08:49:13] [May21 08:49] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 14299905 jiffies s: 1697 root: 0x2/.
+[08:49:13] [  +0.000221] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:51:53] [May21 08:51] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:51:53] [  +0.000240] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:51:53] [  +0.000224] rcu: 	(detected by 17, t=14640407 jiffies, g=18194885, q=653641 ncpus=32)
+[08:52:13] [May21 08:52] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 14480128 jiffies s: 1697 root: 0x2/.
+[08:52:13] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:54:53] [May21 08:54] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:54:53] [  +0.000263] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:54:53] [  +0.000225] rcu: 	(detected by 20, t=14820412 jiffies, g=18194885, q=657207 ncpus=32)
+[08:55:13] [May21 08:55] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 14660352 jiffies s: 1697 root: 0x2/.
+[08:55:13] [  +0.000212] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[08:57:53] [May21 08:57] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[08:57:53] [  +0.000261] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[08:57:53] [  +0.000233] rcu: 	(detected by 22, t=15000417 jiffies, g=18194885, q=661152 ncpus=32)
+[08:58:13] [May21 08:58] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 14840576 jiffies s: 1697 root: 0x2/.
+[08:58:13] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:00:53] [May21 09:00] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:00:53] [  +0.000368] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:00:53] [  +0.000255] rcu: 	(detected by 14, t=15180422 jiffies, g=18194885, q=664735 ncpus=32)
+[09:01:13] [May21 09:01] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15020801 jiffies s: 1697 root: 0x2/.
+[09:01:13] [  +0.000422] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:03:53] [May21 09:03] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:03:53] [  +0.000276] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:03:53] [  +0.000240] rcu: 	(detected by 18, t=15360427 jiffies, g=18194885, q=668293 ncpus=32)
+[09:04:13] [May21 09:04] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15201025 jiffies s: 1697 root: 0x2/.
+[09:04:13] [  +0.000215] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:06:54] [May21 09:06] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:06:54] [  +0.000257] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:06:54] [  +0.000224] rcu: 	(detected by 1, t=15540432 jiffies, g=18194885, q=672235 ncpus=32)
+[09:07:14] [May21 09:07] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15381249 jiffies s: 1697 root: 0x2/.
+[09:07:14] [  +0.000215] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:09:54] [May21 09:09] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:09:54] [  +0.000256] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:09:54] [  +0.000218] rcu: 	(detected by 17, t=15720437 jiffies, g=18194885, q=675799 ncpus=32)
+[09:10:14] [May21 09:10] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15561472 jiffies s: 1697 root: 0x2/.
+[09:10:14] [  +0.000215] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:12:54] [May21 09:12] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:12:54] [  +0.000246] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:12:54] [  +0.000210] rcu: 	(detected by 20, t=15900442 jiffies, g=18194885, q=679375 ncpus=32)
+[09:13:14] [May21 09:13] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15741696 jiffies s: 1697 root: 0x2/.
+[09:13:14] [  +0.000261] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:15:54] [May21 09:15] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:15:54] [  +0.000251] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:15:54] [  +0.000213] rcu: 	(detected by 0, t=16080447 jiffies, g=18194885, q=683304 ncpus=32)
+[09:16:14] [May21 09:16] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 15921921 jiffies s: 1697 root: 0x2/.
+[09:16:14] [  +0.000217] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:18:54] [May21 09:18] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:18:54] [  +0.000253] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:18:54] [  +0.000215] rcu: 	(detected by 17, t=16260452 jiffies, g=18194885, q=687237 ncpus=32)
+[09:19:14] [May21 09:19] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 16102145 jiffies s: 1697 root: 0x2/.
+[09:19:14] [  +0.000207] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:21:54] [May21 09:21] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:21:54] [  +0.000258] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:21:54] [  +0.000221] rcu: 	(detected by 23, t=16440457 jiffies, g=18194885, q=690781 ncpus=32)
+[09:22:14] [May21 09:22] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 16282368 jiffies s: 1697 root: 0x2/.
+[09:22:14] [  +0.000278] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:24:54] [May21 09:24] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:24:54] [  +0.000261] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:24:54] [  +0.000225] rcu: 	(detected by 22, t=16620462 jiffies, g=18194885, q=694372 ncpus=32)
+[09:25:14] [May21 09:25] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 16462592 jiffies s: 1697 root: 0x2/.
+[09:25:14] [  +0.000220] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:27:54] [May21 09:27] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:27:54] [  +0.000246] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:27:54] [  +0.000223] rcu: 	(detected by 23, t=16800467 jiffies, g=18194885, q=698304 ncpus=32)
+[09:28:14] [May21 09:28] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 16642817 jiffies s: 1697 root: 0x2/.
+[09:28:14] [  +0.000262] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:30:54] [May21 09:30] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:30:54] [  +0.000249] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:30:54] [  +0.000219] rcu: 	(detected by 5, t=16980472 jiffies, g=18194885, q=701887 ncpus=32)
+[09:31:14] [May21 09:31] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 16823041 jiffies s: 1697 root: 0x2/.
+[09:31:14] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:33:54] [May21 09:33] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:33:54] [  +0.000246] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:33:54] [  +0.000217] rcu: 	(detected by 6, t=17160477 jiffies, g=18194885, q=705425 ncpus=32)
+[09:34:14] [May21 09:34] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 17003265 jiffies s: 1697 root: 0x2/.
+[09:34:14] [  +0.000213] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:36:54] [May21 09:36] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:36:54] [  +0.000255] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:36:54] [  +0.000224] rcu: 	(detected by 0, t=17340482 jiffies, g=18194885, q=709367 ncpus=32)
+[09:37:14] [May21 09:37] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 17183489 jiffies s: 1697 root: 0x2/.
+[09:37:14] [  +0.000239] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:39:54] [May21 09:39] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:39:54] [  +0.000368] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:39:54] [  +0.000261] rcu: 	(detected by 27, t=17520487 jiffies, g=18194885, q=712921 ncpus=32)
+[09:40:14] [May21 09:40] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 17363712 jiffies s: 1697 root: 0x2/.
+[09:40:14] [  +0.000398] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:42:54] [May21 09:42] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:42:54] [  +0.000280] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:42:54] [  +0.000239] rcu: 	(detected by 2, t=17700492 jiffies, g=18194885, q=716501 ncpus=32)
+[09:43:14] [May21 09:43] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 17543936 jiffies s: 1697 root: 0x2/.
+[09:43:14] [  +0.000216] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T
+[09:45:54] [May21 09:45] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[09:45:54] [  +0.000251] rcu: 	Tasks blocked on level-1 rcu_node (CPUs 16-31): P27218/1:b..l
+[09:45:54] [  +0.000226] rcu: 	(detected by 6, t=17880497 jiffies, g=18194885, q=720420 ncpus=32)
+[09:46:14] [May21 09:46] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P27218 } 17724160 jiffies s: 1697 root: 0x2/.
+[09:46:14] [  +0.000217] rcu: blocking rcu_node structures (internal RCU debug): l=1:16-31:0x0/T

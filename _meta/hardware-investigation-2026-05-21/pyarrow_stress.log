@@ -1,0 +1,28 @@
+=== PyArrow round-trip stress test ===
+out: /mnt/projects/research/dotaml-turbo/_meta/hardware-investigation-2026-05-21/pq/stress.parquet
+params: n_rows=8,000,000, n_cols=20, iters=100, pressure_gb=25.0
+
+[03:29:14] generating baseline parquet...
+  wrote 0.95 GB in 2.9s
+  on-disk md5: 1a31eab14674ae1e6b62ce6a59caa07f
+  computed expected signature for 20 columns
+
+[03:29:19] starting 100-iter stress loop with 25.0 GB pressure...
+  iter   0  ok    30.7s  pressure_sum=-2.84e+03
+  iter  10  ok    31.2s  pressure_sum=-3.43e+04
+  iter  20  ok    31.2s  pressure_sum=5.11e+04
+  iter  30  ok    31.2s  pressure_sum=-3.64e+03
+  iter  40  ok    31.3s  pressure_sum=2.46e+04
+  iter  50  ok    31.3s  pressure_sum=3.55e+04
+  iter  60  FAIL  31.4s  pressure_sum=7.85e+04  disk_drift=False  diffs=['i64_2.md5: 439894c64ba58ade059c1bb7ca488651 vs acc641969d73e1855d497df03417fc91', 'i64_2.max: 999999977.0 vs 141837450994669.0', 'i64_2.sum_abs: 4001207998257586.0 vs 4264828795976209.0']
+  iter  70  ok    31.3s  pressure_sum=-3.86e+03
+  iter  80  ok    31.2s  pressure_sum=-2.89e+04
+  iter  85  FAIL  31.3s  pressure_sum=-5.81e+04  disk_drift=False  diffs=['i64_18.md5: c757d71e3545ea65869ed1e87068ab59 vs 183366d2483b1c41f675c11101922ff9', 'i64_18.min: 127.0 vs -9.223372036606112e+18', 'i64_18.max: 999999934.0 vs 4.68627688808351e+18', 'i64_18.sum_abs: 4001079202212874.0 vs 2.913973115767583e+18']
+  iter  90  ok    31.3s  pressure_sum=-6.49e+03
+
+=== summary ===
+iters: 100
+fails: 2
+first 5 fail entries:
+  (60, 'sig_mismatch', ['i64_2.md5: 439894c64ba58ade059c1bb7ca488651 vs acc641969d73e1855d497df03417fc91', 'i64_2.max: 999999977.0 vs 141837450994669.0', 'i64_2.sum_abs: 4001207998257586.0 vs 4264828795976209.0'])
+  (85, 'sig_mismatch', ['i64_18.md5: c757d71e3545ea65869ed1e87068ab59 vs 183366d2483b1c41f675c11101922ff9', 'i64_18.min: 127.0 vs -9.223372036606112e+18', 'i64_18.max: 999999934.0 vs 4.68627688808351e+18', 'i64_18.sum_abs: 4001079202212874.0 vs 2.913973115767583e+18'])

@@ -1,0 +1,24 @@
+---
+title: "rich-supervision-multitask-740 — notes"
+format: html
+---
+
+# Running notes
+
+Placeholders. Populate after the full run.
+
+## Per-ablation metrics
+
+- `metrics_win_only_sanity.json` — sanity replication of cleanup-740 on the rich-cols pipeline.
+- `metrics_multitask_all.json` — PRIMARY 4-head joint training.
+- `metrics.json` — copy of the primary file.
+
+## Vocab inspection
+
+- `results/item_vocab.json` — observed vocab size, frequency cutoff, top items, duration bucket edges.
+
+## Plots
+
+- `results/learning_curve_*.png` — per-component train/val loss + val_auc curves.
+- `results/calibration_*.png` — win-head 20-quantile calibration.
+- `results/roc_*.png` — win-head ROC.

@@ -1,0 +1,153 @@
+# Config for rich-supervision-multitask-740.
+#
+# Forked from upstream-data-cleanup-740/config.yaml. Differences:
+#
+# 1. Adds [rich_cols] block: where the raw_json-derived per-match sidecar
+#    parquet (duration + per-slot KDA/GPM/XPM/hero_damage/net_worth + items)
+#    lives. Built by build_rich_cols.py.
+# 2. Adds [item_vocab] block: vocab cutoff + path.
+# 3. Adds [duration_bucket] block: n_buckets + path (shared file with item_vocab).
+# 4. Adds [multitask_loss] block: per-head alpha weights.
+# 5. transformer_ablations now: win_only_sanity (alpha_d/i/a = 0) and
+#    multitask_all (all four heads active).
+#
+# HCE-strict: rich-cols build refuses to walk test-window dates
+# [2026-03-10, 2026-03-23] or post-snapshot [2026-03-24, ...].
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+anonymous_account_ids: [0, 4294967295]
+
+# Source dir for the Transformer trainer (data.py reads this) — clean parquet.
+player_features_transformer:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean"
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+# Rich-cols sidecar (NEW). Built by build_rich_cols.py.
+rich_cols:
+  out_dir: "data/snapshots/7.40-2025-12-16/processed/rich_cols"
+  train_filename: "train.parquet"
+  val_filename: "val.parquet"
+  smoke_train_filename: "train_smoke.parquet"
+  smoke_val_filename: "val_smoke.parquet"
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+  # Per-feature physical bounds. Inclusive both sides.
+  feat_bounds:
+    duration:        [0, 7200]      # 0 .. 2 h (Turbo skews short)
+    kills:           [0, 100]
+    deaths:          [0, 100]
+    assists:         [0, 100]
+    gpm:             [0, 5000]
+    xpm:             [0, 5000]
+    hero_damage:     [0, 500000]
+    net_worth:       [0, 500000]
+
+# Item vocab + duration buckets (NEW). Built by build_item_vocab.py.
+item_vocab:
+  freq_cutoff: 100
+  vocab_path: "results/item_vocab.json"
+
+duration_bucket:
+  n_buckets: 8
+  # bucket edges saved in the same vocab JSON for reproducibility.
+
+# Train subsetting (mirror parent for clean A/B)
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+# Hero vocab.
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# MinimalTransformer HPs — IDENTICAL to cleanup-740.
+transformer_model:
+  embed_dim: 64
+  d_model: 64
+  n_heads: 4
+  n_layers: 2
+  ff_mult: 2
+  dropout: 0.0
+
+transformer_optim:
+  batch_size: 8192
+  lr: 1.0e-3
+  weight_decay: 0.0
+  max_epochs: 30
+  num_workers: 0
+  pin_memory: false
+  mixed_precision: true
+  patience: 5
+  early_stopping_metric: val_win_log_loss   # early-stop on the PRIMARY (win) component only
+
+# Joint-loss alpha weights. win_only_sanity zeroes all but alpha_win.
+# 2026-05-20: alpha_dur dropped 0.5 -> 0.15 because attempt-2 epoch-1
+# diagnostics showed duration dominating the joint loss after weighting
+# (d*0.5=1.0347 vs w=0.6841, dur was 58% of total) and pulling the encoder
+# away from win-optimal representations (val_auc=0.6186 at epoch 2 vs
+# cleanup-740 trajectory of 0.6218). Other alphas unchanged.
+multitask_loss:
+  alpha_win: 1.0
+  alpha_dur: 0.15
+  alpha_item: 0.3
+  alpha_aux: 0.1
+  # Aux targets list (per-slot, standardized to train-mean/std).
+  aux_targets:
+    - kills
+    - gpm
+    - hero_damage
+
+transformer_ablations:
+  - name: win_only_sanity
+    use_features: true
+    multitask: false
+    description: "Sanity. Only win head active (alpha_d/i/a=0). Should reproduce cleanup-740's 0.6477054 to ~1e-4 modulo rich-cols join filtering."
+  - name: multitask_all
+    use_features: true
+    multitask: true
+    description: "PRIMARY. All four heads active with the joint loss weights above."
+
+transformer_smoke:
+  max_epochs: 1
+  n_train: 50000
+  n_val: 5000
+  metrics_suffix: "_smoke"
+
+# Smoke knobs for build_rich_cols.py.
+rich_cols_smoke:
+  n_days: 1    # one post-patch day (~10K matches)
+
+# Comparison anchors (literal — for metrics.json delta fields).
+anchors:
+  plateau_baseline_740_val_auc: 0.6161
+  plateau_architectures_740_val_auc: 0.6322
+  transformer_hp_sweep_740_val_auc: 0.6318
+  player_features_740_val_auc: 0.6227
+  player_features_prepatch_740_features_only_val_auc: 0.6256
+  transformer_plus_features_extended_740_val_auc: 0.6477298
+  upstream_data_cleanup_740_clean_val_auc: 0.6477054
+  proposal_target_val_auc: 0.6487
+  equality_band_lower: 0.6467
+  equality_band_upper: 0.6487
+  cleanup_anchor_val_auc: 0.6477054
+  multitask_helped_threshold: 0.001
+
+output:
+  results_dir: "results"
+  metrics: "metrics.json"

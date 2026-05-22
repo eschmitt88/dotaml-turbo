@@ -1,0 +1,91 @@
+===== multitask_all rerun v3 (α_dur=0.15, vectorized items, 30s recovery sleep) START 2026-05-20T21:14:17+00:00 =====
+[2026-05-20T21:14:17+00:00] attempt 1/3 START
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+/tmp/multitask_rerun.sh: line 9: 997120 Segmentation fault      (core dumped) $PY $EXP/train.py --config $EXP/config.yaml --ablation multitask_all --metrics-suffix _multitask_all
+[2026-05-20T21:48:52+00:00] attempt 1 FAILED rc=139 — sleeping 30s for OS/CUDA cleanup before retry
+[2026-05-20T21:49:22+00:00] attempt 2/3 START
+Ablation: multitask_all (use_features=True, multitask=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  WARN: pq.read_table(/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet) failed: Unexpected end of stream
+  WARN: switching to defensive per-column-per-row-group read.
+  defensive: ONE corrupted column 'p9_days_since_last_log1p' — recovering via per-row-group + median fill.
+  defensive: 'p9_days_since_last_log1p' rg [6] unreadable; filling 1,048,576 rows with median=5.9026
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 77.4s
+  joining val sidecar...
+Traceback (most recent call last):
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 758, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 619, in main
+    train_ds, val_ds, meta = load_train_val(
+                             ^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 612, in load_train_val
+    _build_multitask_targets(
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 397, in _build_multitask_targets
+    side_tbl = _read_sidecar_tbl(sidecar_path, clean_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 343, in _read_sidecar_tbl
+    tbl, expect, bad = _try_pf_read()
+                       ^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 334, in _try_pf_read
+    tbl = pf.read(columns=cols)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py", line 639, in read
+    return self.reader.read_all(column_indices=column_indices,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_parquet.pyx", line 1863, in pyarrow._parquet.ParquetReader.read_all
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: Unexpected end of stream
+[2026-05-20T21:51:44+00:00] attempt 2 FAILED rc=1 — sleeping 30s for OS/CUDA cleanup before retry
+[2026-05-20T21:52:14+00:00] attempt 3/3 START
+Ablation: multitask_all (use_features=True, multitask=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  WARN: pq.read_table(/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet) failed: Unexpected end of stream
+  WARN: switching to defensive per-column-per-row-group read.
+  defensive: ONE corrupted column 'p9_days_since_last_log1p' — recovering via per-row-group + median fill.
+  defensive: 'p9_days_since_last_log1p' rg [6] unreadable; filling 1,048,576 rows with median=5.9026
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 76.6s
+  joining val sidecar...
+Traceback (most recent call last):
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 758, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 619, in main
+    train_ds, val_ds, meta = load_train_val(
+                             ^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 612, in load_train_val
+    _build_multitask_targets(
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 397, in _build_multitask_targets
+    side_tbl = _read_sidecar_tbl(sidecar_path, clean_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 343, in _read_sidecar_tbl
+    tbl, expect, bad = _try_pf_read()
+                       ^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 334, in _try_pf_read
+    tbl = pf.read(columns=cols)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py", line 639, in read
+    return self.reader.read_all(column_indices=column_indices,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_parquet.pyx", line 1863, in pyarrow._parquet.ParquetReader.read_all
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+OSError: Unexpected end of stream
+[2026-05-20T21:54:36+00:00] attempt 3 FAILED rc=1 — sleeping 30s for OS/CUDA cleanup before retry
+===== rerun v3 DONE rc=1 2026-05-20T21:55:06+00:00 =====

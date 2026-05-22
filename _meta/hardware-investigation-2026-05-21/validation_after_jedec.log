@@ -1,0 +1,37 @@
+===== POST-JEDEC VALIDATION SUITE START 2026-05-21T10:36:26+00:00 =====
+Memory state baseline:
+	Speed: 4800 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Configured Voltage: 1.1 V
+	Speed: 4800 MT/s
+	Configured Memory Speed: 4800 MT/s
+	Configured Voltage: 1.1 V
+
+monitor PID=6409
+
+===== TEST 1/3: memtester 30 GB, 1 pass =====
+Start: 2026-05-21T10:36:26+00:00
+memtester result: 0
+0 FAILURES in 1258 sec
+  CLEAN
+
+===== TEST 2/3: stress-ng vm 4x5G=20GB, 30 min =====
+Start: 2026-05-21T10:57:24+00:00
+stress-ng result: 0
+0 workers reported errors, 0 total bit errors in 1801 sec
+  CLEAN
+
+===== TEST 3/3: PyArrow round-trip stress 100 iters, 25 GB pressure =====
+Start: 2026-05-21T11:27:25+00:00
+PyArrow stress result: rc=0, 0
+0 fail entries in 3128 sec
+  CLEAN
+
+===== SUITE DONE 2026-05-21T12:19:33+00:00 =====
+
+==== VERDICT ====
+memtester:   0
+0 failures   (was: ~100s of failures at EXPO 6000)
+stress-ng:   0 bit errors (was: 2110 at EXPO 6000)
+PyArrow:     0 fail lines (was: 2 mismatches in 100 iters at EXPO 6000)
+=== STILL FAILING — JEDEC alone is not enough. Need DIMM-level testing or ECC. ===

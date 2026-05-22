@@ -1,0 +1,666 @@
+===== AI Workstation Reliability Investigation =====
+Started: 2026-05-21T03:26:54+00:00
+Host: aiserver2026
+Kernel: 6.17.0-23-generic
+Uptime: up 1 day, 19 hours, 3 minutes
+
+===== PHASE 1: Baseline hardware snapshot =====
+--- CPU ---
+cpu family	: 26
+physical cores: 32
+
+--- Memory DIMM inventory ---
+	Error Correction Type: None
+	Locator: DIMM 0
+	Bank Locator: P0 CHANNEL A
+	Type: Unknown
+	Size: 48 GB
+	Locator: DIMM 1
+	Bank Locator: P0 CHANNEL A
+	Type: DDR5
+	Speed: 4800 MT/s
+	Manufacturer: Corsair
+	Part Number: CMK96GX5M2E6000C36
+	Configured Memory Speed: 6000 MT/s
+	Configured Voltage: 1.1 V
+	Non-Volatile Size: None
+	Volatile Size: 48 GB
+	Cache Size: None
+	Logical Size: None
+	Locator: DIMM 0
+	Bank Locator: P0 CHANNEL B
+	Type: Unknown
+	Size: 48 GB
+	Locator: DIMM 1
+	Bank Locator: P0 CHANNEL B
+	Type: DDR5
+	Speed: 4800 MT/s
+	Manufacturer: Corsair
+	Part Number: CMK96GX5M2E6000C36
+	Configured Memory Speed: 6000 MT/s
+	Configured Voltage: 1.1 V
+	Non-Volatile Size: None
+	Volatile Size: 48 GB
+	Cache Size: None
+	Logical Size: None
+
+--- Total memory state ---
+               total        used        free      shared  buff/cache   available
+Mem:            91Gi       3.5Gi        58Gi       2.1Mi        31Gi        88Gi
+Swap:          8.0Gi        34Mi       8.0Gi
+MemTotal:       96427076 kB
+MemFree:        61195588 kB
+HardwareCorrupted:     0 kB
+
+--- ECC status ---
+	Error Correction Type: None
+	Total Width: Unknown
+	Data Width: Unknown
+	Total Width: 64 bits
+	Data Width: 64 bits
+	Total Width: Unknown
+	Data Width: Unknown
+	Total Width: 64 bits
+	Data Width: 64 bits
+EDAC mc dirs:
+power
+subsystem
+uevent
+
+--- Motherboard / BIOS ---
+	Version: 1401
+	Release Date: 05/05/2025
+	Manufacturer: ASUSTeK COMPUTER INC.
+	Product Name: ROG CROSSHAIR X870E HERO
+	Version: Rev 1.xx
+
+--- NVMe drives ---
+Node                  Generic               SN                   Model                                    Namespace  Usage                      Format           FW Rev  
+--------------------- --------------------- -------------------- ---------------------------------------- ---------- -------------------------- ---------------- --------
+/dev/nvme0n1          /dev/ng0n1            254265801730         WD_BLACK SN850X 4000GB                   0x1          4.00  TB /   4.00  TB    512   B +  0 B   624361WD
+/dev/nvme1n1          /dev/ng1n1            S7L9NL0L201197F      Samsung SSD 990 PRO 2TB                  0x1        114.96  GB /   2.00  TB    512   B +  0 B   8B2QJXD7
+
+===== PHASE 1 done at 2026-05-21T03:26:54+00:00 =====
+
+===== PHASE 2: SSD health + temperatures + rasdaemon =====
+
+--- WD_BLACK SN850X (nvme0n1, data drive) SMART log ---
+Smart Log for NVME device:nvme0n1 namespace-id:ffffffff
+critical_warning			: 0
+temperature				: 53 °C (326 K)
+available_spare				: 100%
+available_spare_threshold		: 10%
+percentage_used				: 0%
+endurance group critical warning summary: 0
+Data Units Read				: 2036488 (1.04 TB)
+Data Units Written			: 439937 (225.25 GB)
+host_read_commands			: 8196113
+host_write_commands			: 1796436
+controller_busy_time			: 13
+power_cycles				: 13
+power_on_hours				: 1
+unsafe_shutdowns			: 6
+media_errors				: 0
+num_err_log_entries			: 0
+Warning Temperature Time		: 0
+Critical Composite Temperature Time	: 0
+Thermal Management T1 Trans Count	: 0
+Thermal Management T2 Trans Count	: 0
+Thermal Management T1 Total Time	: 0
+Thermal Management T2 Total Time	: 0
+
+--- WD_BLACK SN850X error log (last 16 entries) ---
+Error Log Entries for device:nvme0n1 entries:64
+.................
+ Entry[ 0]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 1]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 2]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 3]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 4]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 5]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+
+--- Samsung 990 PRO (nvme1n1, boot drive) SMART log ---
+Smart Log for NVME device:nvme1n1 namespace-id:ffffffff
+critical_warning			: 0
+temperature				: 52 °C (325 K)
+available_spare				: 100%
+available_spare_threshold		: 10%
+percentage_used				: 0%
+endurance group critical warning summary: 0
+Data Units Read				: 83242 (42.62 GB)
+Data Units Written			: 484465 (248.05 GB)
+host_read_commands			: 1258523
+host_write_commands			: 9307564
+controller_busy_time			: 112
+power_cycles				: 11
+power_on_hours				: 357
+unsafe_shutdowns			: 6
+media_errors				: 0
+num_err_log_entries			: 0
+Warning Temperature Time		: 0
+Critical Composite Temperature Time	: 0
+Temperature Sensor 1           : 52 °C (325 K)
+Temperature Sensor 2           : 54 °C (327 K)
+Thermal Management T1 Trans Count	: 0
+Thermal Management T2 Trans Count	: 0
+Thermal Management T1 Total Time	: 0
+Thermal Management T2 Total Time	: 0
+
+--- Samsung 990 PRO error log ---
+Error Log Entries for device:nvme1n1 entries:64
+.................
+ Entry[ 0]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 1]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 2]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 3]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 4]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+lba		: 0
+nsid		: 0
+vs		: 0
+trtype		: The transport type is not indicated or the error is not transport related.
+csi		: 0
+opcode		: 0
+cs		: 0
+trtype_spec_info: 0
+log_page_version: 0
+.................
+ Entry[ 5]   
+.................
+error_count	: 0
+sqid		: 0
+cmdid		: 0
+status_field	: 0(Successful Completion: The command completed without error)
+phase_tag	: 0
+parm_err_loc	: 0
+
+--- smartctl on both (extended attributes) ---
+smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.17.0-23-generic] (local build)
+Copyright (C) 2002-23, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Model Number:                       WD_BLACK SN850X 4000GB
+Serial Number:                      254265801730
+Firmware Version:                   624361WD
+PCI Vendor/Subsystem ID:            0x15b7
+IEEE OUI Identifier:                0x001b44
+Total NVM Capacity:                 4,000,787,030,016 [4.00 TB]
+Unallocated NVM Capacity:           0
+Controller ID:                      8224
+NVMe Version:                       1.4
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          4,000,787,030,016 [4.00 TB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            001b44 8b4f80d603
+Local Time is:                      Thu May 21 03:27:51 2026 UTC
+Firmware Updates (0x14):            2 Slots, no Reset required
+Optional Admin Commands (0x0017):   Security Format Frmw_DL Self_Test
+Optional NVM Commands (0x00df):     Comp Wr_Unc DS_Mngmt Wr_Zero Sav/Sel_Feat Timestmp Verify
+Log Page Attributes (0x1e):         Cmd_Eff_Lg Ext_Get_Lg Telmtry_Lg Pers_Ev_Lg
+Maximum Data Transfer Size:         128 Pages
+Warning  Comp. Temp. Threshold:     90 Celsius
+Critical Comp. Temp. Threshold:     94 Celsius
+Namespace 1 Features (0x02):        NA_Fields
+
+Supported Power States
+St Op     Max   Active     Idle   RL RT WL WT  Ent_Lat  Ex_Lat
+ 0 +     9.00W    9.00W       -    0  0  0  0        0       0
+ 1 +     6.00W    6.00W       -    0  0  0  0        0       0
+ 2 +     4.50W    4.50W       -    0  0  0  0        0       0
+ 3 -   0.0250W       -        -    3  3  3  3     3100   11900
+ 4 -   0.0050W       -        -    4  4  4  4     3900   45700
+
+Supported LBA Sizes (NSID 0x1)
+Id Fmt  Data  Metadt  Rel_Perf
+ 0 +     512       0         2
+ 1 -    4096       0         1
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART/Health Information (NVMe Log 0x02)
+Critical Warning:                   0x00
+Temperature:                        53 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    2,036,488 [1.04 TB]
+Data Units Written:                 439,937 [225 GB]
+Host Read Commands:                 8,196,113
+Host Write Commands:                1,796,436
+Controller Busy Time:               13
+Power Cycles:                       13
+Power On Hours:                     1
+Unsafe Shutdowns:                   6
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      0
+Warning  Comp. Temperature Time:    0
+
+smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.17.0-23-generic] (local build)
+Copyright (C) 2002-23, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 990 PRO 2TB
+Serial Number:                      S7L9NL0L201197F
+Firmware Version:                   8B2QJXD7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 2,000,398,934,016 [2.00 TB]
+Unallocated NVM Capacity:           0
+Controller ID:                      1
+NVMe Version:                       2.0
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          2,000,398,934,016 [2.00 TB]
+Namespace 1 Utilization:            114,963,283,968 [114 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 4261a0b273
+Local Time is:                      Thu May 21 03:27:51 2026 UTC
+Firmware Updates (0x16):            3 Slots, no Reset required
+Optional Admin Commands (0x0017):   Security Format Frmw_DL Self_Test
+Optional NVM Commands (0x0055):     Comp DS_Mngmt Sav/Sel_Feat Timestmp
+Log Page Attributes (0x2f):         S/H_per_NS Cmd_Eff_Lg Ext_Get_Lg Telmtry_Lg Log0_FISE_MI
+Maximum Data Transfer Size:         512 Pages
+Warning  Comp. Temp. Threshold:     82 Celsius
+Critical Comp. Temp. Threshold:     85 Celsius
+
+Supported Power States
+St Op     Max   Active     Idle   RL RT WL WT  Ent_Lat  Ex_Lat
+ 0 +     9.61W       -        -    0  0  0  0        0       0
+ 1 +     9.61W       -        -    1  1  1  1        0       0
+ 2 +     9.61W       -        -    2  2  2  2        0       0
+ 3 -   0.0500W       -        -    3  3  3  3     4200    3500
+ 4 -   0.0050W       -        -    4  4  4  4     2200   22200
+
+Supported LBA Sizes (NSID 0x1)
+Id Fmt  Data  Metadt  Rel_Perf
+ 0 +     512       0         0
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART/Health Information (NVMe Log 0x02)
+Critical Warning:                   0x00
+Temperature:                        52 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    83,242 [42.6 GB]
+Data Units Written:                 484,465 [248 GB]
+Host Read Commands:                 1,258,523
+Host Write Commands:                9,307,564
+Controller Busy Time:               112
+Power Cycles:                       11
+Power On Hours:                     357
+Unsafe Shutdowns:                   6
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      0
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+
+--- Temperatures (lm-sensors) ---
+spd5118-i2c-1-51
+Adapter: SMBus PIIX4 adapter port 0 at 0b00
+temp1:        +51.0°C  (low  =  +0.0°C, high = +55.0°C)  ALARM (HIGH)
+                       (crit low =  +0.0°C, crit = +85.0°C)
+
+nvme-pci-0300
+Adapter: PCI adapter
+Composite:    +52.9°C  (low  =  -5.2°C, high = +89.8°C)
+                       (crit = +93.8°C)
+
+r8169_0_d00:00-mdio-0
+Adapter: MDIO adapter
+temp1:        +65.0°C  (high = +120.0°C)
+
+amdgpu-pci-7b00
+Adapter: PCI adapter
+vddgfx:        1.13 V  
+vddnb:         1.25 V  
+edge:         +52.0°C  
+PPT:           9.00 mW 
+
+spd5118-i2c-1-53
+Adapter: SMBus PIIX4 adapter port 0 at 0b00
+temp1:        +52.8°C  (low  =  +0.0°C, high = +55.0°C)  ALARM (HIGH)
+                       (crit low =  +0.0°C, crit = +85.0°C)
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Tctl:         +56.4°C  
+Tccd1:        +46.0°C  
+Tccd2:        +44.1°C  
+
+nvme-pci-0200
+Adapter: PCI adapter
+Composite:    +51.9°C  (low  = -273.1°C, high = +81.8°C)
+                       (crit = +84.8°C)
+Sensor 1:     +51.9°C  (low  = -273.1°C, high = +65261.8°C)
+Sensor 2:     +53.9°C  (low  = -273.1°C, high = +65261.8°C)
+
+
+--- GPU state ---
+name, driver_version, utilization.gpu [%], memory.used [MiB], memory.total [MiB], temperature.gpu, power.draw [W], clocks.current.sm [MHz], clocks.current.memory [MHz]
+NVIDIA GeForce RTX 5080, 580.159.03, 0 %, 10 MiB, 16303 MiB, 49, 32.43 W, 210 MHz, 405 MHz
+
+--- rasdaemon: any hardware errors logged? ---
+ras-mc-ctl: Error: No DIMMs found in /sys or new sysfs EDAC interface not found.
+ras-mc-ctl: drivers not loaded.
+No Memory errors.
+
+No PCIe AER errors.
+
+No Extlog errors.
+
+No MCE errors.
+
+===== PHASE 2 done at 2026-05-21T03:27:51+00:00 =====
+
+===== PHASE 3: PyArrow round-trip stress test =====
+Start: 2026-05-21T03:29:14+00:00
+PyArrow stress PID=1208812
+--- stress log first 30 lines ---
+
+===== PHASE 4: SSD read consistency on KNOWN-CORRUPTED file =====
+Start: 2026-05-21T03:29:57+00:00
+SSD consistency PID=1209394
+
+
+=========================================================================
+===== FINAL FINDINGS — 2026-05-21 =====
+=========================================================================
+
+ROOT CAUSE: DDR5 EXPO 6000 MT/s memory instability (silent bit-flips)
+            on Ryzen 9950X + Corsair CMK96GX5M2E6000C36 (2x48GB) +
+            ASUS X870E HERO BIOS 1401, with no ECC to detect/correct.
+
+EVIDENCE:
+1. PyArrow stress test: 2 silent data-corruption events in 100 iters
+   under 25 GB memory pressure. Same file, different bytes returned.
+2. memtester (30 GB locked): dozens of single-bit-flip failures detected
+   at specific physical addresses (0xc3xxxxxx, 0xebxxxxxx, 0x142xxxxxx).
+3. stress-ng vm (4 workers, 30 min): 2,110 bit errors total. All
+   4 workers failed.
+4. Kernel BUG event at 04:47:49 UTC during stress: "BUG: Bad page map",
+   "unable to handle page fault", "scheduling while atomic". Followed by
+   5 hours of RCU stalls -> system hung -> user had to force restart.
+5. Temperatures within spec: DIMMs 71C under load (DDR5 throttle ~85C),
+   CPU 89C peak (Tj_max 95C). Thermal not the primary cause.
+
+EXPLAINS PRIOR FAILURES:
+- 2026-05-19 04:09 kernel page-fault BUG -> cleanup-740 RCU stall
+- cleanup-740 parquet p1_smoothed_winrate_hero corruption (6,482 cells)
+- multitask-740 v1 ArrowInvalid length mismatch
+- multitask-740 v2 attempt-2 NaN at val (bf16 logit corruption)
+- multitask-740 v4 clean train.parquet rg6 silent corruption
+- multitask-740 v5 val sidecar p1_items + p7_assists corruption
+- multitask-740 v5 attempt-2 Blackwell segfault @ 2.5h
+- NVIDIA DKMS compile segfault during apt install (this session)
+
+REMEDIATION (priority order):
+1. IMMEDIATE: Disable EXPO in BIOS. Run JEDEC default (4800 MT/s).
+   Free. ~15% memory bandwidth loss for ML workloads. Should
+   eliminate bit-flips. Test by re-running memtester to confirm.
+2. If 4800 still errors: test each DIMM individually with memtest86+
+   from USB. Could be a defective DIMM.
+3. If 4800 stable: consider partial restore via JEDEC 5600 MT/s with
+   loosened timings. May give back some bandwidth without instability.
+4. PRODUCTION FIX: replace with ECC UDIMM kit (X870E HERO supports it).
+   Kingston Server Premier KSM56E46BD8KM-48HM (48 GB ECC UDIMM 5600)
+   is one valid option. ~$300-500 for 96GB pair. Hardware error
+   detection/correction.
+5. Check ASUS for X870E HERO BIOS newer than 1401 (May 2025).
+
+PROCESSES KILLED BY USER'S FORCE RESTART:
+- memtester PID 1238651 (had completed initial passes)
+- stress-ng PID 1238652 (had completed 30-min run with 2110 errors)
+- kernel_watch PID 1210360
+- monitor PID 1210361
+
+INVESTIGATION LOG: this file
+SUPPORTING LOGS: memtester.log (380 MB), stress_ng.log, pyarrow_stress.log,
+                 ssd_consistency.log, monitor.log, kernel_watch.log
+
+
+=========================================================================
+===== POST-JEDEC VALIDATION — 2026-05-21 12:19 UTC =====
+=========================================================================
+
+REMEDIATION APPLIED: User disabled EXPO in BIOS via Ai Tweaker -> Ai
+Overclock Tuner -> Auto. RAM now runs at JEDEC default 4800 MT/s at
+1.1V (was 6000 MT/s EXPO at 1.1V).
+
+VALIDATION RESULTS (same tests that previously failed):
+
+| Test                                | EXPO 6000 (before)        | JEDEC 4800 (after)    |
+|-------------------------------------|---------------------------|-----------------------|
+| memtester 30 GB, 1 pass             | hundreds of FAILUREs      | 0 failures            |
+| stress-ng vm 4x5G, 30 min           | 2,110 bit errors          | 0 bit errors          |
+| PyArrow round-trip 100 iter, 25 GB  | 2 silent data corruptions | 0 mismatches          |
+
+TEMPERATURES (lower speed = less heat):
+- DIMMs: 47-48°C under load (was 70-71°C at EXPO)
+- CPU: 67-75°C peak under stress (was 89°C peak at EXPO)
+- GPU: unchanged (idle ~47°C)
+
+KERNEL EVENTS: ZERO new kernel BUGs, RCU stalls, page faults, or MCEs
+during the 1h 45m validation suite. (Compare: previous run at EXPO
+triggered a kernel page-fault BUG + 5-hour RCU stall that hung the
+system.)
+
+CONCLUSION: DDR5 EXPO 6000 MT/s on this Ryzen 9950X + Corsair
+CMK96GX5M2E6000C36 (2x48GB) + ASUS X870E HERO BIOS 1401 combo was
+the root cause of all reliability issues. JEDEC 4800 MT/s is stable.
+
+Box is back in service for ML training workloads. Multi-hour Transformer
+runs should now complete reliably, modulo the separate Blackwell torch
+DataLoader bug (pytorch/pytorch#184062) which is still upstream.
+
+BANDWIDTH IMPACT (4800 vs 6000 MT/s):
+- Theoretical memory bandwidth: 4800/6000 = -20%
+- ML training is rarely memory-bandwidth bound on Ada/Blackwell GPUs
+  (compute-bound); expected real-world slowdown: 5-15% for typical
+  Transformer/CNN workloads on RTX 5080.
+
+OPEN: ECC RAM upgrade still recommended as the production-grade fix —
+provides hardware error detection/correction even at higher speeds.
+But JEDEC 4800 non-ECC is now empirically stable.
+
+
+=========================================================================
+===== PARQUET REBUILD VERDICT — 2026-05-21 17:19 UTC =====
+=========================================================================
+
+Both corrupted parquets rebuilt successfully on JEDEC 4800 MT/s RAM:
+
+| File                                                                   | Build wall | Verification        |
+|------------------------------------------------------------------------|-----------:|---------------------|
+| processed/player_features_prepatch_clean/{train,val}.parquet           | 2h 11m     | clean (all 13 rg)   |
+| processed/rich_cols/{train,val}.parquet                                | 1h 34m     | clean (all 13 rg)   |
+
+The new clean parquet md5 differs from the old corrupted backup
+(d4789cdb... vs bdb7c8bc...), confirming the on-disk corruption was real
+and the rebuild eliminated it. p9_days_since_last_log1p rg 6 — the
+previously-unreadable column — now reads cleanly with sensible bounds
+(min=0.010, max=5.903, all finite). Rich-cols pre/post-write
+row-group-stats validation both passed; full pq.read_table on both
+train and val succeeds in <1s.
+
+OOM during clean-parquet build STEP 1 (rc=137) was the well-documented
+post-write re-read pattern in cleanup-740's build_features.py
+(aiserver2026-postwrite-parquet-reread-oom memory). The on-disk data
+had already been written; the OOM happened during validation only.
+Rich-cols sidecar build skips full re-read in favor of row-group-stats
+verification and finished cleanly.
+
+ZERO kernel events during ~3h 45m combined heavy-memory build time
+(vs the catastrophic kernel BUG + 5h RCU stall during the same kind
+of workload at EXPO 6000). RAM fix fully validated end-to-end.
+
+CORRUPTED BACKUPS retained at:
+  data/snapshots/7.40-2025-12-16/processed/_corrupted_backup_2026-05-21/

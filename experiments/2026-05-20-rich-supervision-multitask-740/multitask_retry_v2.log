@@ -1,0 +1,55 @@
+===== multitask retry v2 (UNBUFFERED, JEDEC, clean parquets) START 2026-05-21T21:09:23+00:00 =====
+[2026-05-21T21:09:23+00:00] attempt 1/3 START
+Ablation: multitask_all (use_features=True, multitask=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 81.8s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 59.6s
+Data ready in 234.0s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+Model: {'total': 97917, 'trainable': 97917, 'embedding': 9792, 'non_embedding': 88125}, device=cuda
+  epoch 1/30 tr[w=0.6869 d=2.0782 i=0.11510 a=0.3584 tot=1.0690] vl_win=0.6703  val_auc=0.6148  dur_acc=0.1683  itemMAP@10=0.15439501404762268  (456.8s)
+  epoch 2/30 tr[w=0.6667 d=2.0517 i=0.08839 a=0.3286 tot=1.0339] vl_win=0.6682  val_auc=0.6199  dur_acc=0.1710  itemMAP@10=0.1970270872116089  (461.0s)
+  epoch 3/30 tr[w=0.6651 d=2.0506 i=0.08455 a=0.3267 tot=1.0307] vl_win=0.6684  val_auc=0.6226  dur_acc=0.1720  itemMAP@10=0.2259162962436676  (519.5s)
+  epoch 4/30 tr[w=0.6640 d=2.0492 i=0.08166 a=0.3256 tot=1.0285] vl_win=0.6662  val_auc=0.6248  dur_acc=0.1711  itemMAP@10=0.24191339313983917  (461.6s)
+  epoch 5/30 tr[w=0.6622 d=2.0486 i=0.07986 a=0.3243 tot=1.0259] vl_win=0.6669  val_auc=0.6284  dur_acc=0.1727  itemMAP@10=0.25763797760009766  (519.8s)
+  epoch 6/30 tr[w=0.6611 d=2.0478 i=0.07869 a=0.3233 tot=1.0242] vl_win=0.6641  val_auc=0.6307  dur_acc=0.1745  itemMAP@10=0.2663823664188385  (462.2s)
+  epoch 7/30 tr[w=0.6593 d=2.0446 i=0.07784 a=0.3224 tot=1.0216] vl_win=0.6618  val_auc=0.6338  dur_acc=0.1761  itemMAP@10=0.27263733744621277  (520.5s)
+  epoch 8/30 tr[w=0.6575 d=2.0412 i=0.07709 a=0.3214 tot=1.0189] vl_win=0.6611  val_auc=0.6361  dur_acc=0.1760  itemMAP@10=0.2765696048736572  (457.9s)
+  epoch 9/30 tr[w=0.6561 d=2.0398 i=0.07647 a=0.3207 tot=1.0171] vl_win=0.6592  val_auc=0.6392  dur_acc=0.1762  itemMAP@10=0.2822282016277313  (457.3s)
+  epoch 10/30 tr[w=0.6552 d=2.0389 i=0.07605 a=0.3202 tot=1.0158] vl_win=0.6589  val_auc=0.6397  dur_acc=0.1781  itemMAP@10=0.2845436632633209  (518.7s)
+  epoch 11/30 tr[w=0.6542 d=2.0380 i=0.07568 a=0.3197 tot=1.0146] vl_win=0.6604  val_auc=0.6425  dur_acc=0.1787  itemMAP@10=0.2866172194480896  (461.8s)
+  epoch 12/30 tr[w=0.6535 d=2.0375 i=0.07537 a=0.3191 tot=1.0136] vl_win=0.6570  val_auc=0.6438  dur_acc=0.1737  itemMAP@10=0.2877330183982849  (519.4s)
+  epoch 13/30 tr[w=0.6529 d=2.0369 i=0.07513 a=0.3189 tot=1.0129] vl_win=0.6566  val_auc=0.6444  dur_acc=0.1768  itemMAP@10=0.28999727964401245  (462.0s)
+  epoch 14/30 tr[w=0.6523 d=2.0365 i=0.07493 a=0.3185 tot=1.0121] vl_win=0.6561  val_auc=0.6448  dur_acc=0.1784  itemMAP@10=0.2904130518436432  (517.7s)
+  epoch 15/30 tr[w=0.6517 d=2.0360 i=0.07474 a=0.3181 tot=1.0113] vl_win=0.6557  val_auc=0.6454  dur_acc=0.1795  itemMAP@10=0.29260438680648804  (461.5s)
+  epoch 16/30 tr[w=0.6513 d=2.0355 i=0.07460 a=0.3179 tot=1.0108] vl_win=0.6575  val_auc=0.6461  dur_acc=0.1792  itemMAP@10=0.2935393154621124  (463.1s)
+  epoch 17/30 tr[w=0.6510 d=2.0351 i=0.07448 a=0.3177 tot=1.0104] vl_win=0.6548  val_auc=0.6474  dur_acc=0.1787  itemMAP@10=0.2952006161212921  (516.3s)
+  epoch 18/30 tr[w=0.6505 d=2.0347 i=0.07436 a=0.3174 tot=1.0098] vl_win=0.6549  val_auc=0.6473  dur_acc=0.1794  itemMAP@10=0.2958493232727051  (458.0s)
+  epoch 19/30 tr[w=0.6503 d=2.0345 i=0.07428 a=0.3172 tot=1.0095] vl_win=0.6549  val_auc=0.6474  dur_acc=0.1799  itemMAP@10=0.2972022593021393  (520.8s)
+  epoch 20/30 tr[w=0.6499 d=2.0342 i=0.07417 a=0.3169 tot=1.0090] vl_win=0.6542  val_auc=0.6485  dur_acc=0.1804  itemMAP@10=0.2979566752910614  (461.2s)
+  epoch 21/30 tr[w=0.6497 d=2.0339 i=0.07409 a=0.3168 tot=1.0087] vl_win=0.6546  val_auc=0.6481  dur_acc=0.1800  itemMAP@10=0.2985059320926666  (518.5s)
+  epoch 22/30 tr[w=0.6495 d=2.0338 i=0.07402 a=0.3166 tot=1.0084] vl_win=0.6548  val_auc=0.6481  dur_acc=0.1799  itemMAP@10=0.29873642325401306  (462.0s)
+  epoch 23/30 tr[w=0.6492 d=2.0336 i=0.07396 a=0.3165 tot=1.0081] vl_win=0.6540  val_auc=0.6487  dur_acc=0.1789  itemMAP@10=0.29964712262153625  (461.9s)
+  epoch 24/30 tr[w=0.6490 d=2.0334 i=0.07389 a=0.3163 tot=1.0078] vl_win=0.6540  val_auc=0.6489  dur_acc=0.1802  itemMAP@10=0.2998741567134857  (518.6s)
+  epoch 25/30 tr[w=0.6488 d=2.0332 i=0.07384 a=0.3162 tot=1.0075] vl_win=0.6539  val_auc=0.6488  dur_acc=0.1809  itemMAP@10=0.30033811926841736  (462.9s)
+  epoch 26/30 tr[w=0.6487 d=2.0333 i=0.07381 a=0.3162 tot=1.0074] vl_win=0.6541  val_auc=0.6488  dur_acc=0.1804  itemMAP@10=0.3004540205001831  (518.9s)
+  epoch 27/30 tr[w=0.6484 d=2.0331 i=0.07376 a=0.3161 tot=1.0071] vl_win=0.6542  val_auc=0.6484  dur_acc=0.1806  itemMAP@10=0.30133575201034546  (461.8s)
+  epoch 28/30 tr[w=0.6482 d=2.0330 i=0.07373 a=0.3160 tot=1.0069] vl_win=0.6539  val_auc=0.6495  dur_acc=0.1802  itemMAP@10=0.30100902915000916  (516.7s)
+  epoch 29/30 tr[w=0.6480 d=2.0328 i=0.07370 a=0.3159 tot=1.0067] vl_win=0.6539  val_auc=0.6497  dur_acc=0.1810  itemMAP@10=0.30151981115341187  (453.3s)
+  epoch 30/30 tr[w=0.6479 d=2.0328 i=0.07367 a=0.3159 tot=1.0065] vl_win=0.6537  val_auc=0.6495  dur_acc=0.1809  itemMAP@10=0.3010239899158478  (456.4s)
+Training done in 14508.3s -- best val_auc=0.6495 @ epoch 30
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/metrics_multitask_all.json
+[2026-05-22T01:15:18+00:00] attempt 1 SUCCESS
+===== DONE rc=0 2026-05-22T01:15:18+00:00 =====

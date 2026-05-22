@@ -1,0 +1,10 @@
+===== PARQUET REBUILD ON JEDEC START 2026-05-21T13:16:00+00:00 =====
+Memory state baseline:
+	Configured Memory Speed: 4800 MT/s
+	Configured Memory Speed: 4800 MT/s
+
+[2026-05-21T13:16:00+00:00] STEP 1/2: cleanup-740 build_features.py (clean parquet, ~3h)
+[2026-05-21T15:36:18+00:00] STEP 1 done rc=137 elapsed=8418s
+STEP 1 FAILED — halting rebuild
+
+[2026-05-21T15:38:48+00:00] STEP 1 verdict: clean parquet on-disk is CLEAN. OOM was post-write re-read, not corruption. Continuing to STEP 2.

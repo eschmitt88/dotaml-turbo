@@ -1,0 +1,25 @@
+=== PyArrow round-trip stress test ===
+out: /mnt/projects/research/dotaml-turbo/_meta/hardware-investigation-2026-05-21/pq/stress.parquet
+params: n_rows=8,000,000, n_cols=20, iters=100, pressure_gb=25.0
+
+[11:27:26] generating baseline parquet...
+  wrote 0.95 GB in 3.1s
+  on-disk md5: 1a31eab14674ae1e6b62ce6a59caa07f
+  computed expected signature for 20 columns
+
+[11:27:31] starting 100-iter stress loop with 25.0 GB pressure...
+  iter   0  ok    30.9s  pressure_sum=-1.13e+03
+  iter  10  ok    31.3s  pressure_sum=3.32e+03
+  iter  20  ok    31.2s  pressure_sum=1.94e+03
+  iter  30  ok    31.3s  pressure_sum=-1.51e+05
+  iter  40  ok    31.2s  pressure_sum=1.14e+05
+  iter  50  ok    31.1s  pressure_sum=-5.26e+04
+  iter  60  ok    31.2s  pressure_sum=1.24e+04
+  iter  70  ok    31.1s  pressure_sum=1.22e+05
+  iter  80  ok    31.2s  pressure_sum=6.25e+04
+  iter  90  ok    31.2s  pressure_sum=-2.45e+04
+
+=== summary ===
+iters: 100
+fails: 0
+all iterations passed

@@ -1,0 +1,65 @@
+===== multitask retry on JEDEC + clean parquets START 2026-05-21T17:21:01+00:00 =====
+Memory state:
+	Configured Memory Speed: 4800 MT/s
+	Configured Memory Speed: 4800 MT/s
+
+[2026-05-21T17:21:01+00:00] STEP 2/4: build_item_vocab.py START
+Streaming item + duration from /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols/train.parquet (max_row_groups=None)
+  walked in 5s; train_rows=13,018,393, n_unique_item_ids=329
+  kept 303 items with freq >= 100; vocab_size=305; min_freq_kept=103
+  top-10 items by freq: [[108, 38194927], [116, 34917990], [63, 33368111], [1, 33011457], [1584, 20405902], [180, 20279076], [141, 19546942], [48, 18550927], [1594, 17057976], [36, 16555675]]
+  duration bucket edges (n_buckets=8): [1168.0, 1293.0, 1394.0, 1500.0, 1629.0, 1798.0, 2042.0]
+  duration bucket counts: [1620650, 1630772, 1619841, 1626411, 1634331, 1627072, 1630965, 1628351]
+  duration stats: min=600, max=3600, p50=1500
+  wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json (0.00 MB)
+[2026-05-21T17:21:07+00:00] STEP 2/4: build_item_vocab.py DONE
+[2026-05-21T17:21:07+00:00] STEP 3/4: win_only_sanity START
+[2026-05-21T17:21:07+00:00] train.py win_only_sanity attempt 1/3 START
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+Ablation: win_only_sanity (use_features=True, multitask=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+Data ready in 15.1s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+Model: {'total': 78027, 'trainable': 78027, 'embedding': 9792, 'non_embedding': 68235}, device=cuda
+  epoch 1/30  train_loss=0.6864  val_loss=0.6761  val_auc=0.6141  (60.9s)
+  epoch 2/30  train_loss=0.6666  val_loss=0.6695  val_auc=0.6207  (60.4s)
+  epoch 3/30  train_loss=0.6644  val_loss=0.6679  val_auc=0.6247  (59.6s)
+  epoch 4/30  train_loss=0.6628  val_loss=0.6653  val_auc=0.6279  (60.0s)
+  epoch 5/30  train_loss=0.6613  val_loss=0.6635  val_auc=0.6308  (60.9s)
+  epoch 6/30  train_loss=0.6603  val_loss=0.6635  val_auc=0.6316  (60.3s)
+  epoch 7/30  train_loss=0.6589  val_loss=0.6620  val_auc=0.6326  (60.4s)
+  epoch 8/30  train_loss=0.6578  val_loss=0.6606  val_auc=0.6361  (60.0s)
+  epoch 9/30  train_loss=0.6566  val_loss=0.6594  val_auc=0.6382  (60.0s)
+  epoch 10/30  train_loss=0.6556  val_loss=0.6593  val_auc=0.6392  (60.0s)
+  epoch 11/30  train_loss=0.6548  val_loss=0.6585  val_auc=0.6402  (60.5s)
+  epoch 12/30  train_loss=0.6540  val_loss=0.6574  val_auc=0.6416  (60.7s)
+  epoch 13/30  train_loss=0.6536  val_loss=0.6570  val_auc=0.6425  (60.6s)
+  epoch 14/30  train_loss=0.6530  val_loss=0.6572  val_auc=0.6429  (60.3s)
+  epoch 15/30  train_loss=0.6525  val_loss=0.6566  val_auc=0.6434  (60.1s)
+  epoch 16/30  train_loss=0.6522  val_loss=0.6564  val_auc=0.6435  (60.1s)
+  epoch 17/30  train_loss=0.6517  val_loss=0.6559  val_auc=0.6452  (60.7s)
+  epoch 18/30  train_loss=0.6514  val_loss=0.6559  val_auc=0.6450  (60.5s)
+  epoch 19/30  train_loss=0.6511  val_loss=0.6558  val_auc=0.6461  (60.7s)
+  epoch 20/30  train_loss=0.6506  val_loss=0.6567  val_auc=0.6459  (59.9s)
+  epoch 21/30  train_loss=0.6503  val_loss=0.6557  val_auc=0.6464  (59.6s)
+  epoch 22/30  train_loss=0.6500  val_loss=0.6551  val_auc=0.6464  (59.6s)
+  epoch 23/30  train_loss=0.6496  val_loss=0.6550  val_auc=0.6473  (60.0s)
+  epoch 24/30  train_loss=0.6493  val_loss=0.6552  val_auc=0.6467  (60.2s)
+  epoch 25/30  train_loss=0.6490  val_loss=0.6549  val_auc=0.6471  (60.1s)
+  epoch 26/30  train_loss=0.6488  val_loss=0.6557  val_auc=0.6467  (59.6s)
+  epoch 27/30  train_loss=0.6485  val_loss=0.6552  val_auc=0.6465  (59.8s)
+  epoch 28/30  train_loss=0.6483  val_loss=0.6548  val_auc=0.6473  (59.5s)
+  epoch 29/30  train_loss=0.6480  val_loss=0.6563  val_auc=0.6459  (60.1s)
+  epoch 30/30  train_loss=0.6477  val_loss=0.6558  val_auc=0.6469  (60.3s)
+Training done in 1805.0s -- best val_auc=0.6473 @ epoch 28
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/metrics_win_only_sanity.json
+[2026-05-21T17:51:32+00:00] win_only_sanity attempt 1 SUCCESS
+[2026-05-21T17:51:32+00:00] STEP 4/4: multitask_all START
+[2026-05-21T17:51:32+00:00] train.py multitask_all attempt 1/3 START
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(

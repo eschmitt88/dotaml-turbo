@@ -4,7 +4,10 @@ number: "0001"
 slug: per-trial-subprocess-isolation
 title: "Per-trial subprocess isolation for PyTorch sweeps on Blackwell"
 date: "2026-05-17"
-status: accepted
+status: superseded
+superseded_by: hardware-investigation-2026-05-21 (RAM bit-flip root cause)
+superseded_date: 2026-05-21
+note: "The torch DataLoader segfaults this ADR was written for were caused by RAM bit-flips on unstable DDR5 EXPO 6000 MT/s, NOT a torch bug. With EXPO disabled the issue is gone. The per-trial subprocess isolation pattern is still useful for OTHER reasons (resumable Optuna sweeps, clean state per trial) but is no longer needed as a workaround for the segfault. See _meta/upstream/RETRACTED.md and _meta/hardware-investigation-2026-05-21/."
 context_tags: [torch, blackwell, sm-120, dataloader, gc, infrastructure]
 ---
 

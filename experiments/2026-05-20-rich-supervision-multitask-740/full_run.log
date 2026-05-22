@@ -1,0 +1,170 @@
+===== rich-supervision-multitask-740 run_all START 2026-05-20T13:38:28+00:00 =====
+[2026-05-20T13:38:28+00:00] STEP 1/4: build_rich_cols.py START
+Loading match_id filter sets from clean parquet...
+  train: streaming match_id from train.parquet (13,018,393 rows, 13 row groups)
+    -> 13,018,393 unique match_ids in train
+  val: streaming match_id from val.parquet (2,419,185 rows, 3 row groups)
+    -> 2,419,185 unique match_ids in val
+  total filter set: 15,437,578 match_ids
+Enumerating raw files...
+  /mnt/projects/research/dotaml-turbo/data/history/turbo: 2015 files
+  /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/raw/turbo: 1736 files
+  196 days enumerated (first=2025-08-15, last=2026-03-09)
+  196 days after HCE date filter
+days:   0%|          | 0/196 [00:00<?, ?it/s]days:   1%|          | 1/196 [00:00<01:28,  2.20it/s]days:   1%|          | 2/196 [00:01<01:41,  1.91it/s]days:   2%|▏         | 3/196 [00:01<01:48,  1.78it/s]days:   2%|▏         | 4/196 [00:02<02:19,  1.38it/s]days:   3%|▎         | 5/196 [00:04<03:23,  1.07s/it]days:   3%|▎         | 6/196 [00:08<06:40,  2.11s/it]days:   4%|▎         | 7/196 [00:09<05:47,  1.84s/it]days:   4%|▍         | 8/196 [00:14<08:38,  2.76s/it]days:   5%|▍         | 9/196 [00:19<10:36,  3.41s/it]days:   5%|▌         | 10/196 [00:23<11:11,  3.61s/it]days:   6%|▌         | 11/196 [00:27<11:32,  3.74s/it]days:   6%|▌         | 12/196 [00:31<11:43,  3.82s/it]days:   7%|▋         | 13/196 [00:35<11:42,  3.84s/it]days:   7%|▋         | 14/196 [00:39<11:55,  3.93s/it]days:   8%|▊         | 15/196 [00:43<12:18,  4.08s/it]days:   8%|▊         | 16/196 [00:48<12:36,  4.20s/it]days:   9%|▊         | 17/196 [00:52<12:12,  4.09s/it]days:   9%|▉         | 18/196 [00:55<11:44,  3.96s/it]days:  10%|▉         | 19/196 [00:59<11:12,  3.80s/it]days:  10%|█         | 20/196 [01:02<10:48,  3.69s/it]days:  11%|█         | 21/196 [01:06<10:50,  3.71s/it]days:  11%|█         | 22/196 [01:10<11:14,  3.88s/it]days:  12%|█▏        | 23/196 [01:15<11:36,  4.03s/it]days:  12%|█▏        | 24/196 [01:18<11:20,  3.95s/it]days:  13%|█▎        | 25/196 [01:22<11:01,  3.87s/it]days:  13%|█▎        | 26/196 [01:26<10:47,  3.81s/it]days:  14%|█▍        | 27/196 [01:29<10:26,  3.71s/it]days:  14%|█▍        | 28/196 [01:33<10:31,  3.76s/it]days:  15%|█▍        | 29/196 [01:37<10:58,  3.95s/it]days:  15%|█▌        | 30/196 [01:42<11:13,  4.05s/it]days:  16%|█▌        | 31/196 [01:46<11:05,  4.03s/it]days:  16%|█▋        | 32/196 [01:50<10:52,  3.98s/it]days:  17%|█▋        | 33/196 [01:54<10:48,  3.98s/it]days:  17%|█▋        | 34/196 [01:58<10:47,  4.00s/it]days:  18%|█▊        | 35/196 [02:02<10:59,  4.09s/it]days:  18%|█▊        | 36/196 [02:07<11:35,  4.35s/it]days:  19%|█▉        | 37/196 [02:12<11:58,  4.52s/it]days:  19%|█▉        | 38/196 [02:16<11:27,  4.35s/it]days:  20%|█▉        | 39/196 [02:16<08:32,  3.26s/it]days:  20%|██        | 40/196 [02:17<06:28,  2.49s/it]days:  21%|██        | 41/196 [02:18<04:52,  1.89s/it]days:  21%|██▏       | 42/196 [02:18<03:45,  1.46s/it]days:  22%|██▏       | 43/196 [02:19<03:01,  1.18s/it]days:  22%|██▏       | 44/196 [02:19<02:29,  1.01it/s]days:  23%|██▎       | 45/196 [02:20<02:07,  1.18it/s]days:  23%|██▎       | 46/196 [02:20<01:52,  1.33it/s]days:  24%|██▍       | 47/196 [02:21<01:38,  1.52it/s]days:  24%|██▍       | 48/196 [02:21<01:35,  1.55it/s]days:  25%|██▌       | 49/196 [02:22<01:44,  1.41it/s]days:  26%|██▌       | 50/196 [02:23<01:55,  1.26it/s]days:  26%|██▌       | 51/196 [02:24<02:01,  1.19it/s]days:  27%|██▋       | 52/196 [02:25<02:06,  1.14it/s]days:  27%|██▋       | 53/196 [02:26<02:09,  1.10it/s]days:  28%|██▊       | 54/196 [02:27<02:15,  1.05it/s]days:  28%|██▊       | 55/196 [02:28<02:28,  1.05s/it]days:  29%|██▊       | 56/196 [02:32<04:12,  1.80s/it]days:  29%|██▉       | 57/196 [02:35<05:23,  2.33s/it]days:  30%|██▉       | 58/196 [02:39<06:06,  2.66s/it]days:  30%|███       | 59/196 [02:42<06:37,  2.90s/it]days:  31%|███       | 60/196 [02:46<07:12,  3.18s/it]days:  31%|███       | 61/196 [02:50<07:54,  3.51s/it]days:  32%|███▏      | 62/196 [02:55<08:25,  3.77s/it]days:  32%|███▏      | 63/196 [02:58<08:17,  3.74s/it]days:  33%|███▎      | 64/196 [03:02<08:07,  3.69s/it]days:  33%|███▎      | 65/196 [03:06<07:56,  3.64s/it]days:  34%|███▎      | 66/196 [03:09<07:49,  3.61s/it]days:  34%|███▍      | 67/196 [03:13<07:43,  3.59s/it]days:  35%|███▍      | 68/196 [03:17<07:56,  3.72s/it]days:  35%|███▌      | 69/196 [03:21<08:13,  3.88s/it]days:  36%|███▌      | 70/196 [03:25<08:08,  3.88s/it]days:  36%|███▌      | 71/196 [03:29<08:02,  3.86s/it]days:  37%|███▋      | 72/196 [03:32<07:39,  3.70s/it]days:  37%|███▋      | 73/196 [03:35<07:18,  3.57s/it]days:  38%|███▊      | 74/196 [03:39<07:16,  3.58s/it]days:  38%|███▊      | 75/196 [03:43<07:31,  3.73s/it]days:  39%|███▉      | 76/196 [03:47<07:35,  3.80s/it]days:  39%|███▉      | 77/196 [03:50<07:13,  3.65s/it]days:  40%|███▉      | 78/196 [03:55<07:51,  3.99s/it]days:  40%|████      | 79/196 [04:00<08:09,  4.18s/it]days:  41%|████      | 80/196 [04:04<08:20,  4.31s/it]days:  41%|████▏     | 81/196 [04:09<08:37,  4.50s/it]days:  42%|████▏     | 82/196 [04:15<09:06,  4.80s/it]days:  42%|████▏     | 83/196 [04:20<09:26,  5.01s/it]days:  43%|████▎     | 84/196 [04:25<09:01,  4.83s/it]days:  43%|████▎     | 85/196 [04:29<08:34,  4.64s/it]days:  44%|████▍     | 86/196 [04:33<08:14,  4.50s/it]days:  44%|████▍     | 87/196 [04:37<08:01,  4.41s/it]days:  45%|████▍     | 88/196 [04:42<08:01,  4.46s/it]days:  45%|████▌     | 89/196 [04:47<08:19,  4.66s/it]days:  46%|████▌     | 90/196 [04:52<08:30,  4.81s/it]days:  46%|████▋     | 91/196 [04:56<08:04,  4.61s/it]days:  47%|████▋     | 92/196 [05:00<07:41,  4.44s/it]days:  47%|████▋     | 93/196 [05:04<07:23,  4.31s/it]days:  48%|████▊     | 94/196 [05:08<07:12,  4.24s/it]days:  48%|████▊     | 95/196 [05:13<07:09,  4.25s/it]days:  49%|████▉     | 96/196 [05:17<07:23,  4.43s/it]days:  49%|████▉     | 97/196 [05:22<07:24,  4.49s/it]days:  50%|█████     | 98/196 [05:26<07:01,  4.31s/it]days:  51%|█████     | 99/196 [05:30<06:46,  4.19s/it]days:  51%|█████     | 100/196 [05:34<06:30,  4.07s/it]days:  52%|█████▏    | 101/196 [05:37<06:17,  3.98s/it]days:  52%|█████▏    | 102/196 [05:41<06:17,  4.01s/it]days:  53%|█████▎    | 103/196 [05:46<06:28,  4.18s/it]days:  53%|█████▎    | 104/196 [05:51<06:34,  4.29s/it]days:  54%|█████▎    | 105/196 [05:54<06:17,  4.15s/it]days:  54%|█████▍    | 106/196 [05:58<06:03,  4.04s/it]days:  55%|█████▍    | 107/196 [06:02<05:47,  3.91s/it]days:  55%|█████▌    | 108/196 [06:05<05:35,  3.82s/it]days:  56%|█████▌    | 109/196 [06:10<05:51,  4.04s/it]days:  56%|█████▌    | 110/196 [06:15<06:22,  4.45s/it]days:  57%|█████▋    | 111/196 [06:21<06:45,  4.78s/it]days:  57%|█████▋    | 112/196 [06:25<06:32,  4.67s/it]days:  58%|█████▊    | 113/196 [06:43<11:47,  8.53s/it]days:  58%|█████▊    | 114/196 [07:00<15:02, 11.01s/it]days:  59%|█████▊    | 115/196 [07:18<18:01, 13.35s/it]days:  59%|█████▉    | 116/196 [07:38<20:12, 15.15s/it]days:  60%|█████▉    | 117/196 [08:02<23:25, 17.79s/it]days:  60%|██████    | 118/196 [08:29<26:47, 20.61s/it]days:  61%|██████    | 119/196 [08:49<26:08, 20.37s/it]days:  61%|██████    | 120/196 [09:09<25:56, 20.48s/it]days:  62%|██████▏   | 121/196 [09:31<26:10, 20.94s/it]days:  62%|██████▏   | 122/196 [09:55<26:47, 21.72s/it]days:  63%|██████▎   | 123/196 [10:21<27:50, 22.89s/it]days:  63%|██████▎   | 124/196 [10:49<29:19, 24.44s/it]days:  64%|██████▍   | 125/196 [11:18<30:46, 26.01s/it]days:  64%|██████▍   | 126/196 [11:47<31:11, 26.73s/it]days:  65%|██████▍   | 127/196 [12:17<31:49, 27.67s/it]days:  65%|██████▌   | 128/196 [12:45<31:31, 27.81s/it]days:  66%|██████▌   | 129/196 [13:17<32:26, 29.06s/it]days:  66%|██████▋   | 130/196 [13:51<33:49, 30.75s/it]days:  67%|██████▋   | 131/196 [14:28<35:08, 32.43s/it]days:  67%|██████▋   | 132/196 [15:05<36:04, 33.81s/it]days:  68%|██████▊   | 133/196 [15:41<36:21, 34.63s/it]days:  68%|██████▊   | 134/196 [16:19<36:37, 35.44s/it]days:  69%|██████▉   | 135/196 [16:57<37:00, 36.40s/it]days:  69%|██████▉   | 136/196 [17:37<37:17, 37.29s/it]days:  70%|██████▉   | 137/196 [18:18<37:48, 38.45s/it]days:  70%|███████   | 138/196 [19:02<38:48, 40.15s/it]days:  71%|███████   | 139/196 [19:47<39:30, 41.58s/it]days:  71%|███████▏  | 140/196 [20:29<38:53, 41.66s/it]days:  72%|███████▏  | 141/196 [21:12<38:30, 42.01s/it]days:  72%|███████▏  | 142/196 [21:55<38:11, 42.43s/it]days:  73%|███████▎  | 143/196 [22:40<38:12, 43.25s/it]days:  73%|███████▎  | 144/196 [23:27<38:28, 44.40s/it]days:  74%|███████▍  | 145/196 [24:18<39:22, 46.33s/it]days:  74%|███████▍  | 146/196 [25:10<39:56, 47.92s/it]days:  75%|███████▌  | 147/196 [25:59<39:32, 48.41s/it]days:  76%|███████▌  | 148/196 [26:49<39:05, 48.86s/it]days:  76%|███████▌  | 149/196 [27:40<38:42, 49.42s/it]days:  77%|███████▋  | 150/196 [28:31<38:20, 50.01s/it]days:  77%|███████▋  | 151/196 [29:25<38:19, 51.10s/it]days:  78%|███████▊  | 152/196 [30:22<38:49, 52.95s/it]days:  78%|███████▊  | 153/196 [31:21<39:08, 54.61s/it]days:  79%|███████▊  | 154/196 [32:17<38:28, 54.97s/it]days:  79%|███████▉  | 155/196 [33:13<37:58, 55.57s/it]days:  80%|███████▉  | 156/196 [34:11<37:23, 56.08s/it]days:  80%|████████  | 157/196 [35:09<36:54, 56.79s/it]days:  81%|████████  | 158/196 [36:10<36:39, 57.89s/it]days:  81%|████████  | 159/196 [37:14<36:54, 59.85s/it]days:  82%|████████▏ | 160/196 [38:19<36:50, 61.40s/it]days:  82%|████████▏ | 161/196 [39:22<36:04, 61.84s/it]days:  83%|████████▎ | 162/196 [40:26<35:22, 62.41s/it]days:  83%|████████▎ | 163/196 [41:30<34:38, 63.00s/it]days:  84%|████████▎ | 164/196 [42:36<34:02, 63.82s/it]days:  84%|████████▍ | 165/196 [43:44<33:39, 65.15s/it]days:  85%|████████▍ | 166/196 [44:54<33:20, 66.69s/it]days:  85%|████████▌ | 167/196 [46:05<32:52, 68.03s/it]days:  86%|████████▌ | 168/196 [47:14<31:48, 68.16s/it]days:  86%|████████▌ | 169/196 [48:24<30:51, 68.58s/it]days:  87%|████████▋ | 170/196 [49:34<29:54, 69.01s/it]days:  87%|████████▋ | 171/196 [50:45<29:01, 69.64s/it]days:  88%|████████▊ | 172/196 [51:58<28:20, 70.87s/it]days:  88%|████████▊ | 173/196 [53:14<27:42, 72.30s/it]days:  89%|████████▉ | 174/196 [54:31<27:00, 73.66s/it]days:  89%|████████▉ | 175/196 [55:47<26:00, 74.33s/it]days:  90%|████████▉ | 176/196 [57:03<25:00, 75.02s/it]days:  90%|█████████ | 177/196 [58:20<23:55, 75.55s/it]days:  91%|█████████ | 178/196 [59:38<22:50, 76.15s/it]days:  91%|█████████▏| 179/196 [1:00:57<21:52, 77.19s/it]days:  92%|█████████▏| 180/196 [1:02:20<21:01, 78.83s/it]days:  92%|█████████▏| 181/196 [1:03:45<20:10, 80.69s/it]days:  93%|█████████▎| 182/196 [1:05:09<19:01, 81.54s/it]days:  93%|█████████▎| 183/196 [1:06:32<17:47, 82.08s/it]days:  94%|█████████▍| 184/196 [1:07:56<16:32, 82.72s/it]days:  94%|█████████▍| 185/196 [1:09:21<15:16, 83.31s/it]days:  95%|█████████▍| 186/196 [1:10:48<14:03, 84.37s/it]days:  95%|█████████▌| 187/196 [1:12:17<12:52, 85.78s/it]days:  96%|█████████▌| 188/196 [1:13:48<11:38, 87.36s/it]days:  96%|█████████▋| 189/196 [1:15:16<10:13, 87.58s/it]days:  97%|█████████▋| 190/196 [1:16:45<08:49, 88.20s/it]days:  97%|█████████▋| 191/196 [1:18:15<07:23, 88.73s/it]days:  98%|█████████▊| 192/196 [1:19:47<05:58, 89.50s/it]days:  98%|█████████▊| 193/196 [1:21:19<04:31, 90.44s/it]days:  99%|█████████▉| 194/196 [1:22:55<03:03, 91.95s/it]days:  99%|█████████▉| 195/196 [1:24:31<01:33, 93.17s/it]days: 100%|██████████| 196/196 [1:26:06<00:00, 93.82s/it]days: 100%|██████████| 196/196 [1:26:06<00:00, 26.36s/it]
+Walk done in 5167s. raw_read=36,548,292 bad_json=0 emit_train=13,018,393 emit_val=2,419,185
+Clamper: clamp_events=784, by_feat={'duration': 0, 'kills': 1, 'deaths': 0, 'assists': 1, 'gpm': 0, 'xpm': 703, 'hero_damage': 79, 'net_worth': 0}
+Pre-arrow validation of numeric columns...
+Writing sidecar parquets (numpy-routed pa.array construction)...
+  wrote /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols/train.parquet (13,018,393 rows, 2337.6 MB)
+  wrote /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols/val.parquet (2,419,185 rows, 437.0 MB)
+Post-write row-group-stats verification...
+  row-group-stats verify train.parquet: 13,018,393 rows, 13 row groups, 83 cols
+    OK: all numeric columns within bounds in train.parquet
+  row-group-stats verify val.parquet: 2,419,185 rows, 3 row groups, 83 cols
+    OK: all numeric columns within bounds in val.parquet
+DONE.
+[2026-05-20T15:09:10+00:00] STEP 1/4: build_rich_cols.py DONE
+[2026-05-20T15:09:10+00:00] STEP 2/4: build_item_vocab.py START
+Streaming item + duration from /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols/train.parquet (max_row_groups=None)
+  walked in 5s; train_rows=13,018,393, n_unique_item_ids=329
+  kept 303 items with freq >= 100; vocab_size=305; min_freq_kept=103
+  top-10 items by freq: [[108, 38194927], [116, 34917990], [63, 33368111], [1, 33011457], [1584, 20405902], [180, 20279076], [141, 19546942], [48, 18550927], [1594, 17057976], [36, 16555675]]
+  duration bucket edges (n_buckets=8): [1168.0, 1293.0, 1394.0, 1500.0, 1629.0, 1798.0, 2042.0]
+  duration bucket counts: [1620650, 1630772, 1619841, 1626411, 1634331, 1627072, 1630965, 1628351]
+  duration stats: min=600, max=3600, p50=1500
+  wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json (0.00 MB)
+[2026-05-20T15:09:15+00:00] STEP 2/4: build_item_vocab.py DONE
+[2026-05-20T15:09:15+00:00] STEP 3/4: win_only_sanity START
+[2026-05-20T15:09:15+00:00] train.py win_only_sanity attempt 1/3 START
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+Ablation: win_only_sanity (use_features=True, multitask=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+Data ready in 13.9s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+Model: {'total': 78027, 'trainable': 78027, 'embedding': 9792, 'non_embedding': 68235}, device=cuda
+  epoch 1/30  train_loss=0.6864  val_loss=0.6761  val_auc=0.6141  (55.9s)
+  epoch 2/30  train_loss=0.6666  val_loss=0.6695  val_auc=0.6207  (56.4s)
+  epoch 3/30  train_loss=0.6644  val_loss=0.6679  val_auc=0.6247  (55.5s)
+  epoch 4/30  train_loss=0.6628  val_loss=0.6653  val_auc=0.6279  (56.0s)
+  epoch 5/30  train_loss=0.6613  val_loss=0.6635  val_auc=0.6308  (56.4s)
+  epoch 6/30  train_loss=0.6603  val_loss=0.6635  val_auc=0.6316  (56.2s)
+  epoch 7/30  train_loss=0.6589  val_loss=0.6620  val_auc=0.6326  (56.2s)
+  epoch 8/30  train_loss=0.6578  val_loss=0.6606  val_auc=0.6361  (55.7s)
+  epoch 9/30  train_loss=0.6566  val_loss=0.6594  val_auc=0.6382  (55.7s)
+  epoch 10/30  train_loss=0.6556  val_loss=0.6593  val_auc=0.6392  (55.8s)
+  epoch 11/30  train_loss=0.6548  val_loss=0.6585  val_auc=0.6402  (55.7s)
+  epoch 12/30  train_loss=0.6540  val_loss=0.6574  val_auc=0.6416  (56.3s)
+  epoch 13/30  train_loss=0.6536  val_loss=0.6570  val_auc=0.6425  (56.3s)
+  epoch 14/30  train_loss=0.6530  val_loss=0.6572  val_auc=0.6429  (55.7s)
+  epoch 15/30  train_loss=0.6525  val_loss=0.6566  val_auc=0.6434  (55.7s)
+  epoch 16/30  train_loss=0.6522  val_loss=0.6564  val_auc=0.6435  (55.7s)
+  epoch 17/30  train_loss=0.6517  val_loss=0.6559  val_auc=0.6452  (55.8s)
+  epoch 18/30  train_loss=0.6514  val_loss=0.6559  val_auc=0.6450  (56.4s)
+  epoch 19/30  train_loss=0.6511  val_loss=0.6558  val_auc=0.6461  (56.3s)
+  epoch 20/30  train_loss=0.6506  val_loss=0.6567  val_auc=0.6459  (55.7s)
+  epoch 21/30  train_loss=0.6503  val_loss=0.6557  val_auc=0.6464  (55.9s)
+  epoch 22/30  train_loss=0.6500  val_loss=0.6551  val_auc=0.6464  (55.9s)
+  epoch 23/30  train_loss=0.6496  val_loss=0.6550  val_auc=0.6473  (55.8s)
+  epoch 24/30  train_loss=0.6493  val_loss=0.6552  val_auc=0.6467  (56.4s)
+  epoch 25/30  train_loss=0.6490  val_loss=0.6549  val_auc=0.6471  (56.2s)
+  epoch 26/30  train_loss=0.6488  val_loss=0.6557  val_auc=0.6467  (55.7s)
+  epoch 27/30  train_loss=0.6485  val_loss=0.6552  val_auc=0.6465  (55.9s)
+  epoch 28/30  train_loss=0.6483  val_loss=0.6548  val_auc=0.6473  (55.9s)
+  epoch 29/30  train_loss=0.6480  val_loss=0.6563  val_auc=0.6459  (56.0s)
+  epoch 30/30  train_loss=0.6477  val_loss=0.6558  val_auc=0.6469  (56.4s)
+Training done in 1679.7s -- best val_auc=0.6473 @ epoch 28
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/metrics_win_only_sanity.json
+[2026-05-20T15:37:32+00:00] win_only_sanity attempt 1 SUCCESS
+[2026-05-20T15:37:32+00:00] STEP 3/4: win_only_sanity DONE rc=0
+[2026-05-20T15:37:32+00:00] STEP 4/4: multitask_all START
+[2026-05-20T15:37:32+00:00] train.py multitask_all attempt 1/3 START
+Ablation: multitask_all (use_features=True, multitask=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+Traceback (most recent call last):
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 701, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 562, in main
+    train_ds, val_ds, meta = load_train_val(
+                             ^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 409, in load_train_val
+    _build_multitask_targets(
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 231, in _build_multitask_targets
+    side_tbl = _read_sidecar_tbl(sidecar_path, clean_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/data.py", line 203, in _read_sidecar_tbl
+    tbl = pf.read(columns=cols)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py", line 639, in read
+    return self.reader.read_all(column_indices=column_indices,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pyarrow/_parquet.pyx", line 1863, in pyarrow._parquet.ParquetReader.read_all
+  File "pyarrow/error.pxi", line 155, in pyarrow.lib.pyarrow_internal_check_status
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+pyarrow.lib.ArrowInvalid: Column 11 named p9_items expected length 13018393 but got length 13018391
+[2026-05-20T15:37:50+00:00] multitask_all attempt 1 FAILED rc=1
+[2026-05-20T15:37:55+00:00] train.py multitask_all attempt 2/3 START
+/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+Ablation: multitask_all (use_features=True, multitask=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+Data ready in 312.3s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+Model: {'total': 97917, 'trainable': 97917, 'embedding': 9792, 'non_embedding': 88125}, device=cuda
+  epoch 1/30 tr[w=0.6841 d=2.0694 i=0.11496 a=0.3631 tot=1.7896] vl_win=0.6711  val_auc=0.6146  dur_acc=0.1716  itemMAP@10=0.15004746615886688  (347.3s)
+  epoch 2/30 tr[w=0.6672 d=2.0503 i=0.08905 a=0.3303 tot=1.7521] vl_win=0.6688  val_auc=0.6186  dur_acc=0.1710  itemMAP@10=0.1860266923904419  (348.3s)
+Traceback (most recent call last):
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 701, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 604, in main
+    tr = train_model_multitask(
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 394, in train_model_multitask
+    m_w = metrics_block(eval_out["win_y"], eval_out["win_p"], base_rate=base_rate_val)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/train.py", line 208, in metrics_block
+    auc = float(roc_auc_score(y, p))
+                ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/sklearn/metrics/_ranking.py", line 683, in roc_auc_score
+    y_score = check_array(y_score, ensure_2d=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py", line 1074, in check_array
+    _assert_all_finite(
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py", line 133, in _assert_all_finite
+    _assert_all_finite_element_wise(
+  File "/mnt/projects/research/dotaml-turbo/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py", line 182, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.
+[2026-05-20T16:01:01+00:00] multitask_all attempt 2 FAILED rc=1
+[2026-05-20T16:01:06+00:00] train.py multitask_all attempt 3/3 START
+Terminated
+[2026-05-20T16:03:33+00:00] multitask_all attempt 3 FAILED rc=143
+[2026-05-20T16:03:38+00:00] multitask_all EXHAUSTED retries -- moving on
+[2026-05-20T16:03:38+00:00] STEP 4/4: multitask_all DONE rc=1
+===== rich-supervision-multitask-740 run_all DONE sanity_rc=0 primary_rc=1 2026-05-20T16:03:38+00:00 =====

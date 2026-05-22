@@ -1,0 +1,40 @@
+=== known-corrupted file consistency test ===
+path: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+
+iter   0  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.7s)
+iter   1  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   2  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   3  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   4  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   5  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   6  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   7  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   8  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter   9  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  10  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  11  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  12  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  13  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.5s)
+iter  14  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.5s)
+iter  15  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  16  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  17  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  18  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  19  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  20  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  21  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  22  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  23  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  24  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  25  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  26  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  27  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  28  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+iter  29  disk_md5=4333d5c9  rg6=FAIL_OSError               col89=FAIL_OSError               (1.6s)
+
+=== summary ===
+disk md5 unique values: 1 = {'4333d5c9a3feafad6e6881a0e87e8fb8'}
+rg6 read outcomes: {'FAIL_OSError'}
+col89 read outcomes: {'FAIL_OSError'}
+disk md5 stable (file content not changing per read)
+rg6 read result: deterministically FAIL (persistent on-disk corruption)

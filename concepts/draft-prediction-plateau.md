@@ -15,6 +15,7 @@ sources:
   - experiments/2026-05-19-transformer-plus-features-extended-740/README.md
   - experiments/2026-05-19-upstream-data-cleanup-740/README.md
   - experiments/2026-05-19-player-embedding-prelim-740/README.md
+  - experiments/2026-05-20-rich-supervision-multitask-740/README.md
 related_concepts:
   - draft-only-win-prediction
   - hero-embedding-vs-onehot
@@ -396,6 +397,66 @@ group (single date 2025-12-29, mixed NaN/denormal/negative
 signature consistent with torn 16-bit memory writes), NOT a math
 bug. The defense (snapshot-time clamp + numpy-routed pyarrow write
 + pre/post-write bounds-check) is mechanism-agnostic.
+
+**Refinement (2026-05-22, tenth experiment): multi-task supervision LIFTS
+the win head — the gradient-density hypothesis is correct.** See
+[[2026-05-20-rich-supervision-multitask-740]]. After the
+embedding-prelim NULL pointed at training-signal density (not parameter
+count) as the binding constraint, a multi-task Transformer with shared
+encoder + four heads (win, duration over 8 quantile buckets, per-slot
+multi-label item set over 305-item vocab, aux KDA/GPM/hero_damage
+regression) was trained jointly with α-weighted losses (α_w=1.0,
+α_d=0.15, α_i=0.3, α_a=0.1). Rich in-game telemetry parsed from raw
+OpenDota match payloads into a 2.3 GB sidecar provides ~10× more bits
+of supervision per match than the binary radiant_win label alone.
+
+**Result:** multitask_all val_auc=**0.6495** @ best_epoch=30 (still
+trending upward at epoch cap), **+0.0022 vs same-data sanity baseline
+(0.6473)** and **+0.0018 vs cleanup-740 anchor (0.6477054)**, clearing
+the proposal target of 0.6487 by +0.0008. The lift is modest but
+real: gradient-signal density was indeed a binding constraint, and
+auxiliary supervision unblocks it. (Identity-richness via embeddings
+did NOT, per [[2026-05-19-player-embedding-prelim-740]] — the two
+results jointly characterize what the encoder bottleneck actually is.)
+
+Aux heads are useful standalone:
+- **Duration**: top1_acc=0.181 over 8 buckets (random=0.125, ~45% above
+  chance — useful curve readout for "end early vs scale" intuition).
+- **Item recommender**: mAP@10=0.301 (mean_precision=0.333,
+  mean_recall=0.440 — top-10 predicted items capture 33-44% of actual
+  final inventory per matchup).
+
+**Updated whole-val scoreboard:**
+
+| approach | val_auc |
+|---|---|
+| LightGBM bag-of-heroes (`plateau-baseline-740`) | 0.6161 |
+| LightGBM + patch features (`player-features-740`) | 0.6227 |
+| LightGBM + prepatch features (`player-features-prepatch-740`) | 0.6256 |
+| Transformer 82k (`plateau-architectures-740`) | 0.6322 |
+| Transformer HP-tuned (`transformer-hp-sweep-740`) | 0.6318 |
+| Transformer + features, 14 ep (`transformer-plus-features-740`) | 0.6452 |
+| Transformer + features, 22 ep (`extended-740`) | 0.6477 |
+| Transformer + features + player-embedding (`embedding-prelim-740`) | 0.6476 (NULL) |
+| **Transformer + features + multi-task heads (`multitask-740`)** | **0.6495** ← new |
+
+The gradient-density unlock is small in absolute terms (+0.0018 over a
+0.6477 reference) but it's the first whole-val movement of this
+project after a long plateau. It also opens a **family of follow-ups**:
+better-tuned α weights, more aux heads (talent picks from
+ability_upgrades[], first_blood_time, tower/barracks state at game
+end), or an alternative duration formulation (continuous regression
+instead of 8-bucket CE — predicted but unlikely to swing val_auc much
+given the modest gain here).
+
+Hardware footnote: this is the FIRST multitask training to complete
+end-to-end. Prior attempts during 2026-05-20/21 all failed mid-training
+to silent RAM bit-flips at DDR5 EXPO 6000 MT/s on non-ECC memory; see
+[[aiserver2026-ram-bitflips-root-cause]]. The hardware was fixed
+2026-05-21 (disabled EXPO → JEDEC 4800 MT/s), data-corrupted parquets
+were rebuilt, and this run completed cleanly: 4h 1m wall, zero retries,
+zero kernel events. The architecture/training-recipe was sound the
+whole time; the box was the bottleneck.
 
 ## Connections
 

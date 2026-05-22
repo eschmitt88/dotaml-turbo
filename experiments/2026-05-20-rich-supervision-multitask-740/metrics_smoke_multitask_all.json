@@ -1,0 +1,235 @@
+{
+  "ablation": "multitask_all",
+  "multitask": true,
+  "smoke": true,
+  "use_features": true,
+  "val_auc": 0.5062389118864576,
+  "val_win_log_loss": 0.722493389791539,
+  "val_metrics_at_best": {
+    "win": {
+      "auc": 0.5062389118864576,
+      "acc": 0.5450643776824035,
+      "log_loss": 0.7224934174030944,
+      "brier": 0.2632112205028534,
+      "majority_class_acc": 0.5332000255584717
+    },
+    "dur_top1_acc": 0.11955855303494789,
+    "dur_brier": 0.938618363060225,
+    "item_mAP_at_10": {
+      "map_at_k": 0.009019932709634304,
+      "mean_precision_at_k": 0.024150827899575233,
+      "mean_recall_at_k": 0.03172330558300018,
+      "n_rows": 16310,
+      "k": 10
+    },
+    "aux_mse_per_dim": [
+      2.1101325394696504,
+      3.7288911614806866,
+      3.9400298417381974
+    ],
+    "val_component_losses": {
+      "win_log_loss_per_row": 0.722493389791539,
+      "dur_ce_per_row": 2.5955486473022686,
+      "item_bce_per_slot_per_class": 0.7299573830798766,
+      "aux_smoothl1_per_slot_per_dim": 1.0961517090741877,
+      "weighted_total": 1.4404280727182608
+    }
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_win_loss": 0.972588393872475,
+      "train_dur_loss": 3.402197358654517,
+      "train_item_loss": 0.7829255601115319,
+      "train_aux_loss": 1.9199866744178795,
+      "train_weighted_total": 1.9097943952629912,
+      "val_win_log_loss": 0.722493389791539,
+      "val_win_auc": 0.5062389118864576,
+      "val_win_brier": 0.2632112205028534,
+      "val_dur_ce_per_row": 2.5955486473022686,
+      "val_dur_acc": 0.11955855303494789,
+      "val_dur_brier": 0.938618363060225,
+      "val_item_bce_per_slot_per_class": 0.7299573830798766,
+      "val_item_map_at_10": 0.009019932709634304,
+      "val_aux_smoothl1_per_dim": 1.0961517090741877,
+      "val_aux_mse_per_dim": [
+        2.1101325394696504,
+        3.7288911614806866,
+        3.9400298417381974
+      ],
+      "val_weighted_total": 1.4404280727182608,
+      "wall_seconds": 1.2238757610321045
+    }
+  ],
+  "model_hp": {
+    "embed_dim": 64,
+    "d_model": 64,
+    "n_heads": 4,
+    "n_layers": 2,
+    "ff_mult": 2,
+    "dropout": 0.0
+  },
+  "optim_hp": {
+    "batch_size": 8192,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "mixed_precision": true
+  },
+  "multitask_alpha": {
+    "alpha_win": 1.0,
+    "alpha_dur": 0.15,
+    "alpha_item": 0.3,
+    "alpha_aux": 0.1,
+    "aux_targets": [
+      "kills",
+      "gpm",
+      "hero_damage"
+    ]
+  },
+  "param_counts": {
+    "total": 97917,
+    "trainable": 97917,
+    "embedding": 9792,
+    "non_embedding": 88125
+  },
+  "train_seconds": 1.224611520767212,
+  "data_seconds": 0.7786657810211182,
+  "n_train_pre_subsample": 341627,
+  "n_train_post_subsample": 14685,
+  "n_val": 1631,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "train_date_min": "2025-12-16",
+  "train_date_max": "2025-12-18",
+  "val_date_min": "2025-12-18",
+  "val_date_max": "2025-12-18",
+  "radiant_base_rate_train_full": 0.5344278994341782,
+  "radiant_base_rate_train_subsampled": 0.5364400148391724,
+  "radiant_base_rate_val": 0.5332000255584717,
+  "val_majority_class_acc": 0.5332000255584717,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "item_vocab_size": 305,
+  "n_dur_buckets": 8,
+  "aux_targets": [
+    "kills",
+    "gpm",
+    "hero_damage"
+  ],
+  "duration_bucket_edges": [
+    1168.0,
+    1293.0,
+    1394.0,
+    1500.0,
+    1629.0,
+    1798.0,
+    2042.0
+  ],
+  "aux_train_mean": [
+    6.549509525299072,
+    1021.771240234375,
+    24338.498046875
+  ],
+  "aux_train_std": [
+    4.771095275878906,
+    321.8719177246094,
+    15293.3154296875
+  ],
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "plateau_architectures_740_val_auc": 0.6322,
+    "transformer_hp_sweep_740_val_auc": 0.6318,
+    "player_features_740_val_auc": 0.6227,
+    "player_features_prepatch_740_features_only_val_auc": 0.6256,
+    "transformer_plus_features_extended_740_val_auc": 0.6477298,
+    "upstream_data_cleanup_740_clean_val_auc": 0.6477054,
+    "proposal_target_val_auc": 0.6487,
+    "equality_band_lower": 0.6467,
+    "equality_band_upper": 0.6487,
+    "cleanup_anchor_val_auc": 0.6477054,
+    "multitask_helped_threshold": 0.001
+  },
+  "delta_vs_cleanup_anchor": -0.14146648811354234,
+  "delta_vs_proposal_target": -0.1424610881135424,
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.38066625595092773,
+      0.852139002084732
+    ],
+    "buckets": {
+      "low": {
+        "n": 540,
+        "val_auc": 0.5156792026870768,
+        "mean_coverage_log1p": 0.14236409962177277
+      },
+      "medium": {
+        "n": 548,
+        "val_auc": 0.45835344272844275,
+        "mean_coverage_log1p": 0.6051729321479797
+      },
+      "high": {
+        "n": 543,
+        "val_auc": 0.5187482730035922,
+        "mean_coverage_log1p": 1.2469830513000488
+      }
+    }
+  },
+  "calibration": {
+    "mean_pred": [
+      0.5885792901603187,
+      0.614519364532383,
+      0.6226339256152128,
+      0.6293804549401806,
+      0.6361363247036934,
+      0.6421458405606887,
+      0.6473115419640261,
+      0.6530732103558474,
+      0.6589086070293333,
+      0.6644189722836018,
+      0.6690166633237492,
+      0.6733107533253414,
+      0.6791492973764738,
+      0.6847407212897912,
+      0.6900972999632359,
+      0.6965556578202681,
+      0.7022053135765923,
+      0.7098279842516271,
+      0.7187672341481234,
+      0.7376894965956483
+    ],
+    "frac_pos": [
+      0.47560975609756095,
+      0.5632183908045977,
+      0.5641025641025641,
+      0.5698924731182796,
+      0.575,
+      0.4117647058823529,
+      0.6029411764705882,
+      0.5813953488372093,
+      0.524390243902439,
+      0.5875,
+      0.5454545454545454,
+      0.43661971830985913,
+      0.5833333333333334,
+      0.582089552238806,
+      0.6125,
+      0.5113636363636364,
+      0.6049382716049383,
+      0.5365853658536586,
+      0.46153846153846156,
+      0.5822784810126582
+    ]
+  }
+}
