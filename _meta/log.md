@@ -63,3 +63,17 @@ skills; read by `/lint`.
 2026-05-21 00:57 session_end session=a2d361fd-8403-4d66-b3f7-1534c816c316
 2026-05-21 09:49 session_end session=f2c6b153-467e-4a57-b832-91168b3beb18
 2026-05-21 10:34 session_end session=d6cf2300-0292-4a3b-af5f-8d9afda5d70a
+2026-05-22 16:07 fetch-paper https://arxiv.org/abs/2106.11959 → raw/papers/gorishniy2021revisiting.pdf
+2026-05-22 16:18 ingest raw/papers/gorishniy2021revisiting.pdf → literature/papers/gorishniy2021revisiting.md (relevance=5; +1 concept seeded: tabular-foundation-model)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2412.19152 → raw/papers/kim2024predict.pdf
+2026-05-22 16:19 ingest raw/papers/kim2024predict.pdf → literature/papers/kim2024predict.md (relevance=4; +1 concept seeded: masked-modeling-tabular)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2408.07985 → raw/papers/kirchdorfer2024analytical.pdf
+2026-05-22 16:20 ingest raw/papers/kirchdorfer2024analytical.pdf → literature/papers/kirchdorfer2024analytical.md (relevance=5; +1 concept seeded: uncertainty-weighted-multitask)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2106.01342 → raw/papers/somepalli2021saint.pdf
+2026-05-22 16:21 ingest raw/papers/somepalli2021saint.pdf → literature/papers/somepalli2021saint.md (relevance=5; 0 concepts seeded — covered by tabular-foundation-model + masked-modeling-tabular)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2205.08084 → raw/papers/cui2022m6.pdf
+2026-05-22 16:22 ingest raw/papers/cui2022m6.pdf → literature/papers/cui2022m6.md (relevance=3; +1 concept seeded: multi-query-foundation-model)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2507.10626 → raw/papers/wang2025player.pdf
+2026-05-22 16:23 ingest raw/papers/wang2025player.pdf → literature/papers/wang2025player.md (relevance=4; 0 concepts seeded — covered by tabular-foundation-model)
+2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2301.12618 → raw/papers/jiang2023forkmerge.pdf
+2026-05-22 16:24 ingest raw/papers/jiang2023forkmerge.pdf → literature/papers/jiang2023forkmerge.md (relevance=4; 0 concepts seeded — covered by uncertainty-weighted-multitask)
