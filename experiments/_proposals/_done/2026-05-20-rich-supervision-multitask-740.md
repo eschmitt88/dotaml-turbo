@@ -21,10 +21,11 @@ rationale: >
   helps the encoder learn" through a different mechanism than the
   embedding lookup.
 
-  Audit confirms the raw parquets carry the full OpenDota payload
-  per match — duration, picks_bans with order, per-player items
-  (item_0..5 + neutrals), KDA, GPM, XPM, hero_damage, tower_damage,
-  ability_upgrades with timestamps — all 175 GB already on disk
+  Audit confirms the raw parquets carry the full Steam Web API
+  match-details payload per match — duration, picks_bans with order,
+  per-player items (item_0..5 + neutrals), KDA, GPM, XPM, hero_damage,
+  tower_damage, ability_upgrades with timestamps — all 175 GB already
+  on disk
   (81 GB patch-7.40 + 94 GB pre-patch). A one-time JSON-parse pass
   materializes the rich columns into a sidecar parquet that the
   multi-task trainer joins to the existing clean per-player-features

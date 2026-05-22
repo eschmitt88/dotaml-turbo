@@ -33,10 +33,11 @@ any row whose `start_time_date` falls in that window.
   invalid — the model has only the final 10-hero composition pre-game.
 - **~66% of player slots are anonymous** (`account_id` ∈ {0, 4294967295}).
   This is the binding constraint on player-identity-based features.
-- Match payloads in `data/snapshots/.../raw/turbo/` carry full OpenDota
-  `raw_json` fields: duration, picks_bans (post-game order), per-player
-  items / KDA / GPM / XPM / hero_damage, ability_upgrades with
-  timestamps. 175 GB across patch-7.40 + pre-patch history.
+- Match payloads in `data/snapshots/.../raw/turbo/` carry full Steam Web
+  API match-details `raw_json` fields: duration, picks_bans (post-game
+  order), per-player items / KDA / GPM / XPM / hero_damage,
+  ability_upgrades with timestamps. 175 GB across patch-7.40 +
+  pre-patch history.
 
 ## Layout (see user CLAUDE.md for the full rationale)
 

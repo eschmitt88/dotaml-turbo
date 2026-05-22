@@ -407,7 +407,7 @@ encoder + four heads (win, duration over 8 quantile buckets, per-slot
 multi-label item set over 305-item vocab, aux KDA/GPM/hero_damage
 regression) was trained jointly with α-weighted losses (α_w=1.0,
 α_d=0.15, α_i=0.3, α_a=0.1). Rich in-game telemetry parsed from raw
-OpenDota match payloads into a 2.3 GB sidecar provides ~10× more bits
+Steam API match payloads into a 2.3 GB sidecar provides ~10× more bits
 of supervision per match than the binary radiant_win label alone.
 
 **Result:** multitask_all val_auc=**0.6495** @ best_epoch=30 (still

@@ -453,7 +453,7 @@ def _write_rich_cols(buf: dict[str, list], path: Path,
                                       type=pa.uint8())
     for p_i in range(N_PLAYERS):
         # items: variable-length list<int32>; build via pa.array on list-of-lists.
-        # Keep as int32 (item IDs in OpenDota fit easily). No numpy routing —
+        # Keep as int32 (Steam API item IDs fit easily). No numpy routing —
         # list<int32> would require a chunked construction; pa.array on a
         # Python list-of-list-of-int is the canonical path and is NOT the
         # fp32-corruption path (that was specifically fp32 dense columns).

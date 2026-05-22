@@ -119,7 +119,7 @@ def main() -> int:
 
     # Online accumulators.
     # Use a dict[int, int] counter; numpy bincount would need a max-ID bound,
-    # and item IDs can be in the 10K range in OpenDota.
+    # and Steam API item IDs can be in the 10K range.
     counts: dict[int, int] = {}
     duration_chunks: list[np.ndarray] = []
     n_total_item_slots_rows = 0
