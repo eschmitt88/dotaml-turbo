@@ -77,3 +77,14 @@ skills; read by `/lint`.
 2026-05-22 16:23 ingest raw/papers/wang2025player.pdf → literature/papers/wang2025player.md (relevance=4; 0 concepts seeded — covered by tabular-foundation-model)
 2026-05-22 16:11 fetch-paper https://arxiv.org/abs/2301.12618 → raw/papers/jiang2023forkmerge.pdf
 2026-05-22 16:24 ingest raw/papers/jiang2023forkmerge.pdf → literature/papers/jiang2023forkmerge.md (relevance=4; 0 concepts seeded — covered by uncertainty-weighted-multitask)
+2026-05-22 16:47 fetch-paper https://arxiv.org/abs/2211.02556 → raw/papers/bi2022pangu.pdf
+2026-05-22 16:55 ingest raw/papers/bi2022pangu.pdf → literature/papers/bi2022pangu.md (relevance=4; +1 concept seeded: attention-bias-positional)
+2026-05-22 16:47 fetch-paper https://arxiv.org/abs/2410.10469 → raw/papers/liu2024moirai.pdf
+2026-05-22 16:56 ingest raw/papers/liu2024moirai.pdf → literature/papers/liu2024moirai.md (relevance=4; 0 concepts seeded — covered by tabular-foundation-model + multi-query-foundation-model)
+2026-05-22 16:47 fetch-paper https://arxiv.org/abs/2310.16802 → raw/papers/shoghi2023molecules.pdf
+2026-05-22 16:57 ingest raw/papers/shoghi2023molecules.pdf → literature/papers/shoghi2023molecules.md (relevance=5; +1 concept seeded: supervised-multitask-pretraining)
+2026-05-22 16:47 fetch-paper https://arxiv.org/abs/2405.12213 → raw/papers/ghosh2024octo.pdf
+2026-05-22 16:58 ingest raw/papers/ghosh2024octo.pdf → literature/papers/ghosh2024octo.md (relevance=5; 0 concepts seeded — covered by tabular-foundation-model + multi-query-foundation-model + task-as-token-prompting + attention-bias-positional)
+2026-05-22 16:47 fetch-paper https://arxiv.org/abs/2212.04356 → raw/papers/radford2022robust.pdf
+2026-05-22 16:59 ingest raw/papers/radford2022robust.pdf → literature/papers/radford2022robust.md (relevance=5; +1 concept seeded: task-as-token-prompting)
+2026-05-22 17:00 promote MoC: mocs/foundation-models.md (7 concepts crossed ≥5 threshold; tabular-foundation-model + masked-modeling-tabular + uncertainty-weighted-multitask + multi-query-foundation-model + attention-bias-positional + task-as-token-prompting + supervised-multitask-pretraining)

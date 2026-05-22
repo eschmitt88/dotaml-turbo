@@ -12,6 +12,12 @@ and `/new-experiment`.
 
 (promote a cluster of ≥5 related concepts into `mocs/<theme>.md`)
 
+- [[mocs/foundation-models]] — seven concepts now cluster on the
+  foundation-model theme (tabular-foundation-model, masked-modeling-
+  tabular, uncertainty-weighted-multitask, multi-query-foundation-model,
+  attention-bias-positional, task-as-token-prompting, supervised-
+  multitask-pretraining). Promoted 2026-05-22 after the second batch
+  of cross-domain FM ingests (Pangu, Moirai-MoE, JMP, Octo, Whisper).
 - **MoC candidate (not yet promoted):** *Prior-art priors for draft-only
   win prediction.* Five concepts now cluster on this theme — they all came
   from one source (DotaML repo), so wait until a second independent source
