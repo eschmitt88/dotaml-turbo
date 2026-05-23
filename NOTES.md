@@ -871,3 +871,93 @@ and `player-features-prepatch-740` upstream data-quality finding.)
 - (Carryover, deferred) HCE-vs-prior-art-splits ADR; 5M-vs-13M sanity
   check; DVC formalisation.
 
+
+## 2026-05-23
+
+### Did
+
+- **2-round literature survey on foundation models across 14 papers**
+  (tabular/recommendation/sports first round: FT-Transformer, PMAE,
+  UW-SO, SAINT, M6-Rec, HIGFormer, ForkMerge; cross-domain second round:
+  Pangu-Weather, Moirai-MoE, JMP, Octo, Whisper). 4 new concepts seeded
+  (`tabular-foundation-model`, `masked-modeling-tabular`,
+  `uncertainty-weighted-multitask`, `multi-query-foundation-model`), then
+  3 more (`attention-bias-positional`, `task-as-token-prompting`,
+  `supervised-multitask-pretraining`) → promoted to MoC
+  `mocs/foundation-models.md`.
+- **Wrote and implemented `foundation-mvp-740`** (5M-param Transformer
+  foundation model: FT-Transformer skeleton + permutation-equivariance
+  within team + (team,team) attention bias + patch token + UW-SO loss
+  weighting + PMAE auxiliary + shared decoder with task-as-token
+  prompting). 3 ablations: `baseline_multitask_repro` (works at 0.6470),
+  `foundation_mvp` (broken at 0.5058), `foundation_no_patch_token`
+  (broken at 0.4984). ~17h compute on stable JEDEC RAM.
+- **Wrote v2 proposal `foundation-component-isolation-740`**: 3
+  ablations each adding ONE new component on top of the working baseline
+  to attribute the failure.
+- **Codified "Monitoring long-running ML jobs" discipline** in user-level
+  `~/.claude/CLAUDE.md` + brief reference in project CLAUDE.md.
+- **User correction: no slot semantics in Turbo.** `player_slot` is
+  arbitrary lobby order. Killed the original Pangu-style per-slot
+  attention bias from the foundation-mvp proposal; replaced with
+  permutation-equivariance within team + (team,team) 2×2 bias.
+- **User correction: data source is Steam Web API, not OpenDota.**
+  Fixed in 6 in-repo references (CLAUDE.md, concept, index, proposal,
+  2 code comments). Public retraction comment didn't reference the
+  source so no upstream change needed.
+
+### Findings
+
+- **The foundation-mvp design broke training catastrophically** despite
+  all four new components being well-grounded in literature. baseline
+  ablation at 0.6470 (close to anchor) confirms the SCALE (77K→5M
+  params) is neutral; the additions are the saboteur. Most likely:
+  UW-SO loss-scale misapplication (T=0.45 + 30× raw loss-scale variance
+  means low-loss tasks like items dominate by ~30× over duration), PMAE
+  collapsed to mae_loss=0 mid-training (masking implementation bug),
+  possibly (team,team) bias interacting badly with multi-task heads.
+- **The proposal's anticipated diagnostic fork worked.**
+  `baseline_multitask_repro` was specifically there to disambiguate
+  "scale broke it" vs "design broke it." Answer: design. v2 is the
+  attribution experiment that fork pointed to.
+- **The multi-conditional-queries framing is genuinely ahead of
+  published tabular FM literature** per the cross-domain survey. M6-Rec
+  (recommendation) and Octo (robotics) are the closest analogs; tabular
+  FMs (FT-Transformer, SAINT, TabPFN) all benchmark single-target
+  prediction. We're working at the edge of the recipe and should
+  expect some design self-invention.
+- **Pre-train-then-fine-tune doesn't transfer cleanly to tabular**
+  (per the literature). Joint multi-task + auxiliary MAE from scratch
+  is the right pattern (JMP shows +59% over unsupervised pre-training).
+- **17h of unmonitored training was wasteful** — the foundation_mvp
+  failure was visible at epoch 3 (train_win INCREASING, val_auc at
+  random). The new monitoring rule should prevent recurrence.
+
+### Next
+
+- **`foundation-component-isolation-740`** (PROPOSED). 3 ablations
+  attributing the foundation-mvp failure. Each adds ONE new component
+  on top of baseline_multitask_repro. PMAE bug-fix or extra-logging
+  BEFORE iso_pmae; UW-SO loss-scale normalization BEFORE iso_uwso.
+  Live monitoring per the new rule. ~10-15h total.
+- **`foundation-v3`** (depends on v2 results). Re-introduces ONLY the
+  components that pass v2, with targeted fixes for the broken ones.
+  Plus: maybe add the SAINT contrastive auxiliary (well-supported,
+  was deferred), and/or move from patch-token to FiLM patch
+  conditioning if cross-patch ablation tells us we need it.
+- **Data scale-up** (deferred from foundation-mvp original proposal).
+  Once architecture is debugged, the next axis is extending training
+  to Aug 2025 → Feb 2026 (~30-40M matches across ~3 patches). Needs
+  ~3-4h CPU pre-build of player aggregates + rich-cols sidecar over
+  the broader window.
+- **Inference wrapper / personal use tool** (deferred from
+  multitask-740). Once we have a stable foundation model, build a
+  CLI/notebook tool that takes (draft + 10 player aggregates) and
+  returns (win_prob, duration_curve, item top-K per slot).
+- **(Carryover, deferred)** `anonymous-aware-modeling-740` —
+  compounds with foundation if v3 works.
+- **(Carryover, deferred)** `player-features-decay-740` — smaller
+  experiment, exponential time weighting (τ ≈ 90 days).
+- **(Carryover, deferred)** DVC formalization, HCE-vs-prior-art ADR,
+  5M-vs-13M sanity check.
+
