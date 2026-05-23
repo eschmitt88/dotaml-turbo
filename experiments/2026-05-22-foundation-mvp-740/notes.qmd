@@ -1,0 +1,53 @@
+---
+title: "foundation-mvp-740 notes"
+format: html
+---
+
+# foundation-mvp-740 -- running notes
+
+## Architecture summary
+
+- FT-Transformer encoder: d_model=256, n_heads=8, n_layers=6, ff_mult=4,
+  Pre-Norm, first-layer first-LN removed (Gorishniy 2021 recipe).
+- (team_query, team_key) 2x2/3x3 attention bias per head per layer
+  (Pangu-Weather Bi 2022, adapted to (team,team)).
+- NO per-slot positional embedding -- Turbo slots are arbitrary lobby order.
+- Canonical input: sort each team by hero_id ascending at load time.
+- Patch token (single learned embedding indexed by patch_id; on this window
+  patch_id=1 constant).
+- Shared 2-block decoder + 42-token task vocabulary (win, dur, items*10,
+  kda*10, gpm*10, hd*10), Whisper-style task-as-token prompting.
+
+## Loss
+
+- UW-SO loss weighting (Kirchdorfer 2024): omega = softmax(1/sg[L_k]/T),
+  single learnable temperature T.
+- PMAE auxiliary (Kim 2024): per-column proportional masking with logit
+  transform M_j = a*logit(1-p_obs_j)+b, group-masked semantic units
+  (hero_token, patch_token), encoder-state reconstruction vs unmasked teacher.
+- alpha_mae annealed 1.0 -> 0.1 over training.
+
+## Ablations
+
+| Ablation                     | features | patch_tok | team_bias | pmae | uw_so |
+|------------------------------|----------|-----------|-----------|------|-------|
+| baseline_multitask_repro     | yes      | no        | no        | no   | no    |
+| foundation_mvp (PRIMARY)     | yes      | yes       | yes       | yes  | yes   |
+| foundation_no_patch_token    | yes      | no        | yes       | yes  | yes   |
+
+## Anchors
+
+- transformer_plus_features_extended_740: 0.6477298
+- upstream_data_cleanup_740:               0.6477054
+- rich_supervision_multitask_740:          0.6495
+- foundation_mvp target:                   0.6525 (+0.003 over multitask-740)
+
+## Diagnostics to fill post-run
+
+(Per the proposal -- pull from metrics.json after the full run completes.)
+
+- per-task val metrics at best epoch
+- coverage-bucket val_auc (low / med / high terciles)
+- loss-component traces per epoch + UW-SO omega weights
+- train-val gap on win head
+- in-vocab item rate (already constrained at vocab-build time; sanity check)

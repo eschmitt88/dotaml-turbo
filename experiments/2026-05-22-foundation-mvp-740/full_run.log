@@ -1,0 +1,195 @@
+===== foundation-mvp-740 run_all START 2026-05-22T18:27:23+00:00 =====
+[2026-05-22T18:27:23+00:00] inputs verified.
+[2026-05-22T18:27:23+00:00] STEP 1/4: smoke all ablations
+Ablation: baseline_multitask_repro (features=True patch=False team_bias=False pmae=False uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.0s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  epoch 1/1  tr[w=0.7190 d=2.8182 i=0.74804 kda=0.5688 gpm=0.6226 hd=0.4490 mae=0.0000 tot=1.5302]  vl_win=0.6919  val_auc=0.4860  dur_acc=0.1208  itemMAP=0.00503127183765173  lr=2.90e-05  T=None  alpha_mae=0.100  (1.7s)
+Training done in 1.7s -- best val_auc=0.4860 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_smoke_baseline_multitask_repro.json
+Ablation: foundation_mvp (features=True patch=True team_bias=True pmae=True uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.0s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6455021, 'trainable': 6455021, 'embedding': 52224, 'non_embedding': 6402797}, device=cuda
+  epoch 1/1  tr[w=0.7032 d=2.6019 i=0.78261 kda=0.6299 gpm=0.4828 hd=0.4544 mae=0.1405 tot=0.7332]  vl_win=0.6940  val_auc=0.5015  dur_acc=0.1300  itemMAP=0.008666682057082653  lr=2.90e-05  T=0.999596118927002  alpha_mae=0.100  (2.0s)
+Training done in 2.0s -- best val_auc=0.5015 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_smoke_foundation_mvp.json
+Ablation: foundation_no_patch_token (features=True patch=False team_bias=True pmae=True uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.0s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797}, device=cuda
+  epoch 1/1  tr[w=0.7302 d=2.9824 i=0.74582 kda=0.4667 gpm=0.5477 hd=0.4236 mae=0.1465 tot=0.7181]  vl_win=0.6928  val_auc=0.4922  dur_acc=0.1239  itemMAP=0.007004869170486927  lr=2.90e-05  T=0.9995765686035156  alpha_mae=0.100  (1.9s)
+Training done in 1.9s -- best val_auc=0.4922 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_smoke_foundation_no_patch_token.json
+[2026-05-22T18:27:39+00:00] STEP 1/4: smoke DONE
+[2026-05-22T18:27:39+00:00] STEP 2/4: baseline_multitask_repro
+[2026-05-22T18:27:39+00:00] train.py baseline_multitask_repro attempt 1/3 START 
+Ablation: baseline_multitask_repro (features=True patch=False team_bias=False pmae=False uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 80.5s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 103.2s
+Data ready in 300.1s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  epoch 1/30  tr[w=0.6696 d=2.0589 i=0.09721 kda=0.4448 gpm=0.2475 hd=0.3817 mae=0.0000 tot=1.1150]  vl_win=0.6646  val_auc=0.6275  dur_acc=0.1712  itemMAP=0.1600414216518402  lr=9.98e-04  T=None  alpha_mae=0.970  (536.1s)
+  epoch 2/30  tr[w=0.6584 d=2.0419 i=0.08314 kda=0.4196 gpm=0.2228 hd=0.3569 mae=0.0000 tot=1.0896]  vl_win=0.6598  val_auc=0.6390  dur_acc=0.1768  itemMAP=0.2934187054634094  lr=9.90e-04  T=None  alpha_mae=0.940  (583.9s)
+  epoch 3/30  tr[w=0.6550 d=2.0385 i=0.07427 kda=0.4049 gpm=0.2093 hd=0.3423 mae=0.0000 tot=1.0787]  vl_win=0.6577  val_auc=0.6424  dur_acc=0.1769  itemMAP=0.3105088770389557  lr=9.77e-04  T=None  alpha_mae=0.910  (583.1s)
+  epoch 4/30  tr[w=0.6535 d=2.0369 i=0.07350 kda=0.4037 gpm=0.2079 hd=0.3410 mae=0.0000 tot=1.0763]  vl_win=0.6645  val_auc=0.6301  dur_acc=0.1650  itemMAP=0.1997765153646469  lr=9.59e-04  T=None  alpha_mae=0.880  (584.2s)
+  epoch 5/30  tr[w=0.6525 d=2.0359 i=0.07349 kda=0.4037 gpm=0.2078 hd=0.3408 mae=0.0000 tot=1.0751]  vl_win=0.6580  val_auc=0.6436  dur_acc=0.1750  itemMAP=0.27410969138145447  lr=9.36e-04  T=None  alpha_mae=0.850  (583.4s)
+  epoch 6/30  tr[w=0.6519 d=2.0351 i=0.07344 kda=0.4033 gpm=0.2075 hd=0.3407 mae=0.0000 tot=1.0743]  vl_win=0.6562  val_auc=0.6448  dur_acc=0.1793  itemMAP=0.31473493576049805  lr=9.08e-04  T=None  alpha_mae=0.820  (526.1s)
+  epoch 7/30  tr[w=0.6512 d=2.0345 i=0.07287 kda=0.4019 gpm=0.2063 hd=0.3393 mae=0.0000 tot=1.0730]  vl_win=0.6553  val_auc=0.6462  dur_acc=0.1781  itemMAP=0.3188799023628235  lr=8.76e-04  T=None  alpha_mae=0.790  (583.4s)
+  epoch 8/30  tr[w=0.6509 d=2.0343 i=0.07339 kda=0.4030 gpm=0.2072 hd=0.3403 mae=0.0000 tot=1.0731]  vl_win=0.6557  val_auc=0.6455  dur_acc=0.1808  itemMAP=0.318380743265152  lr=8.39e-04  T=None  alpha_mae=0.760  (583.4s)
+  epoch 9/30  tr[w=0.6508 d=2.0341 i=0.07346 kda=0.4032 gpm=0.2074 hd=0.3406 mae=0.0000 tot=1.0731]  vl_win=0.6555  val_auc=0.6459  dur_acc=0.1796  itemMAP=0.31592056155204773  lr=7.99e-04  T=None  alpha_mae=0.730  (583.9s)
+  epoch 10/30  tr[w=0.6512 d=2.0344 i=0.07346 kda=0.4033 gpm=0.2075 hd=0.3406 mae=0.0000 tot=1.0736]  vl_win=0.6556  val_auc=0.6464  dur_acc=0.1801  itemMAP=0.31730014085769653  lr=7.56e-04  T=None  alpha_mae=0.700  (582.9s)
+  epoch 11/30  tr[w=0.6506 d=2.0338 i=0.07299 kda=0.4023 gpm=0.2064 hd=0.3396 mae=0.0000 tot=1.0724]  vl_win=0.6563  val_auc=0.6443  dur_acc=0.1799  itemMAP=0.31714195013046265  lr=7.09e-04  T=None  alpha_mae=0.670  (582.5s)
+  epoch 12/30  tr[w=0.6502 d=2.0334 i=0.07276 kda=0.4016 gpm=0.2059 hd=0.3390 mae=0.0000 tot=1.0717]  vl_win=0.6547  val_auc=0.6470  dur_acc=0.1798  itemMAP=0.31888294219970703  lr=6.61e-04  T=None  alpha_mae=0.640  (583.1s)
+  epoch 13/30  tr[w=0.6496 d=2.0329 i=0.07260 kda=0.4010 gpm=0.2055 hd=0.3383 mae=0.0000 tot=1.0708]  vl_win=0.6551  val_auc=0.6468  dur_acc=0.1809  itemMAP=0.3200480043888092  lr=6.11e-04  T=None  alpha_mae=0.610  (582.7s)
+  epoch 14/30  tr[w=0.6505 d=2.0333 i=0.07299 kda=0.4021 gpm=0.2065 hd=0.3395 mae=0.0000 tot=1.0722]  vl_win=0.6559  val_auc=0.6447  dur_acc=0.1801  itemMAP=0.31679198145866394  lr=5.60e-04  T=None  alpha_mae=0.580  (525.3s)
+  epoch 15/30  tr[w=0.6505 d=2.0332 i=0.07307 kda=0.4023 gpm=0.2066 hd=0.3397 mae=0.0000 tot=1.0723]  vl_win=0.6559  val_auc=0.6452  dur_acc=0.1809  itemMAP=0.318431556224823  lr=5.08e-04  T=None  alpha_mae=0.550  (582.8s)
+  epoch 16/30  tr[w=0.6500 d=2.0329 i=0.07277 kda=0.4015 gpm=0.2059 hd=0.3389 mae=0.0000 tot=1.0714]  vl_win=0.6559  val_auc=0.6445  dur_acc=0.1808  itemMAP=0.3153669536113739  lr=4.56e-04  T=None  alpha_mae=0.520  (582.9s)
+  epoch 17/30  tr[w=0.6499 d=2.0328 i=0.07306 kda=0.4021 gpm=0.2064 hd=0.3396 mae=0.0000 tot=1.0716]  vl_win=0.6551  val_auc=0.6466  dur_acc=0.1808  itemMAP=0.32036951184272766  lr=4.04e-04  T=None  alpha_mae=0.490  (582.8s)
+  early stop at epoch 17 (best 12)
+Training done in 9752.6s -- best val_auc=0.6470 @ epoch 12
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_baseline_multitask_repro.json
+[2026-05-22T21:15:24+00:00] baseline_multitask_repro attempt 1 SUCCESS
+[2026-05-22T21:15:24+00:00] STEP 2/4 DONE rc=0
+[2026-05-22T21:15:24+00:00] STEP 3/4: foundation_mvp
+[2026-05-22T21:15:24+00:00] train.py foundation_mvp attempt 1/3 START 
+Ablation: foundation_mvp (features=True patch=True team_bias=True pmae=True uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 82.4s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 103.6s
+Data ready in 302.2s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6455021, 'trainable': 6455021, 'embedding': 52224, 'non_embedding': 6402797}, device=cuda
+  epoch 1/30  tr[w=0.6947 d=2.1162 i=0.09645 kda=0.4592 gpm=0.2575 hd=0.3949 mae=0.0038 tot=0.0982]  vl_win=0.7062  val_auc=0.4962  dur_acc=0.1252  itemMAP=0.2945507764816284  lr=9.98e-04  T=0.6386957168579102  alpha_mae=0.970  (654.0s)
+  epoch 2/30  tr[w=0.6955 d=2.1107 i=0.08550 kda=0.4666 gpm=0.2595 hd=0.3979 mae=0.0106 tot=0.0957]  vl_win=0.6917  val_auc=0.5058  dur_acc=0.1293  itemMAP=0.12549971044063568  lr=9.90e-04  T=0.4537140429019928  alpha_mae=0.940  (704.8s)
+  epoch 3/30  tr[w=0.6983 d=2.1146 i=0.08422 kda=0.4634 gpm=0.2583 hd=0.3963 mae=0.0081 tot=0.0917]  vl_win=0.7275  val_auc=0.4873  dur_acc=0.1278  itemMAP=0.31753823161125183  lr=9.77e-04  T=0.4384016990661621  alpha_mae=0.910  (703.2s)
+  epoch 4/30  tr[w=0.7014 d=2.1105 i=0.08394 kda=0.4613 gpm=0.2560 hd=0.3938 mae=0.0067 tot=0.0900]  vl_win=0.7119  val_auc=0.4906  dur_acc=0.1300  itemMAP=0.32186147570610046  lr=9.59e-04  T=0.4393227994441986  alpha_mae=0.880  (701.2s)
+  epoch 5/30  tr[w=0.7020 d=2.1032 i=0.08383 kda=0.4602 gpm=0.2552 hd=0.3923 mae=0.0076 tot=0.0904]  vl_win=0.7122  val_auc=0.4858  dur_acc=0.1303  itemMAP=0.3234322667121887  lr=9.36e-04  T=0.43732762336730957  alpha_mae=0.850  (706.1s)
+  epoch 6/30  tr[w=0.7020 d=2.0972 i=0.08378 kda=0.4590 gpm=0.2547 hd=0.3918 mae=0.0090 tot=0.0913]  vl_win=0.7319  val_auc=0.4872  dur_acc=0.1319  itemMAP=0.3240931034088135  lr=9.08e-04  T=0.4377976655960083  alpha_mae=0.820  (702.3s)
+  epoch 7/30  tr[w=0.7008 d=2.0945 i=0.08374 kda=0.4583 gpm=0.2543 hd=0.3914 mae=0.0105 tot=0.0922]  vl_win=0.7048  val_auc=0.4908  dur_acc=0.1347  itemMAP=0.32492387294769287  lr=8.76e-04  T=0.43974924087524414  alpha_mae=0.790  (703.7s)
+  early stop at epoch 7 (best 2)
+Training done in 4875.2s -- best val_auc=0.5058 @ epoch 2
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_foundation_mvp.json
+[2026-05-22T22:41:55+00:00] foundation_mvp attempt 1 SUCCESS
+[2026-05-22T22:41:55+00:00] STEP 3/4 DONE rc=0
+[2026-05-22T22:41:55+00:00] STEP 4/4: foundation_no_patch_token
+[2026-05-22T22:41:55+00:00] train.py foundation_no_patch_token attempt 1/3 START 
+Ablation: foundation_no_patch_token (features=True patch=False team_bias=True pmae=True uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 82.0s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 102.9s
+Data ready in 300.9s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797}, device=cuda
+  epoch 1/30  tr[w=0.6945 d=2.1132 i=0.09611 kda=0.4586 gpm=0.2568 hd=0.3947 mae=0.0054 tot=0.0993]  vl_win=0.7040  val_auc=0.5023  dur_acc=0.1267  itemMAP=0.2434459924697876  lr=9.98e-04  T=0.6447775959968567  alpha_mae=0.970  (636.7s)
+  epoch 2/30  tr[w=0.6961 d=2.1222 i=0.08457 kda=0.4640 gpm=0.2576 hd=0.3984 mae=0.0100 tot=0.0942]  vl_win=0.6950  val_auc=0.5013  dur_acc=0.1236  itemMAP=0.13121119141578674  lr=9.90e-04  T=0.46883606910705566  alpha_mae=0.940  (687.0s)
+  epoch 3/30  tr[w=0.6946 d=2.1306 i=0.08426 kda=0.4645 gpm=0.2584 hd=0.3976 mae=0.0001 tot=0.0843]  vl_win=0.6912  val_auc=0.4960  dur_acc=0.1239  itemMAP=0.12923577427864075  lr=9.77e-04  T=0.43711549043655396  alpha_mae=0.910  (685.2s)
+  epoch 4/30  tr[w=0.6941 d=2.1313 i=0.08401 kda=0.4643 gpm=0.2552 hd=0.3978 mae=0.0000 tot=0.0841]  vl_win=0.6923  val_auc=0.5030  dur_acc=0.1239  itemMAP=0.12870442867279053  lr=9.59e-04  T=0.43422260880470276  alpha_mae=0.880  (684.8s)
+  epoch 5/30  tr[w=0.6924 d=2.1238 i=0.08390 kda=0.4617 gpm=0.2509 hd=0.3971 mae=0.0000 tot=0.0839]  vl_win=0.6911  val_auc=0.4952  dur_acc=0.1239  itemMAP=0.12834002077579498  lr=9.36e-04  T=0.4327206611633301  alpha_mae=0.850  (685.9s)
+  epoch 6/30  tr[w=0.6929 d=2.1177 i=0.08384 kda=0.4592 gpm=0.2462 hd=0.3957 mae=0.0000 tot=0.0839]  vl_win=0.6913  val_auc=0.5027  dur_acc=0.1239  itemMAP=0.12872399389743805  lr=9.08e-04  T=0.43106809258461  alpha_mae=0.820  (682.0s)
+  epoch 7/30  tr[w=0.6932 d=2.1134 i=0.08380 kda=0.4585 gpm=0.2428 hd=0.3956 mae=0.0000 tot=0.0838]  vl_win=0.6916  val_auc=0.5019  dur_acc=0.1239  itemMAP=0.12864315509796143  lr=8.76e-04  T=0.42636042833328247  alpha_mae=0.790  (686.2s)
+  epoch 8/30  tr[w=0.6947 d=2.1096 i=0.08378 kda=0.4581 gpm=0.2405 hd=0.3953 mae=0.0000 tot=0.0838]  vl_win=0.6911  val_auc=0.4984  dur_acc=0.1239  itemMAP=0.1285998374223709  lr=8.39e-04  T=0.426684707403183  alpha_mae=0.760  (684.3s)
+  epoch 9/30  tr[w=0.6947 d=2.1049 i=0.08376 kda=0.4581 gpm=0.2394 hd=0.3952 mae=0.0001 tot=0.0838]  vl_win=0.6919  val_auc=0.5030  dur_acc=0.1239  itemMAP=0.12890228629112244  lr=7.99e-04  T=0.42355507612228394  alpha_mae=0.730  (627.3s)
+  epoch 10/30  tr[w=0.6949 d=2.0999 i=0.08375 kda=0.4575 gpm=0.2389 hd=0.3945 mae=0.0000 tot=0.0838]  vl_win=0.6914  val_auc=0.4999  dur_acc=0.1239  itemMAP=0.12829943001270294  lr=7.56e-04  T=0.4245173931121826  alpha_mae=0.700  (684.5s)
+  epoch 11/30  tr[w=0.6940 d=2.0975 i=0.08372 kda=0.4574 gpm=0.2384 hd=0.3941 mae=0.0000 tot=0.0837]  vl_win=0.6917  val_auc=0.4968  dur_acc=0.1239  itemMAP=0.12876111268997192  lr=7.09e-04  T=0.4251828193664551  alpha_mae=0.670  (685.2s)
+  epoch 12/30  tr[w=0.6943 d=2.0960 i=0.08371 kda=0.4575 gpm=0.2382 hd=0.3939 mae=0.0000 tot=0.0837]  vl_win=0.6915  val_auc=0.5006  dur_acc=0.1239  itemMAP=0.1291501373052597  lr=6.61e-04  T=0.4258680045604706  alpha_mae=0.640  (685.2s)
+  epoch 13/30  tr[w=0.6946 d=2.0956 i=0.08370 kda=0.4573 gpm=0.2380 hd=0.3937 mae=0.0000 tot=0.0837]  vl_win=0.6916  val_auc=0.5003  dur_acc=0.1239  itemMAP=0.12860509753227234  lr=6.11e-04  T=0.4225844144821167  alpha_mae=0.610  (685.2s)
+  early stop at epoch 13 (best 8)
+Training done in 8799.5s -- best val_auc=0.4984 @ epoch 8
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-22-foundation-mvp-740/metrics_foundation_no_patch_token.json
+[2026-05-23T01:13:48+00:00] foundation_no_patch_token attempt 1 SUCCESS
+[2026-05-23T01:13:48+00:00] STEP 4/4 DONE rc=0
+===== foundation-mvp-740 run_all DONE baseline=0 primary=0 no_patch=0 2026-05-23T01:13:48+00:00 =====

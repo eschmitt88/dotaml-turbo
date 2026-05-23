@@ -76,6 +76,12 @@ proposal `risks:` and either scope down or raise the ceiling.
 - **Don't re-read a multi-GB parquet** inside a process already holding
   heavy aggregator state — OOM-kills the process and can cascade to a
   hard system reboot. Use pyarrow row-group statistics for validation.
+- **Monitor multi-hour ML runs** per `~/.claude/CLAUDE.md` "Monitoring
+  long-running ML jobs" section. Poll every 10-30 min; halt on a
+  pattern of train-loss-increasing / val-at-random / NaN / wildly
+  imbalanced multi-task loss. The 2026-05-22 `foundation-mvp-740`
+  burned ~8h of trailing-ablation compute on a primary that was
+  clearly broken by epoch 3.
 
 ## Housekeeping
 
