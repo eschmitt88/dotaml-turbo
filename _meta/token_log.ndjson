@@ -3008,3 +3008,26 @@
     "WebFetch": 6
   }
 }
+{
+  "timestamp": "2026-05-24T09:08:43Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6195,
+  "output_tokens": 4752862,
+  "cache_read_tokens": 1355738621,
+  "cache_creation_tokens": 94881500,
+  "tools_used_summary": {
+    "Bash": 595,
+    "Read": 240,
+    "Skill": 34,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 72,
+    "Edit": 329,
+    "AskUserQuestion": 19,
+    "Agent": 31,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}

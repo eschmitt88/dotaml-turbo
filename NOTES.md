@@ -961,3 +961,68 @@ and `player-features-prepatch-740` upstream data-quality finding.)
 - **(Carryover, deferred)** DVC formalization, HCE-vs-prior-art ADR,
   5M-vs-13M sanity check.
 
+
+## 2026-05-24
+
+### Did
+
+- **Implemented `foundation-component-isolation-740` v2** with live
+  monitoring per the new `~/.claude/CLAUDE.md` "Monitoring long-running
+  ML jobs" rule. 3 ablations (`iso_uwso`, `iso_pmae`, `iso_teambias`),
+  each adding ONE new component on top of the working
+  `baseline_multitask_repro` config from foundation-mvp-740.
+- **Halted `iso_uwso` at epoch 2** when omega collapsed to 1.000 for
+  items and train_win started INCREASING — exactly the foundation-mvp
+  failure pattern. Math-deterministic: omega=1.000 means win head's
+  gradient is identically zero, model can't recover. Saved ~4-5h of
+  wasted compute. The new monitoring discipline worked as designed.
+- **iso_pmae completed**: val_auc=0.6464 @ best=21 (Δ=-0.0006 vs anchor
+  0.6470). PMAE with EMA-teacher fix is SAFE.
+- **iso_teambias completed**: val_auc=0.6493 @ best=14 (Δ=+0.0023 vs
+  anchor). (team, team) attention bias is HELPFUL — ~64-param addition
+  gives real lift.
+- **Rolled up v2 artifacts** + committed `5cbcaec`.
+- **Audited code** on user's question: KDA/GPM/HD already use SmoothL1
+  regression; **duration is STILL 8-bucket CE** — never got switched.
+  Fixing in v3.
+
+### Findings
+
+- **The full diagnostic story of foundation-mvp-740 is now clean.**
+  UW-SO (as we implemented it, with or without per-task initial-loss
+  normalization) is broken on this multi-task setup. PMAE was broken
+  BECAUSE OF Bug A (student=teacher BYOL/JEPA collapse); the EMA-teacher
+  fix makes it neutral-safe. (team, team) attention bias is a small but
+  genuine win at ~64 params.
+- **Live monitoring saved ~4-5h** on this experiment alone. The pattern
+  is now reliable: poll log every 30-45 min, look for train loss
+  increasing + val at random + multi-task weight collapse + NaN/Inf.
+  When the pattern is unambiguous (omega=1.000 means deterministic
+  failure), halt at 2 epochs not 3.
+- **Duration regression switch was never made** in foundation-mvp or
+  component-isolation. The proposal text said "1 scalar SmoothL1 on
+  log(seconds)" but the subagent kept multitask-740's 8-bucket CE.
+  v3 fixes this.
+- **The v3 design is now grounded in evidence**: drop UW-SO; keep
+  canonical hero sort + (team, team) bias + PMAE w/ EMA; revert to
+  hand-tuned α weights; ADD duration regression; test patch token on
+  broader cross-patch data.
+
+### Next
+
+- **`foundation-v3-740`** (PROPOSED). All v2 evidence-driven design
+  decisions + duration switched to regression + patch token now
+  meaningful on broader cross-patch corpus. Needs ~3-4h CPU prebuild
+  to extend player aggregates + rich-cols sidecar over Aug 2025 →
+  Feb 2026, then ~6-7h training. Target val_auc ≥ 0.6510.
+- **(Long-term)** Inference wrapper / personal-use tool: take
+  (draft + 10 player aggregates) → (win_prob, duration-curve via
+  regression head, item top-K per slot). Standalone CLI/notebook.
+- **(Long-term)** Once foundation works, downstream queries
+  (hero-pair synergy, lineup-vs-lineup, item rec conditioned on
+  net_worth, fun-pair) per the original foundation framing.
+- **(Carryover, deferred)** `anonymous-aware-modeling-740` — compounds
+  with foundation.
+- **(Carryover, deferred)** `player-features-decay-740` — smaller.
+- **(Carryover, deferred)** DVC formalization, HCE-vs-prior-art ADR.
+
