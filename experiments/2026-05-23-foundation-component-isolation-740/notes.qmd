@@ -1,0 +1,21 @@
+---
+title: "foundation-component-isolation-740 notes"
+format: html
+---
+
+# Live notes
+
+Diagnostic isolation experiment. Each iso_* ablation = baseline_multitask_repro + ONE new component on top.
+
+## Bug-fixes applied vs foundation-mvp-740
+
+- PMAE: EMA teacher (was: shared-weight teacher -> trivial collapse).
+- UW-SO: per-task initial-loss normalization (was: raw losses, low-magnitude tasks dominated).
+
+## Smoke results
+
+(fill in)
+
+## Per-ablation epoch-by-epoch
+
+(fill in: read metrics_iso_*.json `history` field, plot val_win_auc + omega + mae stats)

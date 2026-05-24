@@ -2,7 +2,9 @@
 kind: proposal
 slug: foundation-component-isolation-740
 date: 2026-05-23
-status: proposed
+status: implemented
+experiment: experiments/2026-05-23-foundation-component-isolation-740/
+result: "CLEAN ATTRIBUTION. iso_uwso HALTED early at epoch 2 per new monitoring discipline (omega→1.000 to items by epoch 2, val_auc=0.5276, train_win INCREASING — UW-SO is the saboteur; the per-task initial-loss-normalization fix attempt was insufficient because items per-class BCE converges to ~0.08 within ~100 batches, capturing a too-low L_k_init baseline). iso_pmae val_auc=0.6464 @ best=21 (-0.0006 vs anchor) — SAFE with the EMA-teacher fix (Bug A root cause was the original BYOL/JEPA student=teacher collapse). iso_teambias val_auc=0.6493 @ best=14 (+0.0023 vs anchor) — HELPFUL; the ~64-param (team_query, team_key) attention bias gives a real lift. v3 design: keep canonical hero sort + (team, team) bias + PMAE with EMA teacher; drop UW-SO, revert to multitask-740's hand-tuned α (1.0/0.15/0.3/0.1); test patch token on broader cross-patch data. Live monitoring per the new discipline saved ~4-5h by halting iso_uwso early."
 hypothesis: "Of the four new components added in `foundation-mvp-740` (PMAE auxiliary objective, UW-SO loss weighting, (team_query, team_key) attention bias, patch_id token) on top of the working multitask baseline, AT LEAST ONE introduces the training instability that caused val_auc to collapse to 0.5058 (random). Component-isolation ablations — each new component added individually on top of the known-good 5M-param `baseline_multitask_repro` — will identify which component(s) are the saboteur(s) AND which are safe. After isolation, a `foundation-v3` experiment can re-introduce only the safe components plus targeted fixes for the broken ones."
 rationale: >
   `foundation-mvp-740` (2026-05-22) returned a clean diagnostic

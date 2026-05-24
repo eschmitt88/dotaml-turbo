@@ -1,0 +1,121 @@
+===== foundation-component-isolation-740 run_all START 2026-05-23T18:06:58+00:00 =====
+[2026-05-23T18:06:58+00:00] inputs verified.
+[2026-05-23T18:06:58+00:00] STEP 1/4: smoke all isolation ablations
+Ablation: iso_uwso (features=True patch=False team_bias=False pmae=False uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.2s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  epoch 1/1  tr[w=0.7223 d=2.8001 i=0.75357 kda=0.5638 gpm=0.6294 hd=0.4401 mae=0.0000 tot=0.9849]  vl_win=0.6933  val_auc=0.5191  dur_acc=0.1245  itemMAP=0.005396655760705471  lr=2.90e-05  T=1.0  alpha_mae=0.100  (1.6s)
+    omega(win,dur,item,kda,gpm,hd) = [0.167, 0.167, 0.167, 0.167, 0.167, 0.167]
+Training done in 1.6s -- best val_auc=0.5191 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-23-foundation-component-isolation-740/metrics_smoke_iso_uwso.json
+Ablation: iso_pmae (features=True patch=False team_bias=False pmae=True uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.0s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  EMA teacher constructed momentum=0.996
+  epoch 1/1  tr[w=0.7251 d=2.6646 i=0.73998 kda=0.4723 gpm=0.5452 hd=0.4365 mae=0.1757 tot=1.5953]  vl_win=0.6992  val_auc=0.4845  dur_acc=0.1153  itemMAP=0.0045309290289878845  lr=2.90e-05  T=None  alpha_mae=0.100  (1.8s)
+    pmae: hero_mask_frac=0.396 (count=2006.3) patch_mask_frac=0.000 s_l2=16.0002 t_l2=16.0000
+Training done in 1.8s -- best val_auc=0.4845 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-23-foundation-component-isolation-740/metrics_smoke_iso_pmae.json
+Ablation: iso_teambias (features=True patch=False team_bias=True pmae=False uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train_smoke.parquet
+  train rows: 379,585
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val_smoke.parquet
+  SMOKE: val parquet missing/empty; carving tail 37,958 off train.
+  val   rows: 37,958
+  vocab: item_vocab_size=305, duration_buckets=8
+  SMOKE: val sidecar empty; routing val join through train sidecar.
+  rich-cols sidecar: train=train_smoke.parquet, val=train_smoke.parquet
+  joining train sidecar...
+    sidecar read: 16,316 rows (filtered to clean set)
+    NOTE: dropping 33,684 clean-parquet rows with no sidecar match.
+    items vectorized in 0.3s
+  joining val sidecar...
+    sidecar read: 0 rows (filtered to clean set)
+    NOTE: dropping 5,000 clean-parquet rows with no sidecar match.
+    items vectorized in 0.0s
+  SMOKE: val join empty; carving tail 1,631 off joined train.
+Data ready in 1.0s -- train=14,685 val=1,631
+  train dates 2025-12-16..2025-12-18
+  val   dates 2025-12-18..2025-12-18
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797}, device=cuda
+  epoch 1/1  tr[w=0.7190 d=2.8182 i=0.74803 kda=0.5688 gpm=0.6225 hd=0.4490 mae=0.0000 tot=1.5302]  vl_win=0.6919  val_auc=0.4859  dur_acc=0.1208  itemMAP=0.0050418381579220295  lr=2.90e-05  T=None  alpha_mae=0.100  (1.8s)
+Training done in 1.9s -- best val_auc=0.4859 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-23-foundation-component-isolation-740/metrics_smoke_iso_teambias.json
+[2026-05-23T18:07:14+00:00] STEP 1/4: smoke DONE
+[2026-05-23T18:07:14+00:00] STEP 2/4: iso_uwso
+[2026-05-23T18:07:14+00:00] train.py iso_uwso attempt 1/3 START 
+Ablation: iso_uwso (features=True patch=False team_bias=False pmae=False uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 80.2s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 102.2s
+Data ready in 298.2s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  epoch 1/30  tr[w=0.6951 d=2.0920 i=0.08195 kda=0.4677 gpm=0.2668 hd=0.4042 mae=0.0000 tot=0.0861]  vl_win=0.6961  val_auc=0.5380  dur_acc=0.1512  itemMAP=0.32723715901374817  lr=9.98e-04  T=0.4960181713104248  alpha_mae=0.970  (537.7s)
+    omega(win,dur,item,kda,gpm,hd) = [0.002, 0.002, 0.988, 0.002, 0.002, 0.002]
+  epoch 2/30  tr[w=0.7041 d=2.1120 i=0.07171 kda=0.4790 gpm=0.2764 hd=0.4230 mae=0.0000 tot=0.0717]  vl_win=0.7062  val_auc=0.5276  dur_acc=0.1448  itemMAP=0.33041617274284363  lr=9.90e-04  T=0.3624773621559143  alpha_mae=0.940  (585.5s)
+    omega(win,dur,item,kda,gpm,hd) = [0.000, 0.000, 1.000, 0.000, 0.000, 0.000]
+Terminated
+[2026-05-23T18:39:08+00:00] iso_uwso attempt 1 FAILED rc=143
+[2026-05-23T18:39:13+00:00] train.py iso_uwso attempt 2/3 START 
+Ablation: iso_uwso (features=True patch=False team_bias=False pmae=False uw_so=True)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)

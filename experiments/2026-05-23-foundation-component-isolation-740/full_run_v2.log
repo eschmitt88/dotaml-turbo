@@ -1,0 +1,122 @@
+===== iso_pmae + iso_teambias only (iso_uwso halted at epoch 2 — omega->1.000 to items, deterministic failure) START 2026-05-23T18:40:29+00:00 =====
+[2026-05-23T18:40:29+00:00] iso_pmae START
+[2026-05-23T18:40:29+00:00] train.py iso_pmae attempt 1/3 START
+Ablation: iso_pmae (features=True patch=False team_bias=False pmae=True uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 81.6s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 102.8s
+Data ready in 299.5s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452285, 'trainable': 6452285, 'embedding': 49920, 'non_embedding': 6402365}, device=cuda
+  EMA teacher constructed momentum=0.996
+  epoch 1/30  tr[w=0.6797 d=2.0708 i=0.09770 kda=0.4486 gpm=0.2531 hd=0.3881 mae=0.0362 tot=1.1642]  vl_win=0.6689  val_auc=0.6198  dur_acc=0.1696  itemMAP=0.13428393006324768  lr=9.98e-04  T=None  alpha_mae=0.970  (591.1s)
+    pmae: hero_mask_frac=0.406 (count=2078.5) patch_mask_frac=0.000 s_l2=11.7590 t_l2=12.5844
+  epoch 2/30  tr[w=0.6733 d=2.0596 i=0.09022 kda=0.4430 gpm=0.2463 hd=0.3814 mae=0.0545 tot=1.1684]  vl_win=0.6654  val_auc=0.6260  dur_acc=0.1742  itemMAP=0.15829315781593323  lr=9.90e-04  T=None  alpha_mae=0.940  (638.6s)
+    pmae: hero_mask_frac=0.406 (count=2077.6) patch_mask_frac=0.000 s_l2=11.9403 t_l2=13.1245
+  epoch 3/30  tr[w=0.6719 d=2.0576 i=0.08931 kda=0.4408 gpm=0.2436 hd=0.3790 mae=0.0741 tot=1.1821]  vl_win=0.6630  val_auc=0.6316  dur_acc=0.1749  itemMAP=0.17958983778953552  lr=9.77e-04  T=None  alpha_mae=0.910  (638.3s)
+    pmae: hero_mask_frac=0.406 (count=2077.9) patch_mask_frac=0.000 s_l2=13.9889 t_l2=15.5502
+  epoch 4/30  tr[w=0.6712 d=2.0564 i=0.08848 kda=0.4390 gpm=0.2419 hd=0.3774 mae=0.0958 tot=1.1978]  vl_win=0.6626  val_auc=0.6332  dur_acc=0.1764  itemMAP=0.1946152299642563  lr=9.59e-04  T=None  alpha_mae=0.880  (641.5s)
+    pmae: hero_mask_frac=0.406 (count=2078.7) patch_mask_frac=0.000 s_l2=14.7554 t_l2=16.8131
+  epoch 5/30  tr[w=0.6707 d=2.0555 i=0.08763 kda=0.4378 gpm=0.2407 hd=0.3759 mae=0.0939 tot=1.1919]  vl_win=0.6630  val_auc=0.6356  dur_acc=0.1742  itemMAP=0.2075798362493515  lr=9.36e-04  T=None  alpha_mae=0.850  (637.6s)
+    pmae: hero_mask_frac=0.406 (count=2078.5) patch_mask_frac=0.000 s_l2=14.2835 t_l2=16.2527
+  epoch 6/30  tr[w=0.6701 d=2.0548 i=0.08695 kda=0.4370 gpm=0.2398 hd=0.3752 mae=0.0908 tot=1.1855]  vl_win=0.6595  val_auc=0.6376  dur_acc=0.1781  itemMAP=0.22621119022369385  lr=9.08e-04  T=None  alpha_mae=0.820  (638.7s)
+    pmae: hero_mask_frac=0.406 (count=2078.4) patch_mask_frac=0.000 s_l2=13.7430 t_l2=15.6773
+  epoch 7/30  tr[w=0.6697 d=2.0542 i=0.08636 kda=0.4361 gpm=0.2389 hd=0.3742 mae=0.0875 tot=1.1790]  vl_win=0.6605  val_auc=0.6382  dur_acc=0.1768  itemMAP=0.24149461090564728  lr=8.76e-04  T=None  alpha_mae=0.790  (636.8s)
+    pmae: hero_mask_frac=0.406 (count=2078.0) patch_mask_frac=0.000 s_l2=14.3271 t_l2=16.0671
+  epoch 8/30  tr[w=0.6694 d=2.0538 i=0.08584 kda=0.4352 gpm=0.2381 hd=0.3732 mae=0.0888 tot=1.1767]  vl_win=0.6590  val_auc=0.6393  dur_acc=0.1783  itemMAP=0.26732495427131653  lr=8.39e-04  T=None  alpha_mae=0.760  (638.6s)
+    pmae: hero_mask_frac=0.406 (count=2078.2) patch_mask_frac=0.000 s_l2=16.0290 t_l2=17.6268
+  epoch 9/30  tr[w=0.6690 d=2.0534 i=0.08531 kda=0.4342 gpm=0.2371 hd=0.3721 mae=0.0924 tot=1.1758]  vl_win=0.6588  val_auc=0.6391  dur_acc=0.1773  itemMAP=0.283344566822052  lr=7.99e-04  T=None  alpha_mae=0.730  (582.2s)
+    pmae: hero_mask_frac=0.406 (count=2078.1) patch_mask_frac=0.000 s_l2=17.6483 t_l2=19.1562
+  epoch 10/30  tr[w=0.6688 d=2.0531 i=0.08503 kda=0.4337 gpm=0.2366 hd=0.3716 mae=0.1006 tot=1.1784]  vl_win=0.6585  val_auc=0.6408  dur_acc=0.1757  itemMAP=0.29049134254455566  lr=7.56e-04  T=None  alpha_mae=0.700  (636.2s)
+    pmae: hero_mask_frac=0.406 (count=2079.4) patch_mask_frac=0.000 s_l2=19.0374 t_l2=20.5690
+  epoch 11/30  tr[w=0.6687 d=2.0528 i=0.08484 kda=0.4332 gpm=0.2361 hd=0.3712 mae=0.1056 tot=1.1785]  vl_win=0.6581  val_auc=0.6414  dur_acc=0.1779  itemMAP=0.29807034134864807  lr=7.09e-04  T=None  alpha_mae=0.670  (639.2s)
+    pmae: hero_mask_frac=0.406 (count=2077.8) patch_mask_frac=0.000 s_l2=22.0726 t_l2=23.4673
+  epoch 12/30  tr[w=0.6683 d=2.0526 i=0.08471 kda=0.4329 gpm=0.2359 hd=0.3709 mae=0.1071 tot=1.1757]  vl_win=0.6574  val_auc=0.6420  dur_acc=0.1768  itemMAP=0.30010953545570374  lr=6.61e-04  T=None  alpha_mae=0.640  (637.7s)
+    pmae: hero_mask_frac=0.406 (count=2078.5) patch_mask_frac=0.000 s_l2=24.8576 t_l2=26.1202
+  epoch 13/30  tr[w=0.6681 d=2.0523 i=0.08461 kda=0.4327 gpm=0.2357 hd=0.3707 mae=0.1123 tot=1.1753]  vl_win=0.6577  val_auc=0.6412  dur_acc=0.1778  itemMAP=0.3040781021118164  lr=6.11e-04  T=None  alpha_mae=0.610  (639.9s)
+    pmae: hero_mask_frac=0.406 (count=2078.5) patch_mask_frac=0.000 s_l2=27.5183 t_l2=28.7139
+  epoch 14/30  tr[w=0.6678 d=2.0520 i=0.08454 kda=0.4325 gpm=0.2354 hd=0.3705 mae=0.1209 tot=1.1767]  vl_win=0.6575  val_auc=0.6421  dur_acc=0.1776  itemMAP=0.3045717775821686  lr=5.60e-04  T=None  alpha_mae=0.580  (639.5s)
+    pmae: hero_mask_frac=0.406 (count=2078.3) patch_mask_frac=0.000 s_l2=28.3387 t_l2=29.6003
+  epoch 15/30  tr[w=0.6677 d=2.0519 i=0.08448 kda=0.4323 gpm=0.2353 hd=0.3703 mae=0.1275 tot=1.1766]  vl_win=0.6574  val_auc=0.6426  dur_acc=0.1781  itemMAP=0.30532050132751465  lr=5.08e-04  T=None  alpha_mae=0.550  (639.2s)
+    pmae: hero_mask_frac=0.406 (count=2078.7) patch_mask_frac=0.000 s_l2=28.2152 t_l2=29.5404
+  epoch 16/30  tr[w=0.6673 d=2.0517 i=0.08442 kda=0.4321 gpm=0.2351 hd=0.3701 mae=0.1381 tot=1.1780]  vl_win=0.6566  val_auc=0.6439  dur_acc=0.1796  itemMAP=0.30775025486946106  lr=4.56e-04  T=None  alpha_mae=0.520  (581.5s)
+    pmae: hero_mask_frac=0.406 (count=2078.1) patch_mask_frac=0.000 s_l2=28.4660 t_l2=29.9089
+  epoch 17/30  tr[w=0.6670 d=2.0515 i=0.08437 kda=0.4320 gpm=0.2350 hd=0.3700 mae=0.1435 tot=1.1762]  vl_win=0.6557  val_auc=0.6450  dur_acc=0.1796  itemMAP=0.31052348017692566  lr=4.04e-04  T=None  alpha_mae=0.490  (639.8s)
+    pmae: hero_mask_frac=0.406 (count=2078.7) patch_mask_frac=0.000 s_l2=28.7479 t_l2=30.2483
+  epoch 18/30  tr[w=0.6668 d=2.0513 i=0.08433 kda=0.4319 gpm=0.2348 hd=0.3699 mae=0.1374 tot=1.1687]  vl_win=0.6553  val_auc=0.6458  dur_acc=0.1789  itemMAP=0.31220221519470215  lr=3.54e-04  T=None  alpha_mae=0.460  (639.4s)
+    pmae: hero_mask_frac=0.406 (count=2078.5) patch_mask_frac=0.000 s_l2=29.5616 t_l2=30.9132
+  epoch 19/30  tr[w=0.6664 d=2.0510 i=0.08430 kda=0.4317 gpm=0.2347 hd=0.3698 mae=0.1435 tot=1.1669]  vl_win=0.6563  val_auc=0.6456  dur_acc=0.1792  itemMAP=0.31097522377967834  lr=3.05e-04  T=None  alpha_mae=0.430  (639.9s)
+    pmae: hero_mask_frac=0.406 (count=2078.4) patch_mask_frac=0.000 s_l2=29.8684 t_l2=31.2892
+  epoch 20/30  tr[w=0.6661 d=2.0510 i=0.08426 kda=0.4316 gpm=0.2346 hd=0.3697 mae=0.1531 tot=1.1661]  vl_win=0.6556  val_auc=0.6465  dur_acc=0.1790  itemMAP=0.3124556541442871  lr=2.59e-04  T=None  alpha_mae=0.400  (636.7s)
+    pmae: hero_mask_frac=0.406 (count=2078.9) patch_mask_frac=0.000 s_l2=28.7025 t_l2=30.2988
+  epoch 21/30  tr[w=0.6659 d=2.0506 i=0.08423 kda=0.4315 gpm=0.2345 hd=0.3695 mae=0.1567 tot=1.1626]  vl_win=0.6552  val_auc=0.6464  dur_acc=0.1802  itemMAP=0.3132861852645874  lr=2.15e-04  T=None  alpha_mae=0.370  (639.7s)
+    pmae: hero_mask_frac=0.406 (count=2078.6) patch_mask_frac=0.000 s_l2=29.2027 t_l2=30.7987
+  epoch 22/30  tr[w=0.6655 d=2.0506 i=0.08420 kda=0.4314 gpm=0.2344 hd=0.3695 mae=0.1584 tot=1.1581]  vl_win=0.6554  val_auc=0.6466  dur_acc=0.1799  itemMAP=0.31441402435302734  lr=1.75e-04  T=None  alpha_mae=0.340  (638.5s)
+    pmae: hero_mask_frac=0.406 (count=2078.2) patch_mask_frac=0.000 s_l2=29.6542 t_l2=31.2528
+  epoch 23/30  tr[w=0.6654 d=2.0504 i=0.08418 kda=0.4313 gpm=0.2343 hd=0.3694 mae=0.1609 tot=1.1540]  vl_win=0.6556  val_auc=0.6468  dur_acc=0.1803  itemMAP=0.314216673374176  lr=1.38e-04  T=None  alpha_mae=0.310  (585.0s)
+    pmae: hero_mask_frac=0.406 (count=2078.7) patch_mask_frac=0.000 s_l2=29.7520 t_l2=31.3718
+  epoch 24/30  tr[w=0.6651 d=2.0502 i=0.08416 kda=0.4312 gpm=0.2342 hd=0.3693 mae=0.1648 tot=1.1499]  vl_win=0.6556  val_auc=0.6465  dur_acc=0.1803  itemMAP=0.3140855133533478  lr=1.05e-04  T=None  alpha_mae=0.280  (638.3s)
+    pmae: hero_mask_frac=0.406 (count=2078.3) patch_mask_frac=0.000 s_l2=30.1092 t_l2=31.7506
+  epoch 25/30  tr[w=0.6648 d=2.0501 i=0.08414 kda=0.4311 gpm=0.2341 hd=0.3693 mae=0.1652 tot=1.1448]  vl_win=0.6555  val_auc=0.6474  dur_acc=0.1801  itemMAP=0.31414279341697693  lr=7.68e-05  T=None  alpha_mae=0.250  (639.6s)
+    pmae: hero_mask_frac=0.406 (count=2078.3) patch_mask_frac=0.000 s_l2=30.0700 t_l2=31.7218
+  epoch 26/30  tr[w=0.6647 d=2.0500 i=0.08413 kda=0.4311 gpm=0.2341 hd=0.3692 mae=0.1641 tot=1.1394]  vl_win=0.6557  val_auc=0.6471  dur_acc=0.1801  itemMAP=0.31450048089027405  lr=5.31e-05  T=None  alpha_mae=0.220  (642.0s)
+    pmae: hero_mask_frac=0.406 (count=2078.7) patch_mask_frac=0.000 s_l2=30.2949 t_l2=31.9173
+  early stop at epoch 26 (best 21)
+Training done in 16395.7s -- best val_auc=0.6464 @ epoch 21
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-23-foundation-component-isolation-740/metrics_iso_pmae.json
+[2026-05-23T23:18:57+00:00] iso_pmae attempt 1 SUCCESS
+[2026-05-23T23:18:57+00:00] iso_teambias START
+[2026-05-23T23:18:57+00:00] train.py iso_teambias attempt 1/3 START
+Ablation: iso_teambias (features=True patch=False team_bias=True pmae=False uw_so=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/train.parquet
+  train rows: 13,018,393
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 81.6s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 102.5s
+Data ready in 299.7s -- train=5,000,000 val=2,419,185
+  train dates 2025-12-16..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797}, device=cuda
+  epoch 1/30  tr[w=0.6676 d=2.0576 i=0.09686 kda=0.4415 gpm=0.2440 hd=0.3783 mae=0.0000 tot=1.1117]  vl_win=0.6624  val_auc=0.6327  dur_acc=0.1713  itemMAP=0.17392376065254211  lr=9.98e-04  T=None  alpha_mae=0.970  (590.5s)
+  epoch 2/30  tr[w=0.6565 d=2.0414 i=0.07893 kda=0.4086 gpm=0.2135 hd=0.3462 mae=0.0000 tot=1.0832]  vl_win=0.6587  val_auc=0.6414  dur_acc=0.1755  itemMAP=0.3066275417804718  lr=9.90e-04  T=None  alpha_mae=0.940  (639.1s)
+  epoch 3/30  tr[w=0.6538 d=2.0377 i=0.07345 kda=0.4032 gpm=0.2080 hd=0.3406 mae=0.0000 tot=1.0767]  vl_win=0.6564  val_auc=0.6443  dur_acc=0.1788  itemMAP=0.3161590099334717  lr=9.77e-04  T=None  alpha_mae=0.910  (635.7s)
+  epoch 4/30  tr[w=0.6525 d=2.0361 i=0.07293 kda=0.4019 gpm=0.2071 hd=0.3396 mae=0.0000 tot=1.0747]  vl_win=0.6563  val_auc=0.6443  dur_acc=0.1772  itemMAP=0.319234699010849  lr=9.59e-04  T=None  alpha_mae=0.880  (639.3s)
+  epoch 5/30  tr[w=0.6515 d=2.0350 i=0.07257 kda=0.4007 gpm=0.2061 hd=0.3385 mae=0.0000 tot=1.0731]  vl_win=0.6558  val_auc=0.6472  dur_acc=0.1793  itemMAP=0.3210306465625763  lr=9.36e-04  T=None  alpha_mae=0.850  (640.1s)
+  epoch 6/30  tr[w=0.6509 d=2.0343 i=0.07247 kda=0.4002 gpm=0.2057 hd=0.3380 mae=0.0000 tot=1.0722]  vl_win=0.6548  val_auc=0.6471  dur_acc=0.1806  itemMAP=0.3220863342285156  lr=9.08e-04  T=None  alpha_mae=0.820  (636.2s)
+  epoch 7/30  tr[w=0.6502 d=2.0338 i=0.07240 kda=0.3999 gpm=0.2054 hd=0.3377 mae=0.0000 tot=1.0713]  vl_win=0.6548  val_auc=0.6471  dur_acc=0.1802  itemMAP=0.3220091760158539  lr=8.76e-04  T=None  alpha_mae=0.790  (637.4s)
+  epoch 8/30  tr[w=0.6497 d=2.0334 i=0.07230 kda=0.3994 gpm=0.2051 hd=0.3373 mae=0.0000 tot=1.0705]  vl_win=0.6549  val_auc=0.6473  dur_acc=0.1817  itemMAP=0.321860671043396  lr=8.39e-04  T=None  alpha_mae=0.760  (579.5s)
+  epoch 9/30  tr[w=0.6492 d=2.0331 i=0.07228 kda=0.3993 gpm=0.2049 hd=0.3372 mae=0.0000 tot=1.0700]  vl_win=0.6548  val_auc=0.6484  dur_acc=0.1807  itemMAP=0.3233991265296936  lr=7.99e-04  T=None  alpha_mae=0.730  (636.2s)
+  epoch 10/30  tr[w=0.6487 d=2.0327 i=0.07229 kda=0.3991 gpm=0.2048 hd=0.3370 mae=0.0000 tot=1.0693]  vl_win=0.6543  val_auc=0.6489  dur_acc=0.1808  itemMAP=0.3232743442058563  lr=7.56e-04  T=None  alpha_mae=0.700  (636.4s)
+  epoch 11/30  tr[w=0.6482 d=2.0324 i=0.07228 kda=0.3990 gpm=0.2047 hd=0.3369 mae=0.0000 tot=1.0687]  vl_win=0.6547  val_auc=0.6483  dur_acc=0.1808  itemMAP=0.32420751452445984  lr=7.09e-04  T=None  alpha_mae=0.670  (637.2s)
+  epoch 12/30  tr[w=0.6476 d=2.0320 i=0.07220 kda=0.3986 gpm=0.2043 hd=0.3365 mae=0.0000 tot=1.0680]  vl_win=0.6540  val_auc=0.6486  dur_acc=0.1811  itemMAP=0.32402747869491577  lr=6.61e-04  T=None  alpha_mae=0.640  (635.8s)
+  epoch 13/30  tr[w=0.6469 d=2.0317 i=0.07218 kda=0.3985 gpm=0.2042 hd=0.3364 mae=0.0000 tot=1.0672]  vl_win=0.6541  val_auc=0.6493  dur_acc=0.1817  itemMAP=0.32405099272727966  lr=6.11e-04  T=None  alpha_mae=0.610  (635.8s)
+  epoch 14/30  tr[w=0.6463 d=2.0313 i=0.07213 kda=0.3982 gpm=0.2039 hd=0.3362 mae=0.0000 tot=1.0664]  vl_win=0.6539  val_auc=0.6493  dur_acc=0.1810  itemMAP=0.3254927694797516  lr=5.60e-04  T=None  alpha_mae=0.580  (636.2s)
+  epoch 15/30  tr[w=0.6456 d=2.0310 i=0.07215 kda=0.3981 gpm=0.2038 hd=0.3361 mae=0.0000 tot=1.0657]  vl_win=0.6543  val_auc=0.6487  dur_acc=0.1818  itemMAP=0.32506150007247925  lr=5.08e-04  T=None  alpha_mae=0.550  (638.8s)
+  epoch 16/30  tr[w=0.6448 d=2.0306 i=0.07210 kda=0.3979 gpm=0.2036 hd=0.3359 mae=0.0000 tot=1.0647]  vl_win=0.6543  val_auc=0.6488  dur_acc=0.1820  itemMAP=0.32582518458366394  lr=4.56e-04  T=None  alpha_mae=0.520  (580.2s)
+  epoch 17/30  tr[w=0.6440 d=2.0302 i=0.07207 kda=0.3977 gpm=0.2034 hd=0.3357 mae=0.0000 tot=1.0638]  vl_win=0.6541  val_auc=0.6494  dur_acc=0.1820  itemMAP=0.3261626958847046  lr=4.04e-04  T=None  alpha_mae=0.490  (635.9s)
+  epoch 18/30  tr[w=0.6431 d=2.0298 i=0.07206 kda=0.3975 gpm=0.2032 hd=0.3355 mae=0.0000 tot=1.0628]  vl_win=0.6543  val_auc=0.6493  dur_acc=0.1824  itemMAP=0.32610204815864563  lr=3.54e-04  T=None  alpha_mae=0.460  (635.6s)
+  epoch 19/30  tr[w=0.6420 d=2.0294 i=0.07204 kda=0.3973 gpm=0.2030 hd=0.3354 mae=0.0000 tot=1.0616]  vl_win=0.6553  val_auc=0.6482  dur_acc=0.1818  itemMAP=0.32592180371284485  lr=3.05e-04  T=None  alpha_mae=0.430  (637.4s)
+  early stop at epoch 19 (best 14)
+Training done in 11943.5s -- best val_auc=0.6493 @ epoch 14
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-23-foundation-component-isolation-740/metrics_iso_teambias.json
+[2026-05-24T02:43:13+00:00] iso_teambias attempt 1 SUCCESS
+===== DONE iso_pmae=0 iso_teambias=0 2026-05-24T02:43:13+00:00 =====
