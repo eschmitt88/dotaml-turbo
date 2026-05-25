@@ -1,0 +1,36 @@
+===== v4-iso-teambias-extended-740 run_all START 2026-05-25T18:01:01+00:00 =====
+[2026-05-25T18:01:01+00:00] STEP 1/2: smoke v4_iso_teambias_extended
+Ablation: v4_iso_teambias_extended (features=True patch=False team_bias=True pmae=False dur_loss_mode=ce player_emb=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train_smoke.parquet
+  train rows: 401,864
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val_smoke.parquet
+  val   rows: 163,190
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train_smoke.parquet, val=val_smoke.parquet
+  joining train sidecar...
+    sidecar read: 50,000 rows (filtered to clean set)
+    items vectorized in 1.0s
+  joining val sidecar...
+    sidecar read: 5,000 rows (filtered to clean set)
+    items vectorized in 0.1s
+Data ready in 2.3s -- train=50,000 val=5,000
+  train dates 2025-09-15..2025-12-20
+  val   dates 2026-02-25..2026-02-25
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797, 'player_embedding': 0}, device=cuda
+  epoch 1/1  tr[w=0.6991 d=2.3146 i=0.57766 kda=0.4588 gpm=0.4872 hd=0.4013 mae=0.0000 tot=1.3543]  vl_win=0.6908  val_auc=0.5207  dur_top1=0.1138 dur_mae_log=0.2147 dur_pearson=0.0013  itemMAP=0.005669792648404837  lr=9.80e-05  alpha_mae=0.100  (5.2s)
+    patch_auc: {'1': {'n': 5000, 'val_auc': 0.5206853396700042}}
+Training done in 5.2s -- best val_auc=0.5207 @ epoch 1
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-25-v4-iso-teambias-extended-740/metrics_smoke_v4_iso_teambias_extended.json
+[2026-05-25T18:01:11+00:00] STEP 1/2 DONE
+[2026-05-25T18:01:11+00:00] STEP 2/2: v4_iso_teambias_extended full training
+[2026-05-25T18:01:11+00:00] train.py v4_iso_teambias_extended attempt 1/3 START
+Ablation: v4_iso_teambias_extended (features=True patch=False team_bias=True pmae=False dur_loss_mode=ce player_emb=False)
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train.parquet
+  train rows: 32,641,476
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)

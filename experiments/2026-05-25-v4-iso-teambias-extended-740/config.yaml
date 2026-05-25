@@ -1,0 +1,231 @@
+# Config for v4-iso-teambias-extended-740.
+#
+# Forked from experiments/2026-05-25-v3-ablations-740/config.yaml.
+# Single ablation:
+#   - v4_iso_teambias_extended : run the v2-winner architecture (iso_teambias
+#                                = baseline_multitask_repro + (team_query,
+#                                team_key) attention bias, NO PMAE, NO patch
+#                                token, NO UW-SO, 8-bucket CE duration head,
+#                                hand-tuned multitask alpha) on the EXTENDED
+#                                cross-patch training corpus.
+#
+# This isolates the cross-patch data-extension axis as a single factor on the
+# architecturally-cleanest known-good design. iso_teambias hit val_auc=0.6493
+# on 7.40-only data; v3 hit val_auc=0.6462 on the extended corpus. Three
+# possible outcomes for v4 cleanly attribute v3's 0.0031 regression:
+#   - v4 >= 0.6493 -> extended data neutral/helpful; regression came from
+#                     PMAE/composition.
+#   - v4 in [0.6470, 0.6493) -> extended data costs a little.
+#   - v4 < 0.6470 -> extended data IS the regression cause.
+#
+# Reuses the existing EXTENDED player_features + rich_cols sidecar parquets
+# verbatim (do NOT rebuild — 3.1G train + 5.5G train, expensive).
+# No account_id sidecar needed: use_player_embedding=False.
+#
+# HCE-strict: data.py refuses to walk test-window dates [2026-03-10, 2026-03-23].
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+anonymous_account_ids: [0, 4294967295]
+
+player_features_transformer:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_extended"
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+rich_cols:
+  out_dir: "data/snapshots/7.40-2025-12-16/processed/rich_cols_extended"
+  train_filename: "train.parquet"
+  val_filename: "val.parquet"
+  smoke_train_filename: "train_smoke.parquet"
+  smoke_val_filename: "val_smoke.parquet"
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+  feat_bounds:
+    duration:        [0, 7200]
+    kills:           [0, 100]
+    deaths:          [0, 100]
+    assists:         [0, 100]
+    gpm:             [0, 5000]
+    xpm:             [0, 5000]
+    hero_damage:     [0, 500000]
+    net_worth:       [0, 500000]
+
+# Account sidecar is unused for v4 (use_player_embedding=false), but
+# data.py still expects the keys to exist when iterating config. Provide
+# the prior 7.40-only val/train sidecars as no-op stubs — they will be
+# loaded but ignored (account_idx tensor will be emitted all-zero
+# since the model path that consumes it is disabled).
+account_sidecar:
+  raw_roots:
+    - "data/history/turbo"
+    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+  prior_sidecar_train_path:
+    "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_train.parquet"
+  prior_sidecar_val_path:
+    "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_val.parquet"
+  extended_train_out:
+    "experiments/2026-05-25-v3-ablations-740/sidecar/account_ids_train_extended.parquet"
+  smoke_extended_train_out:
+    "experiments/2026-05-25-v3-ablations-740/sidecar/account_ids_train_extended_smoke.parquet"
+  train_paths:
+    - "experiments/2026-05-25-v3-ablations-740/sidecar/account_ids_train_extended.parquet"
+    - "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_train.parquet"
+  val_paths:
+    - "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_val.parquet"
+  smoke_train_paths:
+    - "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_train.parquet"
+  smoke_val_paths:
+    - "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_val.parquet"
+
+# player_embedding config is here only because train.py reads it on init.
+# enabled=false ensures no embedding lookup occurs at any layer for v4.
+player_embedding:
+  enabled: false
+  vocab_top_n: 30000
+  n_hash_buckets: 1024
+  hash_base_idx: 30001
+  embed_dim: 128
+  init_std: 0.02
+  vocab_path: "vocab/player_id_vocab.json"
+
+item_vocab:
+  vocab_path: "../2026-05-20-rich-supervision-multitask-740/results/item_vocab.json"
+
+duration_bucket:
+  n_buckets: 8
+
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# 5M-scale FT-Transformer (same skeleton as v3/iso_teambias).
+# NOTE: use_patch_token here is the *model-default* — the per-ablation
+# spec below overrides it to false for v4_iso_teambias_extended.
+transformer_model:
+  embed_dim: 256
+  d_model: 256
+  n_heads: 8
+  n_layers: 6
+  ff_mult: 4
+  dropout: 0.0
+  use_team_team_bias: true
+  use_patch_token: false
+  use_lobby_token: false
+  use_canonical_sort: true
+  decoder_n_layers: 2
+  decoder_n_heads: 8
+  remove_first_layer_first_ln: true
+
+patch:
+  vocab_size: 8
+  default_patch_id: 1
+
+# pmae block is here only because train.py / data.py read it on init.
+# enabled=false + use_pmae=false in the ablation spec ensures NO EMA
+# teacher, NO masking, NO reconstruction loss path is taken.
+pmae:
+  enabled: false
+  a: 0.05
+  b: 0.5
+  alpha_mae_start: 1.0
+  alpha_mae_end: 0.1
+  groups: ["player_block", "item_list", "hero_token", "patch_token"]
+  min_rate: 0.05
+  max_rate: 0.85
+  ema_momentum: 0.996
+
+transformer_optim:
+  batch_size: 512
+  lr: 1.0e-3
+  weight_decay: 0.0
+  max_epochs: 30
+  warmup_steps: 1000
+  cosine_min_lr: 1.0e-5
+  num_workers: 0
+  pin_memory: false
+  mixed_precision: true
+  patience: 5
+  early_stopping_metric: val_win_log_loss
+
+# Hand-tuned alphas matching multitask-740 / iso_teambias. No alpha_mae
+# because PMAE is off.
+multitask_loss:
+  alpha_win: 1.0
+  alpha_dur: 0.15
+  alpha_item: 0.3
+  alpha_kda: 0.1
+  alpha_gpm: 0.1
+  alpha_hd: 0.1
+  aux_targets:
+    - kills
+    - gpm
+    - hero_damage
+
+transformer_ablations:
+  - name: v4_iso_teambias_extended
+    use_features: true
+    multitask: true
+    use_patch_token: false
+    use_team_team_bias: true
+    use_pmae: false
+    use_uw_so: false
+    dur_loss_mode: ce
+    use_player_embedding: false
+    description: |
+      v4. v2-winner iso_teambias architecture (baseline_multitask_repro +
+      2x2 (team_query, team_key) attention bias, ~64 params added) on the
+      EXTENDED cross-patch corpus.
+      - duration head = 8-bucket CrossEntropy (iso_teambias's recipe;
+        v3 changed this to SmoothL1 regression on log-seconds; v3-ablations
+        A1 showed reverting to CE on the v3 stack HURT, suggesting CE
+        only works when the rest of the v3 stack is also stripped — which
+        is exactly what v4 does).
+      - NO PMAE EMA-teacher (v3 has it; iso_teambias does not).
+      - NO patch_id token (v3 has it; iso_teambias does not).
+      - NO UW-SO (broken at all scopes).
+      - NO player embedding (closed axis).
+      - Same FT-Transformer skeleton (d_model=256, 6 layers, 8 heads,
+        FFN 4x, Pre-Norm, first-layer first-LN removed, canonical hero sort).
+      - Adam (no AdamW; no embedding => no decay group needed) lr=1e-3,
+        1k-step warmup -> cosine to 1e-5, bs=512, max 30 epochs, early-stop
+        patience=5 on val_win_log_loss, bf16 autocast.
+
+transformer_smoke:
+  max_epochs: 1
+  n_train: 50000
+  n_val: 5000
+  metrics_suffix: "_smoke"
+
+# Comparison anchors. proposal_target=0.6493 (iso_teambias on 7.40-only)
+# is the bar v4 has to meet to vindicate the extended data.
+anchors:
+  foundation_v3_val_auc: 0.6462
+  iso_teambias_val_auc: 0.6493
+  iso_pmae_val_auc: 0.6464
+  embedding_prelim_val_auc: 0.6476
+  cleanup_anchor_val_auc: 0.6477054
+  rich_supervision_multitask_740_val_auc: 0.6495
+  baseline_multitask_repro_anchor: 0.6470
+  proposal_target_v3_ablations_val_auc: 0.6493
+
+output:
+  results_dir: "results"
+  metrics: "metrics.json"

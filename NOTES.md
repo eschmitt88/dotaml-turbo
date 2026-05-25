@@ -1026,3 +1026,81 @@ and `player-features-prepatch-740` upstream data-quality finding.)
 - **(Carryover, deferred)** `player-features-decay-740` — smaller.
 - **(Carryover, deferred)** DVC formalization, HCE-vs-prior-art ADR.
 
+
+## 2026-05-25
+
+### Did
+- **foundation-v3-740 completed**: val_auc=0.6462 @ epoch 25/30 (6.08h
+  wall). Clean convergence, NOT another foundation-mvp crash. Coverage
+  buckets HIGH=0.6565, MED=0.6450, LOW=0.6364. Missed target 0.6508 by
+  0.0046, missed iso_teambias 0.6493 by 0.0031.
+- **OOM fix during v3 data build**: `out_cols` dict accumulated all
+  emitted rows across 196 days unbounded. Killed at day 123 with
+  RSS=91 GB. Implementer added chunked disk-persistent output every
+  30 days + stream-concat via ParquetWriter. Same fix applied
+  preemptively to `build_rich_cols_extended.py`. RSS plateaued at
+  ~46 GB on the retry. Aggregator dict grew at ~0.16 GB/day early
+  then ~0.04 GB/day late (unique-player saturation).
+- **v3-ablations-740 proposed + implemented + completed**: A1
+  (v3_dur_ce) val_auc=0.6349 (Δ=-0.0113 vs v3), A2 (v3_player_emb)
+  val_auc=0.6290 (Δ=-0.0172 vs v3, catastrophic overfit). Total
+  wall 4.78h (A1 3.32h + A2 1.46h; A2 early-stopped fast).
+- **Concept note created + updated**:
+  `[[concepts/embedding-vs-features-gradient-competition]]` —
+  initially captured the gradient-starvation failure mode from
+  embedding-prelim-740, updated post-A2 to document the second
+  failure mode (overfit on extended cross-patch data) with
+  diagnostics + mitigations for each.
+- **Index updated**: 4 new completed experiments (foundation-mvp,
+  component-isolation, foundation-v3, v3-ablations).
+
+### Findings
+- **Duration regression switch was NOT the v3 regression cause.** A1
+  (revert to 8-bucket CE on the v3 stack) val_auc=0.6349 vs v3=0.6462
+  — CE is WORSE by 0.0113 in this stack. The dur_top1=0.176 confirms
+  the CE head was learning normally; it just doesn't help the win head
+  more than regression did.
+- **Player embeddings on extended data overfit catastrophically**, not
+  the gradient-starvation pattern from embedding-prelim-740. Pattern:
+  train_win 0.6812→0.6550 (down) while vl_win 0.6682→0.6840 (up).
+  Coverage HIGH bucket hurt MOST (Δ=-0.019), opposite of "embeddings
+  help frequent players". Mechanism: enough per-player signal in
+  extended train to learn the table, but train (Aug2025-Feb2026
+  multi-patch) and val (single-patch 7.40 late Feb / early Mar) differ
+  enough that learned vectors don't transfer. Two failure modes now
+  documented in the concept note.
+- **Live-monitoring discipline keeps paying off**: A1 early-stopped at
+  epoch 16 saving ~3h, A2 early-stopped at epoch 7 saving ~5h. The
+  patience=5 on vl_win is sometimes too lenient for embedding overfit
+  (where vl_win _improves_ early while val_auc declines); concept note
+  recommends patience=2 for overfit-mode runs.
+- **Remaining suspects for v3's regression vs iso_teambias**: extended
+  cross-patch data itself OR PMAE-on-extended-data interaction.
+  Duration form and player identity both ruled out via A1+A2.
+
+### Next
+- **`v4-iso-teambias-extended-740`** (PROPOSED): run the v2-winner
+  architecture (iso_teambias: 7.40-only-style multitask + (team,team)
+  bias, no PMAE, no patch token, no UW-SO, 8-bucket CE duration) on
+  the EXTENDED cross-patch data. Cleanly tests whether the data
+  extension itself is the regression cause vs v3 component composition.
+  Reuses existing extended parquets. ~6h wall, single ablation.
+- (Carryover) `anonymous-aware-modeling-740` — orthogonal axis, addresses
+  the LOW-bucket binding constraint (anonymous tail 0.6364 vs HIGH 0.6565
+  = biggest delta in the project).
+- (Carryover, deferred) Inference wrapper / personal-use tool.
+- (Carryover, deferred) DVC formalization, HCE-vs-prior-art ADR.
+
+### Structured
+
+```yaml
+intended_effect: "Two factor-isolation ablations on v3 to attribute the regression vs iso_teambias to either duration loss-form (A1) or per-player identity axis on more data (A2)."
+intended_effect_confirmed: yes
+diagnostics.leakage_check: "splits.yaml date filter assert_no_test_dates — passed"
+diagnostics.overfitting_signal: "A1 train=0.6712 val=0.6611 gap=+0.01 healthy; A2 train=0.655 val=0.684 REVERSED (classic embedding overfit)"
+diagnostics.data_quality_issues: "none — reused v3 extended parquets verbatim, post-build row-group stats verified clean during v3"
+delta_from_prior: "A1 vs v3=-0.0113; A2 vs v3=-0.0172, vs embedding-prelim-740=-0.0186"
+next_candidates:
+  - "v4-iso-teambias-extended-740: isolates data-extension effect on v2-winner architecture"
+  - "anonymous-aware-modeling-740: orthogonal axis on the binding LOW-coverage constraint"
+```

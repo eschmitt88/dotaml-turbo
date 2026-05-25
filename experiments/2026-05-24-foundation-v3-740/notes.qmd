@@ -1,0 +1,6 @@
+---
+title: "foundation-v3-740 notes"
+format: html
+---
+
+Running notebook for ad-hoc analysis. Plots land in `results/`.

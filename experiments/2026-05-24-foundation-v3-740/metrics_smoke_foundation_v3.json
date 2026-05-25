@@ -1,0 +1,300 @@
+{
+  "ablation": "foundation_v3",
+  "smoke": true,
+  "use_features": true,
+  "use_patch_token": true,
+  "use_team_team_bias": true,
+  "use_pmae": true,
+  "use_uw_so": false,
+  "val_auc": 0.48961118818842503,
+  "val_win_log_loss": 0.696956396484375,
+  "val_metrics_at_best": {
+    "win": {
+      "auc": 0.48961118818842503,
+      "acc": 0.4688,
+      "log_loss": 0.696956369762439,
+      "brier": 0.2519022524356842,
+      "majority_class_acc": 0.5314000248908997
+    },
+    "dur_mae_log_seconds": 0.2196226567029953,
+    "dur_pearson_log": 0.039219129052805,
+    "dur_bucket_top1_posthoc": 0.1202,
+    "per_patch_val_auc": {
+      "1": {
+        "n": 5000,
+        "val_auc": 0.48961118818842503
+      }
+    },
+    "item_mAP_at_10": {
+      "map_at_k": 0.04590470716357231,
+      "n_rows": 1920,
+      "k": 10
+    },
+    "val_component_losses": {
+      "win_log_loss_per_row": 0.696956396484375,
+      "dur_smoothl1_per_row_log_seconds": 0.03935130462646484,
+      "dur_mse_log_seconds": 0.07870260925292968,
+      "dur_mae_log_seconds": 0.2196226567029953,
+      "item_bce_per_slot_per_class": 0.33891722950819675,
+      "kda_smoothl1_per_slot": 0.41238388671875,
+      "gpm_smoothl1_per_slot": 0.43503447265625,
+      "hd_smoothl1_per_slot": 0.380750869140625
+    }
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_win_loss": 0.7041370849227905,
+      "train_dur_loss": 1.0434362355959415,
+      "train_item_loss": 0.6144329186248779,
+      "train_kda_loss": 0.4951964803504944,
+      "train_gpm_loss": 0.47305698987960815,
+      "train_hd_loss": 0.4102737264251709,
+      "train_mae_loss": 0.09942253065824509,
+      "train_total_loss": 1.2531625434875489,
+      "val_win_log_loss": 0.696956396484375,
+      "val_win_auc": 0.48961118818842503,
+      "val_win_brier": 0.2519022524356842,
+      "val_dur_smoothl1_log_seconds": 0.03935130462646484,
+      "val_dur_mse_log_seconds": 0.07870260925292968,
+      "val_dur_mae_log_seconds": 0.2196226567029953,
+      "val_dur_pearson_log": 0.039219129052805,
+      "val_dur_bucket_top1_posthoc": 0.1202,
+      "val_item_bce": 0.33891722950819675,
+      "val_item_map_at_10": 0.04590470716357231,
+      "val_kda_smoothl1": 0.41238388671875,
+      "val_gpm_smoothl1": 0.43503447265625,
+      "val_hd_smoothl1": 0.380750869140625,
+      "alpha_weights": [
+        1.0,
+        0.15000000596046448,
+        0.30000001192092896,
+        0.10000000149011612,
+        0.10000000149011612,
+        0.10000000149011612
+      ],
+      "alpha_mae": 0.09999999999999998,
+      "lr": 9.800000000000001e-05,
+      "wall_seconds": 5.9069695472717285,
+      "pmae_hero_mask_count": 2044.6122448979593,
+      "pmae_hero_mask_frac": 0.40069963859052077,
+      "pmae_patch_mask_count": 78.03061224489795,
+      "pmae_patch_mask_frac": 0.15297770895520035,
+      "pmae_student_l2_at_mask": 16.001451443652716,
+      "pmae_teacher_l2_at_mask": 16.000087280662694,
+      "ema_momentum": 0.996,
+      "per_patch_val_auc": {
+        "1": {
+          "n": 5000,
+          "val_auc": 0.48961118818842503
+        }
+      }
+    }
+  ],
+  "model_hp": {
+    "embed_dim": 256,
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 6,
+    "ff_mult": 4,
+    "dropout": 0.0,
+    "decoder_n_layers": 2,
+    "decoder_n_heads": 8,
+    "remove_first_layer_first_ln": true,
+    "use_canonical_sort": true
+  },
+  "optim_hp": {
+    "batch_size": 512,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "warmup_steps": 1000,
+    "cosine_min_lr": 1e-05,
+    "mixed_precision": true
+  },
+  "pmae_cfg": {
+    "enabled": true,
+    "a": 0.05,
+    "b": 0.5,
+    "alpha_mae_start": 1.0,
+    "alpha_mae_end": 0.1,
+    "groups": [
+      "player_block",
+      "item_list",
+      "hero_token",
+      "patch_token"
+    ],
+    "min_rate": 0.05,
+    "max_rate": 0.85,
+    "ema_momentum": 0.996
+  },
+  "multitask_alpha": {
+    "alpha_win": 1.0,
+    "alpha_dur": 0.15,
+    "alpha_item": 0.3,
+    "alpha_kda": 0.1,
+    "alpha_gpm": 0.1,
+    "alpha_hd": 0.1
+  },
+  "param_counts": {
+    "total": 6453222,
+    "trainable": 6453222,
+    "embedding": 52224,
+    "non_embedding": 6400998
+  },
+  "task_names": [
+    "win",
+    "dur",
+    "item",
+    "kda",
+    "gpm",
+    "hd"
+  ],
+  "train_seconds": 5.911782503128052,
+  "data_seconds": 2.296987771987915,
+  "n_train_pre_subsample": 401864,
+  "n_train_post_subsample": 50000,
+  "n_val": 5000,
+  "train_subset_size_target": 5000000,
+  "train_subset_seed": 42,
+  "train_date_min": "2025-09-15",
+  "train_date_max": "2025-12-20",
+  "val_date_min": "2026-02-25",
+  "val_date_max": "2026-02-25",
+  "radiant_base_rate_train_full": 0.5344096510262178,
+  "radiant_base_rate_train_subsampled": 0.5339999794960022,
+  "radiant_base_rate_val": 0.5314000248908997,
+  "val_majority_class_acc": 0.5314000248908997,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "item_vocab_size": 305,
+  "n_dur_buckets": 8,
+  "aux_targets": [
+    "kills",
+    "gpm",
+    "hero_damage"
+  ],
+  "duration_bucket_edges": [
+    1168.0,
+    1293.0,
+    1394.0,
+    1500.0,
+    1629.0,
+    1798.0,
+    2042.0
+  ],
+  "aux_train_mean": [
+    6.513954162597656,
+    1041.4608154296875,
+    24517.087890625
+  ],
+  "aux_train_std": [
+    4.75574254989624,
+    325.383544921875,
+    15545.1083984375
+  ],
+  "canonical_sort": true,
+  "default_patch_id": 1,
+  "train_patch_id_distribution": {
+    "1": 24448,
+    "3": 25552
+  },
+  "val_patch_id_distribution": {
+    "1": 5000
+  },
+  "anchors": {
+    "plateau_baseline_740_val_auc": 0.6161,
+    "transformer_plus_features_extended_740_val_auc": 0.6477298,
+    "upstream_data_cleanup_740_clean_val_auc": 0.6477054,
+    "rich_supervision_multitask_740_val_auc": 0.6495,
+    "iso_pmae_val_auc": 0.6464,
+    "iso_teambias_val_auc": 0.6493,
+    "baseline_multitask_repro_anchor": 0.647,
+    "proposal_target_val_auc": 0.6508,
+    "cleanup_anchor_val_auc": 0.6477054
+  },
+  "delta_vs_cleanup_anchor": -0.15809421181157496,
+  "delta_vs_multitask_anchor": -0.15988881181157494,
+  "delta_vs_proposal_target": -0.16118881181157502,
+  "delta_vs_baseline_multitask_repro_anchor": -0.157388811811575,
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.1791759431362152,
+      0.507517397403717
+    ],
+    "buckets": {
+      "low": {
+        "n": 1596,
+        "val_auc": 0.4894190603401022,
+        "mean_coverage_log1p": 0.046264637261629105
+      },
+      "medium": {
+        "n": 1731,
+        "val_auc": 0.48235364486584276,
+        "mean_coverage_log1p": 0.3241768479347229
+      },
+      "high": {
+        "n": 1673,
+        "val_auc": 0.4814314981160728,
+        "mean_coverage_log1p": 0.8416504859924316
+      }
+    }
+  },
+  "calibration": {
+    "mean_pred": [
+      0.46158037680809894,
+      0.465776896265548,
+      0.46801625796589985,
+      0.4699328161015803,
+      0.4715346733957415,
+      0.473151132886709,
+      0.4745295550212387,
+      0.47597753231445056,
+      0.477421904096798,
+      0.47871288881641055,
+      0.4803227693404791,
+      0.4819768604732329,
+      0.4836096500502471,
+      0.48529748318176114,
+      0.4872363103546112,
+      0.48958254165536774,
+      0.4927512056616894,
+      0.4967788134509253,
+      0.5029017453193665,
+      0.5202094810009003
+    ],
+    "frac_pos": [
+      0.5905511811023622,
+      0.562992125984252,
+      0.5100401606425703,
+      0.49795918367346936,
+      0.5363984674329502,
+      0.5303643724696356,
+      0.5371900826446281,
+      0.5393258426966292,
+      0.5102040816326531,
+      0.6192468619246861,
+      0.4830188679245283,
+      0.5524193548387096,
+      0.502092050209205,
+      0.5161290322580645,
+      0.5020242914979757,
+      0.5511811023622047,
+      0.5421686746987951,
+      0.5303643724696356,
+      0.492,
+      0.524
+    ]
+  }
+}
