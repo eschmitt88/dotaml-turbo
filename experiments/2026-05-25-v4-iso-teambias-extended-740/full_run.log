@@ -34,3 +34,61 @@ Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2
   rich-cols sidecar: train=train.parquet, val=val.parquet
   joining train sidecar...
     sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 80.2s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 101.1s
+Data ready in 315.5s -- train=5,000,000 val=2,419,185
+  train dates 2025-08-15..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+  canonical_sort=True default_patch_id=1
+Model: {'total': 6452717, 'trainable': 6452717, 'embedding': 49920, 'non_embedding': 6402797, 'player_embedding': 0}, device=cuda
+  epoch 1/30  tr[w=0.6696 d=2.0586 i=0.09459 kda=0.4441 gpm=0.2340 hd=0.3754 mae=0.0000 tot=1.1121]  vl_win=0.6641  val_auc=0.6295  dur_top1=0.1716 dur_mae_log=0.6794 dur_pearson=0.2250  itemMAP=0.17320984601974487  lr=9.98e-04  alpha_mae=0.970  (659.6s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6294650232226029}}
+  epoch 2/30  tr[w=0.6597 d=2.0433 i=0.07695 kda=0.4130 gpm=0.2072 hd=0.3466 mae=0.0000 tot=1.0859]  vl_win=0.6609  val_auc=0.6374  dur_top1=0.1772 dur_mae_log=0.6702 dur_pearson=0.2372  itemMAP=0.3042149245738983  lr=9.90e-04  alpha_mae=0.940  (656.5s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6373643439160684}}
+  epoch 3/30  tr[w=0.6569 d=2.0398 i=0.07133 kda=0.4069 gpm=0.2019 hd=0.3410 mae=0.0000 tot=1.0792]  vl_win=0.6581  val_auc=0.6412  dur_top1=0.1787 dur_mae_log=0.7224 dur_pearson=0.2353  itemMAP=0.30853089690208435  lr=9.77e-04  alpha_mae=0.910  (712.9s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6412379336119106}}
+  epoch 4/30  tr[w=0.6558 d=2.0388 i=0.07096 kda=0.4064 gpm=0.2014 hd=0.3405 mae=0.0000 tot=1.0778]  vl_win=0.6576  val_auc=0.6420  dur_top1=0.1787 dur_mae_log=0.6343 dur_pearson=0.2411  itemMAP=0.3094079792499542  lr=9.59e-04  alpha_mae=0.880  (656.2s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6419750438293781}}
+  epoch 5/30  tr[w=0.6550 d=2.0377 i=0.07087 kda=0.4060 gpm=0.2011 hd=0.3402 mae=0.0000 tot=1.0766]  vl_win=0.6572  val_auc=0.6431  dur_top1=0.1766 dur_mae_log=0.5987 dur_pearson=0.2367  itemMAP=0.3151398003101349  lr=9.36e-04  alpha_mae=0.850  (713.6s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6430805311682389}}
+  epoch 6/30  tr[w=0.6544 d=2.0371 i=0.07071 kda=0.4056 gpm=0.2007 hd=0.3397 mae=0.0000 tot=1.0758]  vl_win=0.6575  val_auc=0.6420  dur_top1=0.1802 dur_mae_log=0.7218 dur_pearson=0.2379  itemMAP=0.3175957500934601  lr=9.08e-04  alpha_mae=0.820  (657.1s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6420132636961134}}
+  epoch 7/30  tr[w=0.6539 d=2.0366 i=0.07048 kda=0.4050 gpm=0.2001 hd=0.3391 mae=0.0000 tot=1.0749]  vl_win=0.6569  val_auc=0.6446  dur_top1=0.1788 dur_mae_log=0.6098 dur_pearson=0.2410  itemMAP=0.31728124618530273  lr=8.76e-04  alpha_mae=0.790  (657.2s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6445931258821824}}
+  epoch 8/30  tr[w=0.6533 d=2.0362 i=0.07041 kda=0.4045 gpm=0.1998 hd=0.3388 mae=0.0000 tot=1.0742]  vl_win=0.6560  val_auc=0.6449  dur_top1=0.1797 dur_mae_log=0.6529 dur_pearson=0.2400  itemMAP=0.3185952305793762  lr=8.39e-04  alpha_mae=0.760  (715.6s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6449424819802241}}
+  epoch 9/30  tr[w=0.6530 d=2.0359 i=0.07046 kda=0.4045 gpm=0.1998 hd=0.3390 mae=0.0000 tot=1.0739]  vl_win=0.6562  val_auc=0.6441  dur_top1=0.1796 dur_mae_log=0.7132 dur_pearson=0.2403  itemMAP=0.31972265243530273  lr=7.99e-04  alpha_mae=0.730  (657.8s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6440563733540559}}
+  epoch 10/30  tr[w=0.6526 d=2.0356 i=0.07030 kda=0.4039 gpm=0.1994 hd=0.3385 mae=0.0000 tot=1.0732]  vl_win=0.6565  val_auc=0.6449  dur_top1=0.1795 dur_mae_log=0.7343 dur_pearson=0.2344  itemMAP=0.3175928294658661  lr=7.56e-04  alpha_mae=0.700  (657.8s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6449011203220707}}
+  epoch 11/30  tr[w=0.6522 d=2.0352 i=0.07030 kda=0.4038 gpm=0.1993 hd=0.3384 mae=0.0000 tot=1.0727]  vl_win=0.6558  val_auc=0.6456  dur_top1=0.1798 dur_mae_log=0.7266 dur_pearson=0.2395  itemMAP=0.319295197725296  lr=7.09e-04  alpha_mae=0.670  (713.8s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6455767549451221}}
+  epoch 12/30  tr[w=0.6517 d=2.0348 i=0.07028 kda=0.4036 gpm=0.1991 hd=0.3382 mae=0.0000 tot=1.0721]  vl_win=0.6556  val_auc=0.6464  dur_top1=0.1803 dur_mae_log=0.6828 dur_pearson=0.2389  itemMAP=0.3206968605518341  lr=6.61e-04  alpha_mae=0.640  (713.7s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.646408940491898}}
+  epoch 13/30  tr[w=0.6511 d=2.0345 i=0.07015 kda=0.4031 gpm=0.1987 hd=0.3378 mae=0.0000 tot=1.0713]  vl_win=0.6550  val_auc=0.6467  dur_top1=0.1811 dur_mae_log=0.7068 dur_pearson=0.2407  itemMAP=0.32102325558662415  lr=6.11e-04  alpha_mae=0.610  (657.5s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6467067310584755}}
+  epoch 14/30  tr[w=0.6505 d=2.0341 i=0.07007 kda=0.4028 gpm=0.1984 hd=0.3375 mae=0.0000 tot=1.0705]  vl_win=0.6554  val_auc=0.6464  dur_top1=0.1809 dur_mae_log=0.6837 dur_pearson=0.2408  itemMAP=0.32211437821388245  lr=5.60e-04  alpha_mae=0.580  (657.2s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6464047378778714}}
+  epoch 15/30  tr[w=0.6499 d=2.0338 i=0.07006 kda=0.4026 gpm=0.1983 hd=0.3373 mae=0.0000 tot=1.0698]  vl_win=0.6557  val_auc=0.6470  dur_top1=0.1809 dur_mae_log=0.6643 dur_pearson=0.2423  itemMAP=0.32220718264579773  lr=5.08e-04  alpha_mae=0.550  (656.8s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6469884007387682}}
+  epoch 16/30  tr[w=0.6492 d=2.0335 i=0.07003 kda=0.4024 gpm=0.1981 hd=0.3372 mae=0.0000 tot=1.0690]  vl_win=0.6549  val_auc=0.6471  dur_top1=0.1811 dur_mae_log=0.7197 dur_pearson=0.2412  itemMAP=0.3213239014148712  lr=4.56e-04  alpha_mae=0.520  (715.2s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6470695532134192}}
+  epoch 17/30  tr[w=0.6484 d=2.0332 i=0.07004 kda=0.4023 gpm=0.1980 hd=0.3372 mae=0.0000 tot=1.0681]  vl_win=0.6551  val_auc=0.6468  dur_top1=0.1806 dur_mae_log=0.6737 dur_pearson=0.2432  itemMAP=0.32196590304374695  lr=4.04e-04  alpha_mae=0.490  (656.8s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6467692862096008}}
+  epoch 18/30  tr[w=0.6476 d=2.0329 i=0.07009 kda=0.4023 gpm=0.1979 hd=0.3372 mae=0.0000 tot=1.0673]  vl_win=0.6555  val_auc=0.6468  dur_top1=0.1805 dur_mae_log=0.6349 dur_pearson=0.2446  itemMAP=0.3215407133102417  lr=3.54e-04  alpha_mae=0.460  (657.9s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6468155322177854}}
+  epoch 19/30  tr[w=0.6467 d=2.0326 i=0.07007 kda=0.4021 gpm=0.1978 hd=0.3371 mae=0.0000 tot=1.0663]  vl_win=0.6554  val_auc=0.6461  dur_top1=0.1811 dur_mae_log=0.6517 dur_pearson=0.2434  itemMAP=0.3225057125091553  lr=3.05e-04  alpha_mae=0.430  (714.5s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6461450351905986}}
+  epoch 20/30  tr[w=0.6457 d=2.0323 i=0.07007 kda=0.4020 gpm=0.1977 hd=0.3370 mae=0.0000 tot=1.0653]  vl_win=0.6564  val_auc=0.6461  dur_top1=0.1811 dur_mae_log=0.6749 dur_pearson=0.2420  itemMAP=0.3219076991081238  lr=2.59e-04  alpha_mae=0.400  (657.4s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6461253148900948}}
+  epoch 21/30  tr[w=0.6445 d=2.0320 i=0.07006 kda=0.4020 gpm=0.1976 hd=0.3370 mae=0.0000 tot=1.0640]  vl_win=0.6570  val_auc=0.6452  dur_top1=0.1811 dur_mae_log=0.6549 dur_pearson=0.2434  itemMAP=0.32162541151046753  lr=2.15e-04  alpha_mae=0.370  (657.3s)
+    patch_auc: {'1': {'n': 2419185, 'val_auc': 0.6452322211597727}}
+  early stop at epoch 21 (best 16)
+Training done in 14202.5s -- best val_auc=0.6471 @ epoch 16
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-25-v4-iso-teambias-extended-740/metrics_v4_iso_teambias_extended.json
+[2026-05-25T22:03:23+00:00] v4_iso_teambias_extended attempt 1 SUCCESS
+[2026-05-25T22:03:23+00:00] STEP 2/2 DONE rc=0
+metrics.json <- v4_iso_teambias_extended (0.6470695532134192)
+===== v4-iso-teambias-extended-740 run_all DONE rc=0 2026-05-25T22:03:23+00:00 =====

@@ -1104,3 +1104,56 @@ next_candidates:
   - "v4-iso-teambias-extended-740: isolates data-extension effect on v2-winner architecture"
   - "anonymous-aware-modeling-740: orthogonal axis on the binding LOW-coverage constraint"
 ```
+
+## 2026-05-26
+
+### Did
+- **v4-iso-teambias-extended-740 COMPLETED**: val_auc=0.6471 @ epoch
+  16/21 (early-stop, 3.95h wall). Outcome (b) confirmed.
+- **Attribution math closed**: v3 regression vs iso_teambias = -0.0031
+  = -0.0022 (extended-data alone) + -0.0009 (PMAE+patch+dur composition).
+  Roughly 70/30 split — extended data is the bigger cost; component
+  composition only mildly hurts.
+- Status flip + README + index + commit.
+
+### Findings
+- **Extended cross-patch data costs ~0.002 val_auc** on the simplest
+  known-good architecture. The patch_id token in v3 was supposed to
+  bridge the multi-patch train ↔ single-patch val distribution gap;
+  did not fully.
+- **Component composition costs ~0.001** on top of that. PMAE/patch_token/
+  dur_regression interactions are mildly negative but small.
+- **Coverage HIGH on v4 = 0.6574** — slightly above v3's 0.6565,
+  approaching the transformer-plus-features-extended record (0.6588).
+  Extended data does help the HIGH bucket modestly.
+- **Real engineering tradeoff**: 7.40-only for max val_auc vs extended
+  for cross-patch downstream-query coverage. User's foundation framing
+  prefers extended.
+
+### Next
+- **`v5-rich-skill-features-740`** (designed below): pursue user's
+  foundation direction. Extend per-player input features from 8 → ~14
+  with item-derived skill proxies (last20_gpm, last20_hd, etc) and
+  richer hero-novelty signal. Tests whether engineered-feature richness
+  can close the v4 → iso_teambias gap WITHOUT embeddings.
+- (Skipped — user veto) anonymous-aware-modeling. User's main goal is
+  the foundation model for their personal-account queries (non-anonymous,
+  HIGH coverage), so the anonymous-tail axis isn't valuable.
+- (Skipped — outcome attributed) v5-pmae-only-on-v4 was the proposal-
+  decision-tree's outcome-(a) next step. We landed in (b), which
+  reframes the next-step priority toward richer features rather than
+  isolating component interactions.
+
+### Structured
+
+```yaml
+intended_effect: "Isolate extended-data factor on the v2-winner architecture to attribute v3's regression vs iso_teambias precisely."
+intended_effect_confirmed: yes
+diagnostics.leakage_check: "splits.yaml date filter assert_no_test_dates — passed"
+diagnostics.overfitting_signal: "train=0.6492 val=0.6549 gap=+0.0057 healthy"
+diagnostics.data_quality_issues: "none — reused extended parquets verbatim"
+delta_from_prior: "vs v3 +0.0009; vs iso_teambias -0.0022 (the data-extension penalty); vs cleanup_anchor -0.0006"
+next_candidates:
+  - "v5-rich-skill-features-740: extend per-player features with item-derived skill proxies + hero-novelty (no embeddings; user direction)"
+  - "v5-pmae-only-on-v4: cheap PMAE-on-v4 isolation (deprioritized given user direction)"
+```

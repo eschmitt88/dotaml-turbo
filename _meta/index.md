@@ -27,7 +27,7 @@ and `/new-experiment`.
 
 (list of `experiments/YYYY-MM-DD-<slug>/` folders currently in flight)
 
-*(none — all fourteen experiments below completed; status: done.)*
+*(none — all fifteen experiments below completed; status: done.)*
 
 ## Completed experiments
 
@@ -46,6 +46,8 @@ and `/new-experiment`.
 - [[experiments/2026-05-23-foundation-component-isolation-740]] — Three single-component-add ablations to attribute the foundation-mvp crash. CLEAN ATTRIBUTION: **UW-SO is the saboteur** (omega→1.000 to items by epoch 2 even with normalization fix; halted at epoch 2 via the new live-monitoring rule, saving ~4-5h). **PMAE with EMA-teacher SAFE** (val_auc=0.6464, Δ=-0.0006 vs anchor — original Bug A was student=teacher BYOL/JEPA collapse; fix is deep-copied EMA teacher + stop-gradient + momentum=0.996). **(team_query, team_key) attention bias HELPFUL** (val_auc=0.6493, Δ=+0.0023 — ~64 params, real lift). Iso_teambias 0.6493 becomes the strong new anchor.
 - [[experiments/2026-05-24-foundation-v3-740]] — v3 = component-isolation winners MINUS UW-SO + hand-tuned α (1.0/0.15/0.3/0.1) + duration switched to log-seconds SmoothL1 regression + trained on EXTENDED cross-patch corpus (Aug 2025 → Feb 2026, ~32M rows across patches 7.39/7.40 + transition). Target 0.6508. **MISSED**: val_auc=**0.6462** @ epoch 25/30 (6.08h, Δ=-0.0046 vs target, -0.0031 vs iso_teambias, tied with iso_pmae 0.6464). Training healthy (NOT another foundation-mvp crash); the composite design just doesn't compose additively. Coverage: HIGH=0.6565, MED=0.6450, LOW=0.6364. Data build needed two OOM-fix iterations (output-row accumulator → chunked disk-persistent output every 30 days).
 - [[experiments/2026-05-25-v3-ablations-740]] — Two factor-isolation ablations on v3. **A1 (v3_dur_ce)**: revert duration to 8-bucket CE on the v3 stack. val_auc=**0.6349** (Δ=-0.0113 vs v3) — reverting duration to CE HURTS; duration regression switch was NOT the v3 regression cause. **A2 (v3_player_emb)**: add 4M-param per-player identity embedding (top-30k + 1024 hash + 1 anon) to v3. val_auc=**0.6290** @ epoch 2/7 (Δ=-0.0172 vs v3, -0.0186 vs embedding-prelim-740 NULL) — catastrophic overfit (train_win DOWN while vl_win UP; HIGH coverage hurt MOST). Two failure modes of player embeddings now documented in [[concepts/embedding-vs-features-gradient-competition]]: **starvation** (7.40-only) vs **overfit** (extended cross-patch). Remaining v3-regression suspect: extended cross-patch data itself OR PMAE-on-extended-data interaction (motivates v4-iso-teambias-extended).
+
+- [[experiments/2026-05-25-v4-iso-teambias-extended-740]] — Run the v2-winner `iso_teambias` architecture (multitask + (team,team) bias only — no PMAE, no patch token, no UW-SO, 8-bucket CE duration, hand-tuned alpha) on the EXTENDED cross-patch corpus (no rebuild — reuse v3 parquets). Isolates the data-extension axis. **OUTCOME (b) per proposal decision tree**: val_auc=**0.6471** @ epoch 16/21 (3.95h, Δ vs iso_teambias=-0.0022, Δ vs v3=+0.0009). Attribution math closes cleanly: v3's -0.0031 regression = -0.0022 (extended data alone) + -0.0009 (PMAE+patch+dur composition). ~70% of v3's loss came from extended-data distribution shift; ~30% from composition. Coverage: HIGH=0.6574, MED=0.6455, LOW=0.6375 — all slightly above v3. Real engineering tradeoff: 7.40-only for max val_auc (0.6493) vs extended for cross-patch downstream-query generalization at ~0.002 val_auc penalty. Foundation framing favors extended.
 
 ## Open questions
 
