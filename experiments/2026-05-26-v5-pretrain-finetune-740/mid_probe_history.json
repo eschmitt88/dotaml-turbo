@@ -1,0 +1,22 @@
+{
+  "trajectory": [
+    {
+      "epoch": 1,
+      "val_auc": 0.4711
+    },
+    {
+      "epoch": 5,
+      "val_auc": 0.5237
+    },
+    {
+      "epoch": 10,
+      "val_auc": 0.5304
+    },
+    {
+      "epoch": 15,
+      "val_auc": 0.5263
+    }
+  ],
+  "halted_at_epoch": 16,
+  "reason": "mid_probe val_auc essentially random (0.5304 @ ep10, 0.5263 @ ep15) per pre-committed halt criterion"
+}

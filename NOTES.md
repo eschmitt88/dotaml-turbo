@@ -1157,3 +1157,43 @@ next_candidates:
   - "v5-rich-skill-features-740: extend per-player features with item-derived skill proxies + hero-novelty (no embeddings; user direction)"
   - "v5-pmae-only-on-v4: cheap PMAE-on-v4 isolation (deprioritized given user direction)"
 ```
+
+## 2026-05-26 (later)
+
+### Did
+- **v5-pretrain-finetune-740 HALTED**: Phase 1 epoch 16/20. Mid-pretrain
+  probe trajectory 0.4711 → 0.5237 → 0.5304 → 0.5263 (regression).
+  Classic SSL over-specialization to reconstruction. Halt fired per
+  pre-committed criterion; saved ~10h. Cost ~2h GPU on aborted pretrain.
+- **Concept-level discussion with user** on SSL family tradeoffs
+  (reconstruction vs contrastive vs JEPA). User picked Design J — JEPA
+  on v5 scaffolding.
+- **v6-jepa-pretrain-finetune-740 PROPOSED**: single-change ablation of
+  v5 — swap reconstruction → JEPA latent-space prediction, reuse all
+  other v5 scaffolding (6-group masking, EMA teacher [finally used],
+  mid-pretrain probe). ~12.5h.
+- v5 status flip + Diagnostics filled in + index entry added.
+
+### Findings
+- **BERT-style raw-target reconstruction on this mask scheme over-trains
+  past useful win-discriminative features**: the v5 trajectory is
+  diagnostic, not catastrophic — encoder DID find useful features at
+  epoch 5, then drifted away as reconstruction loss kept pulling.
+- **The EMA teacher infrastructure scaffolded in v5 was UNUSED for the
+  loss** (raw-target reconstruction was the BERT-style choice). v6
+  actually uses it for what it was designed for — JEPA latent-space
+  prediction.
+- **Mid-pretrain probe is a load-bearing diagnostic**: without it, we
+  would have burned the full 6h pretrain + linear probe + 6h fine-tune
+  before knowing the encoder wasn't learning useful features. Worth
+  keeping in every future pretrain experiment.
+
+### Next
+- **`v6-jepa-pretrain-finetune-740`** (PROPOSED + about to implement):
+  swap loss form, keep everything else, test "was reconstruction the
+  problem?" Halt criterion same as v5 (mid-probe ≤ 0.51 by ep10 → halt).
+- (Deferred) v7-contrastive-player-centric — if v6 also fails, the
+  next SSL family to try (sample two matches per non-anonymous player,
+  InfoNCE on per-player reps).
+- (Deferred) v7-rich-skill-features — pragmatic pivot to engineered
+  features if SSL universally fails.

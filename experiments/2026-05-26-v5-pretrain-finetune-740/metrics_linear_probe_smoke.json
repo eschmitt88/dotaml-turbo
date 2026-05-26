@@ -1,0 +1,83 @@
+{
+  "phase": "linear_probe",
+  "smoke": true,
+  "val_auc": 0.506067930948793,
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.714084577293396,
+      "val_auc": 0.506067930948793,
+      "val_log_loss": 0.6945334330087198,
+      "val_brier": 0.2506929337978363,
+      "wall_seconds": 3.2310142517089844
+    }
+  ],
+  "coverage_bucket_val_auc": {
+    "quantile_edges_log1p": [
+      0.1791759431362152,
+      0.507517397403717
+    ],
+    "buckets": {
+      "low": {
+        "n": 1596,
+        "val_auc": 0.5082245443147237,
+        "mean_coverage_log1p": 0.046264637261629105
+      },
+      "medium": {
+        "n": 1731,
+        "val_auc": 0.5193191196513876,
+        "mean_coverage_log1p": 0.3241768479347229
+      },
+      "high": {
+        "n": 1673,
+        "val_auc": 0.4957113794931305,
+        "mean_coverage_log1p": 0.8416504859924316
+      }
+    }
+  },
+  "per_patch_val_auc": {
+    "1": {
+      "n": 5000,
+      "val_auc": 0.506067930948793
+    }
+  },
+  "model_hp": {
+    "embed_dim": 256,
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 6,
+    "ff_mult": 4
+  },
+  "n_train": 50000,
+  "n_val": 5000,
+  "train_date_min": "2025-09-15",
+  "train_date_max": "2025-12-20",
+  "val_date_min": "2026-02-25",
+  "val_date_max": "2026-02-25",
+  "radiant_base_rate_val": 0.5314000248908997,
+  "train_patch_id_distribution": {
+    "1": 24448,
+    "3": 25552
+  },
+  "val_patch_id_distribution": {
+    "1": 5000
+  },
+  "anchors": {
+    "v4_val_auc": 0.6471,
+    "iso_teambias_val_auc": 0.6493,
+    "v3_val_auc": 0.6462,
+    "cleanup_anchor_val_auc": 0.6477054,
+    "baseline_multitask_repro_val_auc": 0.647,
+    "iso_pmae_val_auc": 0.6464,
+    "proposal_target_val_auc": 0.6485
+  },
+  "delta_vs_v4": -0.14103206905120702,
+  "delta_vs_iso_teambias": -0.143232069051207,
+  "delta_vs_v3": -0.140132069051207,
+  "delta_vs_cleanup": -0.141637469051207,
+  "delta_vs_baseline_repro": -0.14093206905120703,
+  "delta_vs_iso_pmae": -0.140332069051207,
+  "delta_vs_target": -0.14243206905120698
+}

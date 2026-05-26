@@ -1,0 +1,11 @@
+---
+title: "v5-pretrain-finetune-740 — analysis notebook"
+format: html
+---
+
+Stub for post-run analysis.
+
+- Pre-train per-group loss trajectories: `results/pretrain_history.json`
+- Mid-pretrain probe trajectory: `results/mid_probe_history.json`
+- Linear probe metrics: `metrics_linear_probe.json`
+- Full fine-tune metrics: `metrics_finetune.json` (mirrored to `metrics.json`)

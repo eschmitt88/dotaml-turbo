@@ -1,0 +1,9 @@
+{
+  "mid_probe_history": [
+    {
+      "epoch": 1,
+      "mid_probe_val_auc": 0.47113648401386743,
+      "wall_seconds": 0.3397636413574219
+    }
+  ]
+}

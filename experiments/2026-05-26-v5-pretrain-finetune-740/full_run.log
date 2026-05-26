@@ -1,0 +1,118 @@
+===== v5-pretrain-finetune-740 run_all START 2026-05-26T02:14:34+00:00 =====
+[2026-05-26T02:14:34+00:00] STEP 1/5: smoke pretrain
+[2026-05-26T02:14:34+00:00] smoke-pretrain attempt 1/3 START
+[pretrain] smoke=True max_epochs=1 p_group=0.4 ema=0.996
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train_smoke.parquet
+  train rows: 401,864
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val_smoke.parquet
+  val   rows: 163,190
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train_smoke.parquet, val=val_smoke.parquet
+  joining train sidecar...
+    sidecar read: 50,000 rows (filtered to clean set)
+    items vectorized in 1.0s
+  joining val sidecar...
+    sidecar read: 5,000 rows (filtered to clean set)
+    items vectorized in 0.0s
+[pretrain] data ready in 2.3s — train=50,000 val=5,000
+[pretrain] model: {'total': 6652880, 'trainable': 6652880, 'embedding': 49920, 'non_embedding': 6602960}
+[pretrain] EMA teacher constructed momentum=0.996
+[pretrain] epoch 1/1  total=7.9116  lr=9.80e-05  (4.4s)
+    per-group losses: player_block=0.4859 hero_token=5.1390 item_list=0.6736 kda=0.5689 gpm=0.5569 hd=0.4874
+    mask rates: player_block=0.402 hero_token=0.403 item_list=0.400 kda=0.399 gpm=0.399 hd=0.396
+    mid_probe[epoch 1]: val_auc=0.4711 (0.3s)
+[pretrain] wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v5-pretrain-finetune-740/results/pretrain_encoder_smoke.pt
+[pretrain] wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v5-pretrain-finetune-740/results/pretrain_history_smoke.json
+[pretrain] wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v5-pretrain-finetune-740/results/mid_probe_history_smoke.json
+[2026-05-26T02:14:43+00:00] smoke-pretrain attempt 1 SUCCESS
+[2026-05-26T02:14:43+00:00] STEP 2/5: smoke finetune
+[2026-05-26T02:14:43+00:00] smoke-finetune attempt 1/3 START
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train_smoke.parquet
+  train rows: 401,864
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val_smoke.parquet
+  val   rows: 163,190
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train_smoke.parquet, val=val_smoke.parquet
+  joining train sidecar...
+    sidecar read: 50,000 rows (filtered to clean set)
+    items vectorized in 1.0s
+  joining val sidecar...
+    sidecar read: 5,000 rows (filtered to clean set)
+    items vectorized in 0.1s
+[finetune] data ready in 2.4s — train=50,000 val=5,000
+[finetune] loaded encoder from /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v5-pretrain-finetune-740/results/pretrain_encoder_smoke.pt; model: {'total': 6652880, 'trainable': 6652880, 'embedding': 49920, 'non_embedding': 6602960}
+[finetune] encoder L2-norm pre-finetune: 120.5705
+[finetune] optimizer: 116 encoder tensors (lr=1e-05), 51 head tensors (lr=0.001)
+[finetune] epoch 1/1  tr[w=0.6964 d=2.2227 i=0.61179 kda=0.6161 gpm=0.4290 hd=0.5423]  vl_win=0.7072  val_auc=0.5046  enc_lr=9.80e-07 head_lr=9.80e-05  (5.2s)
+[finetune] encoder L2-norm post-finetune: 120.5705 (delta -0.0000, frac +1.0000x)
+[finetune] wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v5-pretrain-finetune-740/metrics_finetune_smoke.json
+[2026-05-26T02:14:53+00:00] smoke-finetune attempt 1 SUCCESS
+[2026-05-26T02:14:53+00:00] STEP 3/5: full pretrain (~6h)
+[2026-05-26T02:14:53+00:00] pretrain attempt 1/3 START
+[pretrain] smoke=False max_epochs=20 p_group=0.4 ema=0.996
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train.parquet
+  train rows: 32,641,476
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305, duration_buckets=8
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 79.6s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 100.7s
+[pretrain] data ready in 322.4s — train=5,000,000 val=2,419,185
+[pretrain] model: {'total': 6652880, 'trainable': 6652880, 'embedding': 49920, 'non_embedding': 6602960}
+[pretrain] EMA teacher constructed momentum=0.996
+[pretrain] epoch 1/20  total=3.0352  lr=9.95e-04  (365.6s)
+    per-group losses: player_block=0.4984 hero_token=2.1922 item_list=0.0864 kda=0.1655 gpm=0.0822 hd=0.0105
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 2/20  total=2.5462  lr=9.78e-04  (488.9s)
+    per-group losses: player_block=0.4903 hero_token=1.7593 item_list=0.0735 kda=0.1485 gpm=0.0682 hd=0.0064
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 3/20  total=2.4736  lr=9.49e-04  (422.8s)
+    per-group losses: player_block=0.4894 hero_token=1.6916 item_list=0.0729 kda=0.1468 gpm=0.0667 hd=0.0062
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 4/20  total=2.4263  lr=9.09e-04  (422.8s)
+    per-group losses: player_block=0.4882 hero_token=1.6477 item_list=0.0726 kda=0.1457 gpm=0.0660 hd=0.0061
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 5/20  total=2.3912  lr=8.59e-04  (422.1s)
+    per-group losses: player_block=0.4872 hero_token=1.6152 item_list=0.0724 kda=0.1450 gpm=0.0653 hd=0.0060
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+    mid_probe[epoch 5]: val_auc=0.5237 (8.1s)
+[pretrain] epoch 6/20  total=2.3663  lr=8.00e-04  (423.4s)
+    per-group losses: player_block=0.4869 hero_token=1.5918 item_list=0.0723 kda=0.1444 gpm=0.0649 hd=0.0059
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 7/20  total=2.3440  lr=7.34e-04  (422.6s)
+    per-group losses: player_block=0.4866 hero_token=1.5710 item_list=0.0722 kda=0.1439 gpm=0.0645 hd=0.0059
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 8/20  total=2.3176  lr=6.63e-04  (479.6s)
+    per-group losses: player_block=0.4861 hero_token=1.5456 item_list=0.0721 kda=0.1436 gpm=0.0643 hd=0.0058
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 9/20  total=2.2963  lr=5.87e-04  (422.7s)
+    per-group losses: player_block=0.4856 hero_token=1.5258 item_list=0.0720 kda=0.1431 gpm=0.0639 hd=0.0058
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 10/20  total=2.2818  lr=5.09e-04  (422.4s)
+    per-group losses: player_block=0.4851 hero_token=1.5125 item_list=0.0719 kda=0.1428 gpm=0.0637 hd=0.0058
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+    mid_probe[epoch 10]: val_auc=0.5304 (8.2s)
+[pretrain] epoch 11/20  total=2.2554  lr=4.31e-04  (421.7s)
+    per-group losses: player_block=0.4846 hero_token=1.4874 item_list=0.0718 kda=0.1425 gpm=0.0634 hd=0.0057
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 12/20  total=2.2389  lr=3.55e-04  (423.1s)
+    per-group losses: player_block=0.4846 hero_token=1.4715 item_list=0.0718 kda=0.1422 gpm=0.0631 hd=0.0057
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 13/20  total=2.2172  lr=2.83e-04  (478.6s)
+    per-group losses: player_block=0.4844 hero_token=1.4506 item_list=0.0717 kda=0.1420 gpm=0.0629 hd=0.0057
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 14/20  total=2.1996  lr=2.16e-04  (422.7s)
+    per-group losses: player_block=0.4837 hero_token=1.4341 item_list=0.0716 kda=0.1416 gpm=0.0628 hd=0.0057
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+[pretrain] epoch 15/20  total=2.1883  lr=1.56e-04  (423.1s)
+    per-group losses: player_block=0.4837 hero_token=1.4233 item_list=0.0716 kda=0.1415 gpm=0.0626 hd=0.0056
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400
+    mid_probe[epoch 15]: val_auc=0.5263 (8.4s)
+[pretrain] epoch 16/20  total=2.1750  lr=1.05e-04  (422.8s)
+    per-group losses: player_block=0.4833 hero_token=1.4111 item_list=0.0715 kda=0.1412 gpm=0.0624 hd=0.0056
+    mask rates: player_block=0.400 hero_token=0.400 item_list=0.400 kda=0.400 gpm=0.400 hd=0.400

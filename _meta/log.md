@@ -106,3 +106,7 @@ skills; read by `/lint`.
 2026-05-25 18:01 propose v4-iso-teambias-extended-740 → experiments/_proposals/_done/2026-05-25-v4-iso-teambias-extended-740.md (isolate extended-data effect on v2-winner architecture)
 2026-05-25 18:01 implement v4-iso-teambias-extended-740 → experiments/2026-05-25-v4-iso-teambias-extended-740/ seeds=1 model=claude-opus-4-6
 2026-05-26 01:21 wrap v4-iso-teambias-extended-740 COMPLETED val_auc=0.6471 outcome (b) — attribution math closes (70/30 split: extended data -0.0022 + PMAE+patch+dur composition -0.0009 = -0.0031 v3 regression vs iso_teambias)
+2026-05-26 02:14 propose v5-pretrain-finetune-740 → experiments/_proposals/_done/2026-05-26-v5-pretrain-finetune-740.md (BERT-style pre-train + linear probe + multi-task fine-tune; 6 masked input groups inc. KDA/GPM/HD; mid-pretrain probes every 5 epochs as early diagnostic)
+2026-05-26 02:14 implement v5-pretrain-finetune-740 → experiments/2026-05-26-v5-pretrain-finetune-740/ seeds=1 model=claude-opus-4-6
+2026-05-26 07:58 wrap v5-pretrain-finetune-740 HALTED at Phase 1 ep16/20 per pre-committed criterion — mid-probe trajectory 0.4711→0.5237→0.5304→0.5263 (regression) — classic SSL reconstruction over-specialization; saved ~10h
+2026-05-26 07:58 propose v6-jepa-pretrain-finetune-740 → experiments/_proposals/2026-05-26-v6-jepa-pretrain-finetune-740.md (swap reconstruction → JEPA latent-space prediction, reuse v5 scaffolding)
