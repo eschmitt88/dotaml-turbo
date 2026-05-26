@@ -27,7 +27,7 @@ and `/new-experiment`.
 
 (list of `experiments/YYYY-MM-DD-<slug>/` folders currently in flight)
 
-*(none — all sixteen experiments below (one ABANDONED); status: done.)*
+*(none — all seventeen experiments below (two ABANDONED); status: done.)*
 
 ## Completed experiments
 
@@ -50,6 +50,8 @@ and `/new-experiment`.
 - [[experiments/2026-05-25-v4-iso-teambias-extended-740]] — Run the v2-winner `iso_teambias` architecture (multitask + (team,team) bias only — no PMAE, no patch token, no UW-SO, 8-bucket CE duration, hand-tuned alpha) on the EXTENDED cross-patch corpus (no rebuild — reuse v3 parquets). Isolates the data-extension axis. **OUTCOME (b) per proposal decision tree**: val_auc=**0.6471** @ epoch 16/21 (3.95h, Δ vs iso_teambias=-0.0022, Δ vs v3=+0.0009). Attribution math closes cleanly: v3's -0.0031 regression = -0.0022 (extended data alone) + -0.0009 (PMAE+patch+dur composition). ~70% of v3's loss came from extended-data distribution shift; ~30% from composition. Coverage: HIGH=0.6574, MED=0.6455, LOW=0.6375 — all slightly above v3. Real engineering tradeoff: 7.40-only for max val_auc (0.6493) vs extended for cross-patch downstream-query generalization at ~0.002 val_auc penalty. Foundation framing favors extended.
 
 - [[experiments/2026-05-26-v5-pretrain-finetune-740]] — Classical BERT-style sequential pre-train + fine-tune on extended cross-patch data. Phase 1 (PMAE-style reconstruction over 6 masked input groups: player_block + hero_token + items + KDA + GPM + HD per slot, EMA-teacher momentum=0.996, p_group=0.4). Phase 2A linear probe + Phase 2B multi-task fine-tune. **HALTED at Phase 1 epoch 16/20** per pre-committed halt criterion. Mid-pretrain probes: 0.4711 init → 0.5237 (ep5) → 0.5304 (ep10) → **0.5263 (ep15, regression)**. Encoder briefly held win-discriminative features at epoch 5 (+0.05 lift) then drifted toward reconstruction-only representations. Per-group losses kept slowly decreasing (hero CE 1.55 → 1.41) while win signal eroded — classic SSL over-specialization. Saved ~10h compute via halt. Informative: BERT-style raw-target reconstruction with this mask scheme doesn't produce win-useful representations on extended cross-patch data. Next: v6-jepa-pretrain-finetune-740 reuses v5 scaffolding but swaps reconstruction → JEPA latent-space prediction (single-change ablation testing whether the loss form was the failure).
+
+- [[experiments/2026-05-26-v6-jepa-pretrain-finetune-740]] — JEPA-style sequential pre-train + fine-tune on extended cross-patch data. Single-change swap of v5's BERT-style raw-target reconstruction for JEPA latent-space prediction (predict masked TOKEN REPRESENTATIONS via EMA teacher + small predictor MLP). All other v5 scaffolding reused verbatim (6-group masking, p_group=0.4, EMA momentum=0.996, mid-pretrain probes every 5 epochs). **HALTED at Phase 1 epoch 11/20** — classic representation collapse. jepa_loss collapsed 0.0284 → 0.0014, rep_l2_mean shrunk 14.4 → 2.5 (still decreasing), mid_probe val_auc STUCK at random (0.5013 @ ep5, 0.5017 @ ep10). Two of three pre-committed halt criteria fired. v6 actually WORSE than v5 on the mid_probe diagnostic (v5 peaked at 0.5304). Missing standard JEPA collapse mitigations (VICReg variance/covariance regularization, normalized predictor target). Saved ~10h. Foundation-SSL effort paused after v4 diagnostic confirmed encoder is sound. See [[_meta/deferred-foundation-paths]] for the 5 deferred architectural variants. Pivot: downstream queries on v4.
 
 ## Open questions
 

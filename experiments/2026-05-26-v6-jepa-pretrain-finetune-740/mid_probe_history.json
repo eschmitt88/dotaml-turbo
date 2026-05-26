@@ -1,0 +1,87 @@
+{
+  "mid_probe_trajectory": [
+    {
+      "epoch": 1,
+      "val_auc": 0.474
+    },
+    {
+      "epoch": 5,
+      "val_auc": 0.5013
+    },
+    {
+      "epoch": 10,
+      "val_auc": 0.5017
+    }
+  ],
+  "pretrain_signals": [
+    {
+      "epoch": 1,
+      "jepa_loss": 0.0284,
+      "rep_l2_mean": 14.4404,
+      "pairwise_cos_mean": 0.9722
+    },
+    {
+      "epoch": 2,
+      "jepa_loss": 0.0102,
+      "rep_l2_mean": 10.3994,
+      "pairwise_cos_mean": 0.9683
+    },
+    {
+      "epoch": 3,
+      "jepa_loss": 0.0041,
+      "rep_l2_mean": 7.6755,
+      "pairwise_cos_mean": 0.9751
+    },
+    {
+      "epoch": 4,
+      "jepa_loss": 0.0026,
+      "rep_l2_mean": 5.7409,
+      "pairwise_cos_mean": 0.9732
+    },
+    {
+      "epoch": 5,
+      "jepa_loss": 0.0021,
+      "rep_l2_mean": 4.3936,
+      "pairwise_cos_mean": 0.967
+    },
+    {
+      "epoch": 6,
+      "jepa_loss": 0.0018,
+      "rep_l2_mean": 3.623,
+      "pairwise_cos_mean": 0.9555
+    },
+    {
+      "epoch": 7,
+      "jepa_loss": 0.0017,
+      "rep_l2_mean": 3.1893,
+      "pairwise_cos_mean": 0.945
+    },
+    {
+      "epoch": 8,
+      "jepa_loss": 0.0016,
+      "rep_l2_mean": 2.897,
+      "pairwise_cos_mean": 0.9339
+    },
+    {
+      "epoch": 9,
+      "jepa_loss": 0.0015,
+      "rep_l2_mean": 2.6905,
+      "pairwise_cos_mean": 0.9207
+    },
+    {
+      "epoch": 10,
+      "jepa_loss": 0.0014,
+      "rep_l2_mean": 2.5416,
+      "pairwise_cos_mean": 0.9114
+    },
+    {
+      "epoch": 11,
+      "jepa_loss": 0.0014,
+      "rep_l2_mean": 2.4503,
+      "pairwise_cos_mean": 0.9032
+    }
+  ],
+  "halted_at_epoch": 11,
+  "reason": "JEPA representation collapse: mid_probe val_auc=0.5017 at ep10 (\u22640.51 halt threshold), jepa_loss collapsed 0.0284\u21920.0014, rep_l2_mean shrinking 14.44\u21922.54. Encoder learned predictable representations, not useful ones.",
+  "diagnostic_summary": "Pairwise cosine DID decrease (0.972 \u2192 0.911) \u2014 slot differentiation worked. But the manifold collapsed to low-magnitude reps that are trivially predictable. Mid-probe correctly caught this."
+}

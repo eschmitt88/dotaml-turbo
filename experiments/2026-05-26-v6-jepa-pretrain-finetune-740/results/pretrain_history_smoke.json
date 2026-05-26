@@ -1,0 +1,54 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "jepa_loss": 0.2601257602703571,
+      "per_group_mask_rate": {
+        "player_block": 0.40177812199203333,
+        "hero_token": 0.403404777147332,
+        "item_list": 0.40027958732478475,
+        "kda": 0.39904868207415756,
+        "gpm": 0.3994529730811411,
+        "hd": 0.3962025101087531
+      },
+      "n_masked_slots_per_batch_mean": 4867.040816326531,
+      "rep_l2_mean": 16.014855929783412,
+      "rep_l2_std": 0.0006999109891357968,
+      "pairwise_cos_mean": 0.9842006120146537,
+      "collapse_warning": true,
+      "lr": 9.800000000000001e-05,
+      "wall_seconds": 4.610059022903442
+    }
+  ],
+  "meta": {
+    "train_date_min": "2025-09-15",
+    "train_date_max": "2025-12-20",
+    "val_date_min": "2026-02-25",
+    "val_date_max": "2026-02-25",
+    "n_train_post_subsample": 50000,
+    "n_val": 5000,
+    "scalar_inputs_train_mean": [
+      1.42305326461792,
+      1041.4608154296875,
+      9.914316177368164
+    ],
+    "scalar_inputs_train_std": [
+      0.654655933380127,
+      325.383544921875,
+      0.6506201028823853
+    ],
+    "scalar_input_names": [
+      "kda_log1p",
+      "gpm_raw",
+      "hd_log1p"
+    ],
+    "item_vocab_size": 305,
+    "train_patch_id_distribution": {
+      "1": 24448,
+      "3": 25552
+    },
+    "val_patch_id_distribution": {
+      "1": 5000
+    }
+  }
+}

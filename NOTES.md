@@ -1197,3 +1197,87 @@ next_candidates:
   InfoNCE on per-player reps).
 - (Deferred) v7-rich-skill-features — pragmatic pivot to engineered
   features if SSL universally fails.
+
+## 2026-05-26 (evening) — pivot to downstream
+
+### Did
+- **v6-jepa HALTED at Phase 1 ep11**: classic representation collapse
+  (jepa_loss 0.0284 → 0.0014, rep_l2 14.4 → 2.5, mid_probe stuck at
+  0.5017). Pairwise cosine DID decrease (0.972 → 0.911 — slot
+  differentiation worked) but reps collapsed to low-magnitude
+  trivially-predictable subspace. Saved ~10h.
+- **Brainstorming detour with user**: diffusion-style ("sharpening the
+  outcome distribution") vs marginal multi-task; VAE vs PMAE
+  structural+theoretical+tradeoffs comparison; MAGE-style variable
+  masking as a cheap test of "did fixed mask rate cause v5 failure?"
+- **v4 diagnostic — STRONG positive**:
+  - Hero embeddings cluster by role/archetype (carries with carries,
+    supports with supports, mids/casters, initiator-tanks). Cosine
+    similarity well-spread (mean -0.002, std 0.105, range
+    [-0.36, +0.46]). Not collapsed.
+  - Sanity check: post-game GPM-diff alone hits 0.9931 val_auc on the
+    same data; net_worth-diff 0.9918. Architecture/data work
+    perfectly when given strong signal.
+  - v4 encoder representation: PCA-1 captures 52% variance and
+    correlates +0.98 with v4 win_pred, +0.49 with skill_diff.
+    Effective dim ~10-20 (uses capacity, not collapsed).
+  - UMAP-x decile analysis: monotonic win_rate from 0.366 (low-x) to
+    0.726 (high-x) — the encoder organizes matches along expected
+    outcome axis.
+  - Linear probe on team-diff-pool: 0.622 val_auc — within 0.012 of
+    trained win head (0.634 on this 5k sample). Decoder/cross-attention
+    adds almost nothing.
+- **Pre-game baseline diagnostics** (univariate / multivariate LR on
+  team-mean-diff of 8 player features):
+  - smoothed_winrate_hero: 0.5761 (dominant signal)
+  - n_games_hero_log1p: 0.5305 (hero novelty matters)
+  - plain smoothed_winrate: 0.5084 (matchmaking effect — useless alone)
+  - all 8 team-diff features (multivariate LR): 0.5851
+- **Saved deferred foundation paths** at
+  [[_meta/deferred-foundation-paths]]. Five paths (v7-rich-skill,
+  v7-mage-lite, v7-cvae, v7-cross-head, v7-diffusion) with cost +
+  pickup-trigger for each.
+
+### Findings
+- **The v4 architecture is sound, NOT broken.** Hero embeddings,
+  encoder reps, monotonic outcome organization — all behave as a
+  trained foundation model should.
+- **The val_auc 0.647 ceiling is data-bound, not architecture-bound.**
+  Pre-game features have inherent signal limits: matchmaking flattens
+  player_winrate, anonymity rate is 66%, game variance is high.
+- **Decoder + cross-attention barely outperforms linear probe**
+  (+0.012). The encoder is doing essentially all the work.
+- **The two SSL failures were genuine SSL design failures**, not
+  symptoms of a broken architecture: v5 = per-token reconstruction
+  over-specializes; v6 = latent prediction without collapse mitigation.
+  Future SSL work needs proper mitigations (VICReg, KL term, variable
+  masking) AND must demonstrate value vs a strong baseline.
+- **The dominant per-player signal is smoothed_winrate_hero**
+  (univariate 0.5761), exactly matching prior LightGBM importance.
+  User's matchmaking-flattening hypothesis confirmed: plain
+  smoothed_winrate is useless alone.
+
+### Next
+- **PIVOT to downstream queries on v4**: build the inference wrapper
+  (draft + player aggregates) → (win_prob, duration-curve, item
+  top-K, KDA/GPM/HD projections per slot). Then concrete query
+  functions: hero-pair synergy, lineup-vs-lineup matchup, item rec
+  conditioned on net_worth, fun-pair max-kills.
+- (Deferred) The 5 architectural paths above. Pick up only if a
+  specific downstream query reveals a representation deficiency.
+- (Carryover) DVC formalization, HCE-vs-prior-art ADR.
+
+### Structured
+
+```yaml
+intended_effect: "Diagnose whether v4's architecture is the cause of the val_auc ceiling vs the data itself. Verify representations learn expected hero/match semantics."
+intended_effect_confirmed: yes
+diagnostics.leakage_check: "n/a (read-only inspection)"
+diagnostics.overfitting_signal: "v4 train_win=0.6492 vl_win=0.6549 gap=+0.0057 healthy"
+diagnostics.data_quality_issues: "none — features in sensible ranges, GPM/NW post-game stats trivially predict win at 0.99 val_auc"
+delta_from_prior: "n/a (diagnostic, not training)"
+next_candidates:
+  - "Downstream inference wrapper + query functions (next-step)"
+  - "v7-rich-skill-features (if a query reveals missing per-player item-history signal)"
+  - "v7-mage-lite (if we revisit SSL after more lit review)"
+```

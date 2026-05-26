@@ -110,3 +110,6 @@ skills; read by `/lint`.
 2026-05-26 02:14 implement v5-pretrain-finetune-740 → experiments/2026-05-26-v5-pretrain-finetune-740/ seeds=1 model=claude-opus-4-6
 2026-05-26 07:58 wrap v5-pretrain-finetune-740 HALTED at Phase 1 ep16/20 per pre-committed criterion — mid-probe trajectory 0.4711→0.5237→0.5304→0.5263 (regression) — classic SSL reconstruction over-specialization; saved ~10h
 2026-05-26 07:58 propose v6-jepa-pretrain-finetune-740 → experiments/_proposals/2026-05-26-v6-jepa-pretrain-finetune-740.md (swap reconstruction → JEPA latent-space prediction, reuse v5 scaffolding)
+2026-05-26 08:10 implement v6-jepa-pretrain-finetune-740 → experiments/2026-05-26-v6-jepa-pretrain-finetune-740/ seeds=1 model=claude-opus-4-6
+2026-05-26 17:04 wrap v6-jepa HALTED at ep11 (representation collapse) + v4 DIAGNOSTIC strongly positive (hero embeddings cluster by role, encoder PCA-1 corr +0.98 with win_pred, monotonic outcome organization across UMAP-x deciles, linear probe within 0.012 of trained win head) — architecture sound, ceiling data-bound; pivoting to downstream queries
+2026-05-26 17:04 deferred 5 foundation-architecture paths at _meta/deferred-foundation-paths.md (rich-skill, mage-lite, cvae, cross-head, diffusion) — pick up only if a specific downstream query surfaces a representation deficiency

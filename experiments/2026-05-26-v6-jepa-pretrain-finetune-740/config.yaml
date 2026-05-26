@@ -1,0 +1,207 @@
+# Config for v6-jepa-pretrain-finetune-740.
+#
+# Single-change ablation of v5: swap Phase 1 loss form from BERT-style
+# raw-target reconstruction to JEPA-style latent-space prediction.
+# Everything else is identical to v5.
+#
+# Three-phase classical foundation-model pattern:
+#   Phase 1: self-supervised JEPA pre-train (~6h, 20 epochs).
+#     6 input groups per slot: player_block + hero_token + item_list +
+#     kda_scalar + gpm_scalar + hd_scalar. Each group masked independently
+#     per-example with p_group=0.4 and REPLACED with a per-group learned
+#     mask token (NOT zero). EMA-teacher momentum=0.996. Loss = SmoothL1
+#     between predictor(student_per_slot_reps) and teacher_per_slot_reps
+#     at masked slot positions. One scalar loss replaces v5's six per-group
+#     reconstruction losses. Predictor is a 2-layer MLP (Linear-GELU-Linear,
+#     d_model in/out), Phase-1-only (not saved with encoder).
+#     Mid-pretrain linear probes at epochs 5/10/15/20 for representation
+#     diagnostic; per-step collapse diagnostics (per-slot rep L2-norm,
+#     pairwise cosine across slots).
+#   Phase 2A: linear probe (~0.5h). Frozen encoder, single win head.
+#     KDA/GPM/HD/items FULLY masked at the encoder (matches inference).
+#   Phase 2B: full multi-task fine-tune (~6h, 20 epochs). Unfrozen
+#     encoder + all v4 heads. Optimizer with two parameter groups
+#     (encoder lr=1e-5, heads lr=1e-3). KDA/GPM/HD/items FULLY masked
+#     at encoder; targets still used by their prediction heads.
+#
+# Reuses extended player_features + rich_cols sidecar parquets from
+# v3/v4/v5 — no rebuild. HCE-strict: data.py refuses test-window dates.
+
+snapshot_id: "7.40-2025-12-16"
+snapshot_path: "data/snapshots/7.40-2025-12-16"
+splits_spec: "splits.yaml"
+
+seed: 42
+
+anonymous_account_ids: [0, 4294967295]
+
+player_features_transformer:
+  source_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_extended"
+  feat_names:
+    - "n_games_log1p"
+    - "smoothed_winrate"
+    - "smoothed_winrate_hero"
+    - "last10_winrate"
+    - "days_since_last_log1p"
+    - "n_games_hero_log1p"
+    - "hero_diversity_log1p"
+    - "is_anonymous"
+  n_player_feats: 8
+
+rich_cols:
+  out_dir: "data/snapshots/7.40-2025-12-16/processed/rich_cols_extended"
+  train_filename: "train.parquet"
+  val_filename: "val.parquet"
+  smoke_train_filename: "train_smoke.parquet"
+  smoke_val_filename: "val_smoke.parquet"
+  feat_bounds:
+    duration:        [0, 7200]
+    kills:           [0, 100]
+    deaths:          [0, 100]
+    assists:         [0, 100]
+    gpm:             [0, 5000]
+    xpm:             [0, 5000]
+    hero_damage:     [0, 500000]
+    net_worth:       [0, 500000]
+
+item_vocab:
+  vocab_path: "../2026-05-20-rich-supervision-multitask-740/results/item_vocab.json"
+
+duration_bucket:
+  n_buckets: 8
+
+train_subset_size: 5000000
+train_subset_stratify_on: "radiant_win"
+
+hero:
+  id_min: 1
+  id_max: 150
+  vocab_size: 151
+
+# 5M-scale FT-Transformer (same skeleton as v4).
+transformer_model:
+  embed_dim: 256
+  d_model: 256
+  n_heads: 8
+  n_layers: 6
+  ff_mult: 4
+  dropout: 0.0
+  use_team_team_bias: true
+  use_patch_token: false
+  use_lobby_token: false
+  use_canonical_sort: true
+  decoder_n_layers: 2
+  decoder_n_heads: 8
+  remove_first_layer_first_ln: true
+
+patch:
+  vocab_size: 8
+  default_patch_id: 1
+
+# ===== Phase 1: pre-train =====
+pretrain:
+  enabled: true
+  batch_size: 512
+  lr: 1.0e-3
+  weight_decay: 0.0
+  max_epochs: 20
+  warmup_steps: 1000
+  cosine_min_lr: 1.0e-5
+  mixed_precision: true
+  num_workers: 0
+  pin_memory: false
+  # JEPA loss form: predict masked-slot teacher reps in latent space.
+  # (v5 was implicit "reconstruction"; v6 documents the swap.)
+  loss_form: jepa
+  # Per-group mask probability (independent per example per group).
+  p_group: 0.4
+  ema_momentum: 0.996
+  # Six groups: player_block, hero_token, item_list, kda, gpm, hd.
+  groups: ["player_block", "hero_token", "item_list", "kda", "gpm", "hd"]
+  # Collapse-detector thresholds (warn if rep L2-norm drops below
+  # collapse_l2_threshold or pairwise cosine across slots exceeds
+  # collapse_cos_threshold). These are surfaced in epoch history.
+  collapse_l2_threshold: 1.0e-3
+  collapse_cos_threshold: 0.95
+  # Mid-pretrain linear probe schedule (epochs at which to fire).
+  probe_at_epochs: [5, 10, 15, 20]
+  probe_n_train: 50000
+  probe_n_val:   20000
+  probe_epochs:  3
+  probe_lr:      1.0e-2
+  output_encoder: "results/pretrain_encoder.pt"
+  output_history: "results/pretrain_history.json"
+  output_probe_history: "results/mid_probe_history.json"
+
+# ===== Phase 2A: linear probe =====
+linear_probe:
+  enabled: true
+  encoder_path: "results/pretrain_encoder.pt"
+  batch_size: 512
+  lr: 1.0e-2
+  max_epochs: 5
+  mixed_precision: true
+  output_metrics: "metrics_linear_probe.json"
+
+# ===== Phase 2B: full multi-task fine-tune =====
+finetune:
+  enabled: true
+  encoder_path: "results/pretrain_encoder.pt"
+  batch_size: 512
+  encoder_lr: 1.0e-5
+  encoder_weight_decay: 0.0
+  encoder_cosine_min_lr: 1.0e-7
+  head_lr: 1.0e-3
+  head_weight_decay: 1.0e-4
+  head_cosine_min_lr: 1.0e-5
+  max_epochs: 20
+  warmup_steps: 1000
+  patience: 5
+  early_stopping_metric: val_win_log_loss
+  mixed_precision: true
+  output_metrics: "metrics_finetune.json"
+
+# Multitask alphas same as v4 (no alpha_mae — classical BERT recipe).
+multitask_loss:
+  alpha_win: 1.0
+  alpha_dur: 0.15
+  alpha_item: 0.3
+  alpha_kda: 0.1
+  alpha_gpm: 0.1
+  alpha_hd: 0.1
+  aux_targets:
+    - kills
+    - gpm
+    - hero_damage
+
+# Phase 2B uses CE 8-bucket duration head (same as v4).
+dur_loss_mode: ce
+
+# Smoke configs (1 epoch / small subset / no early stop).
+smoke:
+  pretrain:
+    max_epochs: 1
+    n_train: 50000
+    n_val: 5000
+    probe_at_epochs: [1]
+    probe_n_train: 5000
+    probe_n_val: 2000
+    probe_epochs: 1
+  finetune:
+    max_epochs: 1
+    n_train: 50000
+    n_val: 5000
+
+# Comparison anchors used in metrics_*.json deltas.
+anchors:
+  v4_val_auc:                           0.6471
+  iso_teambias_val_auc:                 0.6493
+  v3_val_auc:                           0.6462
+  cleanup_anchor_val_auc:               0.6477054
+  baseline_multitask_repro_val_auc:     0.6470
+  iso_pmae_val_auc:                     0.6464
+  v5_mid_probe_peak_val_auc:            0.5304
+  proposal_target_val_auc:              0.6485
+
+output:
+  results_dir: "results"
