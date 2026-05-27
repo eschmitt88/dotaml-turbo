@@ -1,0 +1,320 @@
+===== v7-unified-masked-multitask-740 run_all START 2026-05-26T20:12:19+00:00 =====
+[2026-05-26T20:12:19+00:00] STEP 1/2: smoke v7_unified
+Ablation: v7_unified smoke=True
+  source_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended
+  sidecar_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols_extended
+  vocab_path=/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train_smoke.parquet
+  train rows: 401,864
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val_smoke.parquet
+  val   rows: 163,190
+  vocab: item_vocab_size=305
+  rich-cols sidecar: train=train_smoke.parquet, val=val_smoke.parquet
+  joining train sidecar...
+    sidecar read: 50,000 rows (filtered to clean set)
+    items vectorized in 1.0s
+  joining val sidecar...
+    sidecar read: 5,000 rows (filtered to clean set)
+    items vectorized in 0.1s
+Data ready in 2.3s -- train=50,000 val=5,000
+  train dates 2025-09-15..2025-12-20
+  val   dates 2026-02-25..2026-02-25
+Model: {'total': 6541032, 'trainable': 6541032, 'embedding': 136448, 'mask_embed': 2560, 'non_embedding': 6404584}, device=cuda
+  probe subset: 2,000 rows (of 5,000)
+  initial scenario probs: everything_visible=0.150 pure_pregame=0.300 partial_draft=0.150 partial_items=0.100 duration_cond=0.080 items_cond=0.080 outcome_cond=0.050 kills_pair_probe=0.050 random_uniform=0.040
+  total_steps=98 warmup_steps=1,000
+  epoch 1/1 (5.7s) lr=9.80e-05
+    losses: win=0.6986 dur=1.2415 items=0.6444 kills=0.2989 deaths=0.3779 assists=0.4460 gpm=1.3115 hd=2.1554  total=7.7214
+    scenarios: everything_visible=22 pure_pregame=27 partial_draft=5 partial_items=12 duration_cond=9 items_cond=9 outcome_cond=5 kills_pair_probe=7 random_uniform=2
+    pure_pregame_val_auc=0.4856
+    PROBE SUITE (1.7s):
+      pure_pregame: 0.4850
+      partial_draft: 0.0215
+      duration_cond: 0.4920
+      items_cond: 0.4688
+      outcome_cond: 0.0073
+      partial_items: 0.4103
+      kills_pair_probe: 0.5570
+      gpm_probe: 0.2813
+      hd_probe: 0.4996
+    sampling probs after update: everything_visible=0.129 pure_pregame=0.310 partial_draft=0.155 partial_items=0.103 duration_cond=0.083 items_cond=0.083 outcome_cond=0.052 kills_pair_probe=0.052 random_uniform=0.034
+Training done in 7.7s -- best pure_pregame_val_auc=0.4856 @ epoch 1
+FINAL PROBE SUITE: {'pure_pregame': 0.48499281851977016, 'partial_draft': 0.0215, 'duration_cond': 0.4919706223144885, 'items_cond': 0.4688063253351358, 'outcome_cond': 0.007265712600201368, 'partial_items': 0.4102968549031493, 'kills_pair_probe': 0.5569964647293091, 'gpm_probe': 0.28131622076034546, 'hd_probe': 0.4995502531528473}
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v7-unified-masked-multitask-740/metrics_smoke_v7_unified.json
+[2026-05-26T20:12:33+00:00] STEP 1/2 DONE
+[2026-05-26T20:12:33+00:00] STEP 2/2: v7_unified full training
+[2026-05-26T20:12:33+00:00] train.py v7_unified attempt 1/3 START
+Ablation: v7_unified smoke=False
+  source_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended
+  sidecar_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols_extended
+  vocab_path=/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train.parquet
+  train rows: 32,641,476
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 80.4s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 101.9s
+Data ready in 318.1s -- train=5,000,000 val=2,419,185
+  train dates 2025-08-15..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+Model: {'total': 6541032, 'trainable': 6541032, 'embedding': 136448, 'mask_embed': 2560, 'non_embedding': 6404584}, device=cuda
+  probe subset: 50,000 rows (of 2,419,185)
+  initial scenario probs: everything_visible=0.150 pure_pregame=0.300 partial_draft=0.150 partial_items=0.100 duration_cond=0.080 items_cond=0.080 outcome_cond=0.050 kills_pair_probe=0.050 random_uniform=0.040
+  total_steps=244,150 warmup_steps=1,000
+  epoch 1/25 (566.6s) lr=9.97e-04
+    losses: win=0.4705 dur=0.0358 items=0.0965 kills=0.2141 deaths=0.1165 assists=0.1439 gpm=0.0580 hd=0.1960  total=1.6543
+    scenarios: everything_visible=1503 pure_pregame=2894 partial_draft=1443 partial_items=1034 duration_cond=777 items_cond=807 outcome_cond=457 kills_pair_probe=471 random_uniform=380
+    pure_pregame_val_auc=0.6115
+    PROBE SUITE (28.2s):
+      pure_pregame: 0.6101
+      partial_draft: 0.0376
+      duration_cond: 0.6090
+      items_cond: 0.9815
+      outcome_cond: 0.1336
+      partial_items: 0.0920
+      kills_pair_probe: 0.5481
+      gpm_probe: 0.2043
+      hd_probe: 0.3866
+    sampling probs after update: everything_visible=0.131 pure_pregame=0.315 partial_draft=0.158 partial_items=0.105 duration_cond=0.084 items_cond=0.067 outcome_cond=0.053 kills_pair_probe=0.053 random_uniform=0.035
+  epoch 2/25 (558.1s) lr=9.86e-04
+    losses: win=0.4481 dur=0.0214 items=0.0879 kills=0.2073 deaths=0.1083 assists=0.1329 gpm=0.0443 hd=0.1692  total=1.5445
+    scenarios: everything_visible=1257 pure_pregame=3185 partial_draft=1500 partial_items=1063 duration_cond=826 items_cond=611 outcome_cond=532 kills_pair_probe=435 random_uniform=357
+    pure_pregame_val_auc=0.6187
+    PROBE SUITE (28.6s):
+      pure_pregame: 0.6168
+      partial_draft: 0.0394
+      duration_cond: 0.6173
+      items_cond: 0.9843
+      outcome_cond: 0.1452
+      partial_items: 0.0907
+      kills_pair_probe: 0.5497
+      gpm_probe: 0.1977
+      hd_probe: 0.3745
+    sampling probs after update: everything_visible=0.114 pure_pregame=0.329 partial_draft=0.164 partial_items=0.110 duration_cond=0.088 items_cond=0.055 outcome_cond=0.055 kills_pair_probe=0.055 random_uniform=0.030
+  epoch 3/25 (560.2s) lr=9.67e-04
+    losses: win=0.4540 dur=0.0209 items=0.0852 kills=0.1926 deaths=0.1071 assists=0.1261 gpm=0.0409 hd=0.1571  total=1.5082
+    scenarios: everything_visible=1140 pure_pregame=3139 partial_draft=1611 partial_items=1118 duration_cond=832 items_cond=548 outcome_cond=550 kills_pair_probe=526 random_uniform=302
+    pure_pregame_val_auc=0.6213
+  epoch 4/25 (560.5s) lr=9.41e-04
+    losses: win=0.4555 dur=0.0200 items=0.0804 kills=0.1711 deaths=0.0991 assists=0.1175 gpm=0.0366 hd=0.1401  total=1.4470
+    scenarios: everything_visible=1136 pure_pregame=3222 partial_draft=1578 partial_items=1055 duration_cond=851 items_cond=527 outcome_cond=548 kills_pair_probe=548 random_uniform=301
+    pure_pregame_val_auc=0.6282
+    PROBE SUITE (28.6s):
+      pure_pregame: 0.6270
+      partial_draft: 0.0233
+      duration_cond: 0.6478
+      items_cond: 0.9864
+      outcome_cond: 0.2547
+      partial_items: 0.0798
+      kills_pair_probe: 0.5184
+      gpm_probe: 0.1121
+      hd_probe: 0.2020
+    sampling probs after update: everything_visible=0.099 pure_pregame=0.341 partial_draft=0.171 partial_items=0.114 duration_cond=0.091 items_cond=0.045 outcome_cond=0.057 kills_pair_probe=0.057 random_uniform=0.026
+  epoch 5/25 (618.3s) lr=9.08e-04
+    losses: win=0.4683 dur=0.0195 items=0.0759 kills=0.1714 deaths=0.0990 assists=0.1178 gpm=0.0359 hd=0.1380  total=1.4605
+    scenarios: everything_visible=954 pure_pregame=3326 partial_draft=1625 partial_items=1158 duration_cond=906 items_cond=454 outcome_cond=522 kills_pair_probe=559 random_uniform=262
+    pure_pregame_val_auc=0.6320
+  epoch 6/25 (561.3s) lr=8.69e-04
+    losses: win=0.4698 dur=0.0190 items=0.0734 kills=0.1697 deaths=0.0980 assists=0.1165 gpm=0.0353 hd=0.1352  total=1.4537
+    scenarios: everything_visible=989 pure_pregame=3366 partial_draft=1682 partial_items=1114 duration_cond=913 items_cond=425 outcome_cond=513 kills_pair_probe=529 random_uniform=235
+    pure_pregame_val_auc=0.6322
+    PROBE SUITE (84.8s):
+      pure_pregame: 0.6311
+      partial_draft: 0.0229
+      duration_cond: 0.6508
+      items_cond: 0.9870
+      outcome_cond: 0.3115
+      partial_items: 0.0747
+      kills_pair_probe: 0.5173
+      gpm_probe: 0.1012
+      hd_probe: 0.1502
+    sampling probs after update: everything_visible=0.090 pure_pregame=0.311 partial_draft=0.187 partial_items=0.125 duration_cond=0.100 items_cond=0.039 outcome_cond=0.062 kills_pair_probe=0.062 random_uniform=0.024
+  epoch 7/25 (566.3s) lr=8.24e-04
+    losses: win=0.4731 dur=0.0191 items=0.0726 kills=0.1723 deaths=0.0992 assists=0.1179 gpm=0.0356 hd=0.1366  total=1.4542
+    scenarios: everything_visible=848 pure_pregame=3114 partial_draft=1856 partial_items=1215 duration_cond=935 items_cond=361 outcome_cond=596 kills_pair_probe=630 random_uniform=211
+    pure_pregame_val_auc=0.6370
+  epoch 8/25 (563.9s) lr=7.74e-04
+    losses: win=0.4690 dur=0.0187 items=0.0713 kills=0.1704 deaths=0.0981 assists=0.1163 gpm=0.0350 hd=0.1343  total=1.4383
+    scenarios: everything_visible=856 pure_pregame=3090 partial_draft=1812 partial_items=1191 duration_cond=986 items_cond=364 outcome_cond=619 kills_pair_probe=613 random_uniform=235
+    pure_pregame_val_auc=0.6373
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6333
+      partial_draft: 0.0226
+      duration_cond: 0.6641
+      items_cond: 0.9873
+      outcome_cond: 0.3183
+      partial_items: 0.0740
+      kills_pair_probe: 0.5137
+      gpm_probe: 0.0943
+      hd_probe: 0.1085
+    sampling probs after update: everything_visible=0.083 pure_pregame=0.286 partial_draft=0.206 partial_items=0.137 duration_cond=0.092 items_cond=0.037 outcome_cond=0.069 kills_pair_probe=0.069 random_uniform=0.022
+  epoch 9/25 (567.1s) lr=7.19e-04
+    losses: win=0.4657 dur=0.0186 items=0.0709 kills=0.1712 deaths=0.0984 assists=0.1168 gpm=0.0349 hd=0.1346  total=1.4225
+    scenarios: everything_visible=777 pure_pregame=2787 partial_draft=2052 partial_items=1311 duration_cond=911 items_cond=386 outcome_cond=660 kills_pair_probe=677 random_uniform=205
+    pure_pregame_val_auc=0.6386
+  epoch 10/25 (566.2s) lr=6.62e-04
+    losses: win=0.4646 dur=0.0183 items=0.0701 kills=0.1702 deaths=0.0977 assists=0.1158 gpm=0.0346 hd=0.1332  total=1.4164
+    scenarios: everything_visible=791 pure_pregame=2815 partial_draft=2008 partial_items=1339 duration_cond=938 items_cond=359 outcome_cond=644 kills_pair_probe=660 random_uniform=212
+    pure_pregame_val_auc=0.6398
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6395
+      partial_draft: 0.0253
+      duration_cond: 0.6668
+      items_cond: 0.9875
+      outcome_cond: 0.3216
+      partial_items: 0.0736
+      kills_pair_probe: 0.5120
+      gpm_probe: 0.1095
+      hd_probe: 0.1310
+    sampling probs after update: everything_visible=0.075 pure_pregame=0.260 partial_draft=0.225 partial_items=0.150 duration_cond=0.083 items_cond=0.036 outcome_cond=0.075 kills_pair_probe=0.075 random_uniform=0.020
+  epoch 11/25 (626.8s) lr=6.01e-04
+    losses: win=0.4571 dur=0.0184 items=0.0696 kills=0.1704 deaths=0.0978 assists=0.1158 gpm=0.0344 hd=0.1335  total=1.3943
+    scenarios: everything_visible=747 pure_pregame=2553 partial_draft=2138 partial_items=1503 duration_cond=826 items_cond=326 outcome_cond=750 kills_pair_probe=759 random_uniform=164
+    pure_pregame_val_auc=0.6410
+  epoch 12/25 (570.6s) lr=5.39e-04
+    losses: win=0.4520 dur=0.0181 items=0.0688 kills=0.1689 deaths=0.0969 assists=0.1146 gpm=0.0340 hd=0.1320  total=1.3777
+    scenarios: everything_visible=785 pure_pregame=2467 partial_draft=2206 partial_items=1459 duration_cond=831 items_cond=354 outcome_cond=750 kills_pair_probe=712 random_uniform=202
+    pure_pregame_val_auc=0.6413
+    PROBE SUITE (85.3s):
+      pure_pregame: 0.6393
+      partial_draft: 0.0252
+      duration_cond: 0.6700
+      items_cond: 0.9877
+      outcome_cond: 0.3224
+      partial_items: 0.0734
+      kills_pair_probe: 0.5119
+      gpm_probe: 0.0846
+      hd_probe: 0.0998
+    sampling probs after update: everything_visible=0.068 pure_pregame=0.235 partial_draft=0.243 partial_items=0.162 duration_cond=0.075 items_cond=0.036 outcome_cond=0.081 kills_pair_probe=0.081 random_uniform=0.018
+  epoch 13/25 (572.6s) lr=4.77e-04
+    losses: win=0.4513 dur=0.0182 items=0.0682 kills=0.1703 deaths=0.0977 assists=0.1156 gpm=0.0341 hd=0.1331  total=1.3730
+    scenarios: everything_visible=665 pure_pregame=2295 partial_draft=2368 partial_items=1590 duration_cond=743 items_cond=366 outcome_cond=786 kills_pair_probe=770 random_uniform=183
+    pure_pregame_val_auc=0.6437
+  epoch 14/25 (573.3s) lr=4.15e-04
+    losses: win=0.4524 dur=0.0183 items=0.0677 kills=0.1706 deaths=0.0978 assists=0.1158 gpm=0.0341 hd=0.1335  total=1.3745
+    scenarios: everything_visible=637 pure_pregame=2312 partial_draft=2370 partial_items=1575 duration_cond=690 items_cond=387 outcome_cond=781 kills_pair_probe=819 random_uniform=195
+    pure_pregame_val_auc=0.6425
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6417
+      partial_draft: 0.0312
+      duration_cond: 0.6740
+      items_cond: 0.9880
+      outcome_cond: 0.3253
+      partial_items: 0.0731
+      kills_pair_probe: 0.5118
+      gpm_probe: 0.0812
+      hd_probe: 0.0847
+    sampling probs after update: everything_visible=0.061 pure_pregame=0.210 partial_draft=0.261 partial_items=0.174 duration_cond=0.067 items_cond=0.036 outcome_cond=0.087 kills_pair_probe=0.087 random_uniform=0.016
+  epoch 15/25 (575.7s) lr=3.54e-04
+    losses: win=0.4536 dur=0.0185 items=0.0674 kills=0.1721 deaths=0.0986 assists=0.1169 gpm=0.0343 hd=0.1348  total=1.3742
+    scenarios: everything_visible=559 pure_pregame=2117 partial_draft=2608 partial_items=1666 duration_cond=652 items_cond=343 outcome_cond=825 kills_pair_probe=823 random_uniform=173
+    pure_pregame_val_auc=0.6444
+  epoch 16/25 (575.4s) lr=2.96e-04
+    losses: win=0.4462 dur=0.0181 items=0.0665 kills=0.1705 deaths=0.0976 assists=0.1155 gpm=0.0338 hd=0.1330  total=1.3521
+    scenarios: everything_visible=583 pure_pregame=2030 partial_draft=2561 partial_items=1717 duration_cond=656 items_cond=382 outcome_cond=838 kills_pair_probe=831 random_uniform=168
+    pure_pregame_val_auc=0.6450
+    PROBE SUITE (84.8s):
+      pure_pregame: 0.6440
+      partial_draft: 0.0312
+      duration_cond: 0.6762
+      items_cond: 0.9883
+      outcome_cond: 0.3264
+      partial_items: 0.0730
+      kills_pair_probe: 0.5117
+      gpm_probe: 0.0800
+      hd_probe: 0.0784
+    sampling probs after update: everything_visible=0.056 pure_pregame=0.192 partial_draft=0.274 partial_items=0.183 duration_cond=0.061 items_cond=0.037 outcome_cond=0.091 kills_pair_probe=0.091 random_uniform=0.015
+  epoch 17/25 (577.7s) lr=2.42e-04
+    losses: win=0.4506 dur=0.0185 items=0.0664 kills=0.1724 deaths=0.0987 assists=0.1170 gpm=0.0342 hd=0.1348  total=1.3592
+    scenarios: everything_visible=519 pure_pregame=1892 partial_draft=2701 partial_items=1751 duration_cond=643 items_cond=352 outcome_cond=877 kills_pair_probe=909 random_uniform=122
+    pure_pregame_val_auc=0.6448
+  epoch 18/25 (635.3s) lr=1.91e-04
+    losses: win=0.4450 dur=0.0184 items=0.0658 kills=0.1716 deaths=0.0982 assists=0.1163 gpm=0.0340 hd=0.1342  total=1.3480
+    scenarios: everything_visible=512 pure_pregame=1916 partial_draft=2681 partial_items=1779 duration_cond=566 items_cond=369 outcome_cond=892 kills_pair_probe=891 random_uniform=160
+    pure_pregame_val_auc=0.6463
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6448
+      partial_draft: 0.0285
+      duration_cond: 0.6762
+      items_cond: 0.9884
+      outcome_cond: 0.3274
+      partial_items: 0.0730
+      kills_pair_probe: 0.5113
+      gpm_probe: 0.0798
+      hd_probe: 0.0827
+    sampling probs after update: everything_visible=0.052 pure_pregame=0.180 partial_draft=0.282 partial_items=0.188 duration_cond=0.058 items_cond=0.038 outcome_cond=0.094 kills_pair_probe=0.094 random_uniform=0.014
+  epoch 19/25 (635.8s) lr=1.45e-04
+    losses: win=0.4364 dur=0.0181 items=0.0649 kills=0.1702 deaths=0.0974 assists=0.1153 gpm=0.0335 hd=0.1329  total=1.3225
+    scenarios: everything_visible=531 pure_pregame=1722 partial_draft=2762 partial_items=1887 duration_cond=544 items_cond=381 outcome_cond=936 kills_pair_probe=870 random_uniform=133
+    pure_pregame_val_auc=0.6462
+  epoch 20/25 (635.8s) lr=1.05e-04
+    losses: win=0.4400 dur=0.0183 items=0.0647 kills=0.1711 deaths=0.0979 assists=0.1160 gpm=0.0337 hd=0.1336  total=1.3295
+    scenarios: everything_visible=502 pure_pregame=1741 partial_draft=2742 partial_items=1883 duration_cond=524 items_cond=375 outcome_cond=919 kills_pair_probe=955 random_uniform=125
+    pure_pregame_val_auc=0.6470
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6462
+      partial_draft: 0.0280
+      duration_cond: 0.6786
+      items_cond: 0.9885
+      outcome_cond: 0.3277
+      partial_items: 0.0729
+      kills_pair_probe: 0.5101
+      gpm_probe: 0.0789
+      hd_probe: 0.0687
+    sampling probs after update: everything_visible=0.050 pure_pregame=0.173 partial_draft=0.287 partial_items=0.192 duration_cond=0.055 items_cond=0.038 outcome_cond=0.096 kills_pair_probe=0.096 random_uniform=0.013
+  epoch 21/25 (637.2s) lr=7.17e-05
+    losses: win=0.4372 dur=0.0183 items=0.0644 kills=0.1711 deaths=0.0978 assists=0.1158 gpm=0.0337 hd=0.1335  total=1.3225
+    scenarios: everything_visible=492 pure_pregame=1668 partial_draft=2798 partial_items=1906 duration_cond=529 items_cond=353 outcome_cond=962 kills_pair_probe=924 random_uniform=134
+    pure_pregame_val_auc=0.6473
+  epoch 22/25 (637.1s) lr=4.50e-05
+    losses: win=0.4392 dur=0.0182 items=0.0640 kills=0.1708 deaths=0.0977 assists=0.1157 gpm=0.0336 hd=0.1332  total=1.3252
+    scenarios: everything_visible=508 pure_pregame=1719 partial_draft=2759 partial_items=1914 duration_cond=544 items_cond=348 outcome_cond=913 kills_pair_probe=934 random_uniform=127
+    pure_pregame_val_auc=0.6475
+    PROBE SUITE (28.5s):
+      pure_pregame: 0.6463
+      partial_draft: 0.0300
+      duration_cond: 0.6795
+      items_cond: 0.9886
+      outcome_cond: 0.3280
+      partial_items: 0.0728
+      kills_pair_probe: 0.5109
+      gpm_probe: 0.0773
+      hd_probe: 0.0603
+    sampling probs after update: everything_visible=0.048 pure_pregame=0.168 partial_draft=0.291 partial_items=0.194 duration_cond=0.054 items_cond=0.039 outcome_cond=0.097 kills_pair_probe=0.097 random_uniform=0.013
+  epoch 23/25 (636.5s) lr=2.57e-05
+    losses: win=0.4394 dur=0.0183 items=0.0639 kills=0.1712 deaths=0.0979 assists=0.1160 gpm=0.0337 hd=0.1336  total=1.3261
+    scenarios: everything_visible=493 pure_pregame=1664 partial_draft=2894 partial_items=1900 duration_cond=506 items_cond=377 outcome_cond=925 kills_pair_probe=897 random_uniform=110
+    pure_pregame_val_auc=0.6478
+  epoch 24/25 (579.7s) lr=1.39e-05
+    losses: win=0.4353 dur=0.0183 items=0.0639 kills=0.1709 deaths=0.0977 assists=0.1158 gpm=0.0336 hd=0.1336  total=1.3175
+    scenarios: everything_visible=519 pure_pregame=1628 partial_draft=2823 partial_items=1822 duration_cond=513 items_cond=391 outcome_cond=995 kills_pair_probe=950 random_uniform=125
+    pure_pregame_val_auc=0.6479
+    PROBE SUITE (84.7s):
+      pure_pregame: 0.6466
+      partial_draft: 0.0290
+      duration_cond: 0.6799
+      items_cond: 0.9887
+      outcome_cond: 0.3281
+      partial_items: 0.0728
+      kills_pair_probe: 0.5108
+      gpm_probe: 0.0770
+      hd_probe: 0.0596
+    sampling probs after update: everything_visible=0.047 pure_pregame=0.164 partial_draft=0.293 partial_items=0.196 duration_cond=0.052 items_cond=0.039 outcome_cond=0.098 kills_pair_probe=0.098 random_uniform=0.013
+  epoch 25/25 (581.8s) lr=1.00e-05
+    losses: win=0.4327 dur=0.0182 items=0.0638 kills=0.1714 deaths=0.0978 assists=0.1158 gpm=0.0336 hd=0.1335  total=1.3102
+    scenarios: everything_visible=447 pure_pregame=1529 partial_draft=2840 partial_items=1940 duration_cond=540 items_cond=358 outcome_cond=1021 kills_pair_probe=946 random_uniform=145
+    pure_pregame_val_auc=0.6480
+Training done in 20621.2s -- best pure_pregame_val_auc=0.6480 @ epoch 25
+FINAL PROBE SUITE: {'pure_pregame': 0.6467556656667421, 'partial_draft': 0.02904, 'duration_cond': 0.6800291024344716, 'items_cond': 0.9886892442232913, 'outcome_cond': 0.328226238489151, 'partial_items': 0.07283467435757711, 'kills_pair_probe': 0.5103852152824402, 'gpm_probe': 0.07703687250614166, 'hd_probe': 0.058288171887397766}
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v7-unified-masked-multitask-740/metrics_v7_unified.json
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v7-unified-masked-multitask-740/metrics_v7.json
+[2026-05-27T02:03:12+00:00] v7_unified attempt 1 SUCCESS
+[2026-05-27T02:03:12+00:00] STEP 2/2 DONE rc=0
+metrics.json <- v7_unified (pure_pregame_val_auc=0.6479612327623001)
+===== v7-unified-masked-multitask-740 run_all DONE rc=0 2026-05-27T02:03:12+00:00 =====

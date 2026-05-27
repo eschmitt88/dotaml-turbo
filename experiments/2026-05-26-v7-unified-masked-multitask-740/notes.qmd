@@ -1,0 +1,58 @@
+---
+title: "v7-unified-masked-multitask-740"
+format: html
+execute:
+  echo: false
+  warning: false
+---
+
+# Setup
+
+```{python}
+import json
+from pathlib import Path
+import numpy as np
+import matplotlib.pyplot as plt
+
+EXP = Path(".").resolve()
+M = json.loads((EXP / "metrics.json").read_text()) if (EXP / "metrics.json").exists() else None
+M
+```
+
+# Probe trajectories
+
+```{python}
+import json
+phist_path = EXP / "probe_suite_history_v7_unified.json"
+if phist_path.exists():
+    rows = [json.loads(l) for l in phist_path.read_text().splitlines() if l.strip()]
+    epochs = [r["epoch"] for r in rows]
+    results = {k: [r["results"][k] for r in rows] for k in rows[0]["results"].keys()}
+    fig, ax = plt.subplots(figsize=(8, 5))
+    for k, vs in results.items():
+        ax.plot(epochs, vs, marker=".", label=k)
+    ax.set_xlabel("epoch")
+    ax.set_ylabel("probe value")
+    ax.legend(fontsize=8)
+    ax.grid(alpha=0.3)
+    plt.show()
+```
+
+# Adaptive sampling distribution
+
+```{python}
+ahist_path = EXP / "adaptive_sampling_history_v7_unified.json"
+if ahist_path.exists():
+    rows = [json.loads(l) for l in ahist_path.read_text().splitlines() if l.strip()]
+    if rows:
+        first = rows[0]["snapshot"]["probs_after"]
+        last = rows[-1]["snapshot"]["probs_after"]
+        scenarios = list(first.keys())
+        x = np.arange(len(scenarios))
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.bar(x - 0.2, [first[s] for s in scenarios], width=0.4, label="first")
+        ax.bar(x + 0.2, [last[s] for s in scenarios], width=0.4, label="last")
+        ax.set_xticks(x); ax.set_xticklabels(scenarios, rotation=30, ha="right")
+        ax.legend(); ax.set_ylabel("sample prob"); ax.grid(alpha=0.3)
+        plt.show()
+```

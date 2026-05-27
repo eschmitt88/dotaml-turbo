@@ -1,0 +1,118 @@
+===== v7-unified-masked-multitask-740 run_all START 2026-05-26T19:08:01+00:00 =====
+[2026-05-26T19:08:01+00:00] STEP 1/2: smoke v7_unified
+Ablation: v7_unified smoke=True
+  source_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended
+  sidecar_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols_extended
+  vocab_path=/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train_smoke.parquet
+  train rows: 401,864
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val_smoke.parquet
+  val   rows: 163,190
+  vocab: item_vocab_size=305
+  rich-cols sidecar: train=train_smoke.parquet, val=val_smoke.parquet
+  joining train sidecar...
+    sidecar read: 50,000 rows (filtered to clean set)
+    items vectorized in 1.0s
+  joining val sidecar...
+    sidecar read: 5,000 rows (filtered to clean set)
+    items vectorized in 0.1s
+Data ready in 2.3s -- train=50,000 val=5,000
+  train dates 2025-09-15..2025-12-20
+  val   dates 2026-02-25..2026-02-25
+Model: {'total': 6541032, 'trainable': 6541032, 'embedding': 136448, 'mask_embed': 2560, 'non_embedding': 6404584}, device=cuda
+  probe subset: 2,000 rows (of 5,000)
+  initial scenario probs: everything_visible=0.150 pure_pregame=0.300 partial_draft=0.150 partial_items=0.100 duration_cond=0.080 items_cond=0.080 outcome_cond=0.050 kills_pair_probe=0.050 random_uniform=0.040
+  total_steps=98 warmup_steps=1,000
+  epoch 1/1 (5.8s) lr=9.80e-05
+    losses: win=0.6985 dur=1.2412 items=0.6445 kills=0.2990 deaths=0.3798 assists=0.4453 gpm=1.3121 hd=2.1521  total=7.7196
+    scenarios: everything_visible=22 pure_pregame=27 partial_draft=5 partial_items=12 duration_cond=9 items_cond=9 outcome_cond=5 kills_pair_probe=7 random_uniform=2
+    pure_pregame_val_auc=0.4855
+    PROBE SUITE (1.6s):
+      pure_pregame: 0.4863
+      partial_draft: 0.0215
+      duration_cond: 0.4937
+      items_cond: 0.4696
+      outcome_cond: 0.0071
+      partial_items: 0.4105
+      kills_pair_probe: 0.5573
+      gpm_probe: 0.2817
+      hd_probe: 0.5005
+    sampling probs after update: everything_visible=0.129 pure_pregame=0.310 partial_draft=0.155 partial_items=0.103 duration_cond=0.083 items_cond=0.083 outcome_cond=0.052 kills_pair_probe=0.052 random_uniform=0.034
+Training done in 7.7s -- best pure_pregame_val_auc=0.4855 @ epoch 1
+FINAL PROBE SUITE: {'pure_pregame': 0.4863149551811262, 'partial_draft': 0.0215, 'duration_cond': 0.4937011176555786, 'items_cond': 0.4696149962181561, 'outcome_cond': 0.007085327059030533, 'partial_items': 0.41045286557518074, 'kills_pair_probe': 0.5572653412818909, 'gpm_probe': 0.2816668152809143, 'hd_probe': 0.5004638433456421}
+Wrote /mnt/projects/research/dotaml-turbo/experiments/2026-05-26-v7-unified-masked-multitask-740/metrics_smoke_v7_unified.json
+[2026-05-26T19:08:14+00:00] STEP 1/2 DONE
+[2026-05-26T19:08:14+00:00] STEP 2/2: v7_unified full training
+[2026-05-26T19:08:14+00:00] train.py v7_unified attempt 1/3 START
+Ablation: v7_unified smoke=False
+  source_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended
+  sidecar_dir=/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/rich_cols_extended
+  vocab_path=/mnt/projects/research/dotaml-turbo/experiments/2026-05-20-rich-supervision-multitask-740/results/item_vocab.json
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/train.parquet
+  train rows: 32,641,476
+Reading clean parquet: /mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/processed/player_features_extended/val.parquet
+  val   rows: 2,419,185
+  vocab: item_vocab_size=305
+  rich-cols sidecar: train=train.parquet, val=val.parquet
+  joining train sidecar...
+    sidecar read: 5,000,000 rows (filtered to clean set)
+    items vectorized in 80.3s
+  joining val sidecar...
+    sidecar read: 2,419,185 rows (filtered to clean set)
+    items vectorized in 101.7s
+Data ready in 317.7s -- train=5,000,000 val=2,419,185
+  train dates 2025-08-15..2026-02-23
+  val   dates 2026-02-24..2026-03-09
+Model: {'total': 6541032, 'trainable': 6541032, 'embedding': 136448, 'mask_embed': 2560, 'non_embedding': 6404584}, device=cuda
+  probe subset: 50,000 rows (of 2,419,185)
+  initial scenario probs: everything_visible=0.150 pure_pregame=0.300 partial_draft=0.150 partial_items=0.100 duration_cond=0.080 items_cond=0.080 outcome_cond=0.050 kills_pair_probe=0.050 random_uniform=0.040
+  total_steps=244,150 warmup_steps=1,000
+  epoch 1/25 (566.6s) lr=9.97e-04
+    losses: win=0.4791 dur=0.0370 items=0.0967 kills=0.2162 deaths=0.1186 assists=0.1478 gpm=0.0588 hd=0.1992  total=1.6780
+    scenarios: everything_visible=1503 pure_pregame=2894 partial_draft=1443 partial_items=1034 duration_cond=777 items_cond=807 outcome_cond=457 kills_pair_probe=471 random_uniform=380
+    pure_pregame_val_auc=0.6119
+    PROBE SUITE (28.2s):
+      pure_pregame: 0.6096
+      partial_draft: 0.0230
+      duration_cond: 0.6089
+      items_cond: 0.9834
+      outcome_cond: 0.1335
+      partial_items: 0.0919
+      kills_pair_probe: 0.5521
+      gpm_probe: 0.2046
+      hd_probe: 0.3903
+    sampling probs after update: everything_visible=0.131 pure_pregame=0.315 partial_draft=0.158 partial_items=0.105 duration_cond=0.084 items_cond=0.067 outcome_cond=0.053 kills_pair_probe=0.053 random_uniform=0.035
+  epoch 2/25 (558.4s) lr=9.86e-04
+    losses: win=0.4480 dur=0.0217 items=0.0880 kills=0.2079 deaths=0.1086 assists=0.1334 gpm=0.0445 hd=0.1702  total=1.5469
+    scenarios: everything_visible=1257 pure_pregame=3185 partial_draft=1500 partial_items=1063 duration_cond=826 items_cond=611 outcome_cond=532 kills_pair_probe=435 random_uniform=357
+    pure_pregame_val_auc=0.6169
+    PROBE SUITE (28.7s):
+      pure_pregame: 0.6152
+      partial_draft: 0.0212
+      duration_cond: 0.6142
+      items_cond: 0.9831
+      outcome_cond: 0.1421
+      partial_items: 0.0911
+      kills_pair_probe: 0.5520
+      gpm_probe: 0.2014
+      hd_probe: 0.3846
+    sampling probs after update: everything_visible=0.114 pure_pregame=0.329 partial_draft=0.164 partial_items=0.110 duration_cond=0.088 items_cond=0.055 outcome_cond=0.055 kills_pair_probe=0.055 random_uniform=0.030
+  epoch 3/25 (560.1s) lr=9.67e-04
+    losses: win=0.4575 dur=0.0214 items=0.0873 kills=0.2070 deaths=0.1086 assists=0.1322 gpm=0.0439 hd=0.1695  total=1.5533
+    scenarios: everything_visible=1140 pure_pregame=3139 partial_draft=1611 partial_items=1118 duration_cond=832 items_cond=548 outcome_cond=550 kills_pair_probe=526 random_uniform=302
+    pure_pregame_val_auc=0.6179
+  epoch 4/25 (559.3s) lr=9.41e-04
+    losses: win=0.4601 dur=0.0212 items=0.0867 kills=0.2040 deaths=0.1081 assists=0.1307 gpm=0.0431 hd=0.1665  total=1.5503
+    scenarios: everything_visible=1136 pure_pregame=3222 partial_draft=1578 partial_items=1055 duration_cond=851 items_cond=527 outcome_cond=548 kills_pair_probe=548 random_uniform=301
+    pure_pregame_val_auc=0.6187
+    PROBE SUITE (28.6s):
+      pure_pregame: 0.6184
+      partial_draft: 0.0159
+      duration_cond: 0.6188
+      items_cond: 0.9841
+      outcome_cond: 0.1554
+      partial_items: 0.0897
+      kills_pair_probe: 0.5400
+      gpm_probe: 0.1795
+      hd_probe: 0.3526
+    sampling probs after update: everything_visible=0.099 pure_pregame=0.341 partial_draft=0.171 partial_items=0.114 duration_cond=0.091 items_cond=0.045 outcome_cond=0.057 kills_pair_probe=0.057 random_uniform=0.026

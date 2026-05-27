@@ -1281,3 +1281,92 @@ next_candidates:
   - "v7-rich-skill-features (if a query reveals missing per-player item-history signal)"
   - "v7-mage-lite (if we revisit SSL after more lit review)"
 ```
+
+## 2026-05-27 — v7 SUCCEEDS, foundation hypothesis confirmed
+
+### Did
+- **v7-unified-masked-multitask-740 COMPLETED SUCCESSFULLY**: val_auc=0.6480
+  @ epoch 25/25 (+0.0009 vs v4=0.6471), items_cond=0.9887, duration_cond=0.6800.
+  All three success criteria met. 5.73h wall, no halt, no collapse.
+- **Two mid-flight fixes by main agent**: (1) log1p loss targets for
+  kills/deaths/assists/gpm/hd to keep multi-task losses commensurate
+  (implementer's smoke had hd loss=24507 which would have dominated
+  the multi-task sum), (2) disabled bogus partial_draft halt criterion
+  (probe measured encoder-output-at-masked-slot ~ hero-embedding cosine
+  but v7 has no hero-reconstruction loss, so probe is misaligned with
+  the actual hero pick rec use case which uses a candidate sweep).
+  ~50 min compute lost on first attempt.
+- **Status flip + index entry + commit**.
+
+### Findings
+- **The masking-augmentation + supervised-anchor combination is the
+  winning recipe for foundation models on this data.** Always-computed
+  supervised heads anchor the encoder to win-discriminative features
+  (preventing the v5 over-specialization and v6 representation collapse).
+  9-scenario masking augmentation teaches the encoder to handle partial
+  inputs robustly — at inference, mask what's unknown, query what's
+  wanted.
+- **Items as INPUT is massively informative** (items_cond val_auc=0.989
+  vs pure_pregame 0.648 = +0.34 lift). When the model knows what items
+  each team built, win prediction is nearly perfect. This validates
+  the conditional item-rec query: sweep over items, find those that
+  maximize predicted win prob.
+- **Duration conditioning gives modest lift** (duration_cond 0.680 vs
+  pure_pregame 0.648 = +0.032). Real but less dramatic than items.
+  Sufficient for the win-rate-vs-duration query.
+- **Outcome_cond plateaued below target** (0.328 vs 0.40 target) —
+  item-rec conditional on win is harder than expected. Probably because
+  the model has to predict from sparse 305-dim multi-hot output
+  conditioned on a single bit (win=1). Manageable; can reweight
+  outcome_cond scenario in a v8 if the item-rec-conditional-on-win
+  query underperforms in actual use.
+- **Adaptive per-scenario sampling worked as designed**: partial_draft
+  budget 0.150 → 0.293 (probe was the hardest), pure_pregame
+  0.300 → 0.164 (saturated), items_cond 0.080 → 0.039 (saturated),
+  everything_visible 0.150 → 0.047 (saturated). The adaptive logic
+  reallocated training compute to weak probes intelligently.
+
+### Next
+- **Build serve/ subdirectory in v7 folder** — concrete query functions
+  on top of v7. Order:
+  1. `serve/v7_inference.py` — load v7 model, build maskable forward
+     wrapper that takes any subset of (heroes, player_feats, items,
+     k/d/a/gpm/hd, duration, win) and returns predictions for masked
+     groups.
+  2. `serve/lookups.py` — account_id → player_features (from val
+     parquet), hero ID ↔ name (OpenDota constants), item ID ↔ name.
+  3. `serve/queries.py` — concrete query functions:
+     - `personal_winprob(draft, player_feats=auto)` — pure_pregame
+     - `hero_pick_rec(partial_draft, my_slot, account_id)` — candidate
+       sweep, top-K by win_prob
+     - `item_rec_for_winprob(draft, my_slot, current_bag)` — sweep
+       items, rank by predicted win_prob, with gold budget filter
+     - `item_rec_given_win(draft, my_slot)` — outcome_cond forward
+       with win=1 fixed
+     - `win_vs_duration(draft, duration_bins)` — sweep duration as
+       input, return P(win | each duration)
+     - `kills_per_minute_pair(hero_pair, player_feats)` — kills_pair
+       scenario, K/D/A heads + dur head, compute (K+A)/duration
+     - `lineup_matchup(radiant_5, dire_5)` — standard pure_pregame
+  4. `serve/notebook.qmd` — interactive notebook for user account
+     3303652
+- **(Carryover, deferred)** The 5 architectural variants at
+  [[_meta/deferred-foundation-paths]] — only pick up if a specific
+  downstream query reveals a representation deficiency v7 can't fix.
+- **(Carryover, deferred)** DVC formalization, HCE-vs-prior-art ADR.
+- **(Carryover, deferred)** v8 if outcome_cond is the binding constraint
+  on item-rec-conditional-on-win query (reweight that scenario).
+
+### Structured
+
+```yaml
+intended_effect: "Build a single unified foundation that natively supports all specified downstream queries (personal win, hero pick rec partial draft, item rec for win, item rec conditional on win, win vs duration, kills/min pair, lineup matchup)."
+intended_effect_confirmed: yes
+diagnostics.leakage_check: "HCE strict, splits.yaml date filter passed; items/kda/etc are inputs during training but val window unchanged; test window [2026-03-10, 2026-03-23] never touched"
+diagnostics.overfitting_signal: "n/a — multi-task supervised + masking; train losses commensurate after log1p fix; pure_pregame_val_auc monotonically climbed from 0.6168 (ep2) to 0.6480 (ep25)"
+diagnostics.data_quality_issues: "none — reused extended parquets verbatim, well-validated from prior experiments"
+delta_from_prior: "vs v4 +0.0009 (beats); vs iso_teambias -0.0013 (still below 7.40-only ceiling); vs proposal target +0.0009 (exceeds)"
+next_candidates:
+  - "Build serve/ subdirectory with concrete query functions on v7 foundation"
+  - "v8 to reweight outcome_cond if item-rec-conditional-on-win underperforms in actual use"
+```

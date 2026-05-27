@@ -1,0 +1,2052 @@
+{
+  "ablation": "v7_unified",
+  "smoke": false,
+  "val_auc_pure_pregame": 0.6479612327623001,
+  "final_probe_results": {
+    "pure_pregame": 0.6467556656667421,
+    "partial_draft": 0.02904,
+    "duration_cond": 0.6800291024344716,
+    "items_cond": 0.9886892442232913,
+    "outcome_cond": 0.328226238489151,
+    "partial_items": 0.07283467435757711,
+    "kills_pair_probe": 0.5103852152824402,
+    "gpm_probe": 0.07703687250614166,
+    "hd_probe": 0.058288171887397766
+  },
+  "best_epoch": 25,
+  "epochs_run": 25,
+  "max_epochs": 25,
+  "halted": false,
+  "halt_reasons": [],
+  "train_seconds": 20621.16356277466,
+  "data_seconds": 318.1383616924286,
+  "param_counts": {
+    "total": 6541032,
+    "trainable": 6541032,
+    "embedding": 136448,
+    "mask_embed": 2560,
+    "non_embedding": 6404584
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "per_head_loss_avg": {
+        "win": 0.47047930849562136,
+        "dur": 0.035821093078327176,
+        "items": 0.09654794558124542,
+        "kills": 0.21412387102413177,
+        "deaths": 0.11651654094800949,
+        "assists": 0.1439401231742859,
+        "gpm": 0.058011412957572936,
+        "hd": 0.1960192956861496
+      },
+      "train_total_loss": 1.6543045187698364,
+      "wall_seconds": 566.5597426891327,
+      "lr": 0.0009968292204951105,
+      "scenarios": {
+        "partial_items": 1034,
+        "pure_pregame": 2894,
+        "duration_cond": 777,
+        "items_cond": 807,
+        "everything_visible": 1503,
+        "partial_draft": 1443,
+        "random_uniform": 380,
+        "outcome_cond": 457,
+        "kills_pair_probe": 471
+      },
+      "pure_pregame_val_auc": 0.6115414781616328,
+      "probe_results": {
+        "pure_pregame": 0.6101363341080881,
+        "partial_draft": 0.03764,
+        "duration_cond": 0.6089711098528408,
+        "items_cond": 0.981503916692555,
+        "outcome_cond": 0.13360252976417542,
+        "partial_items": 0.09201033142622639,
+        "kills_pair_probe": 0.5480826497077942,
+        "gpm_probe": 0.2042960822582245,
+        "hd_probe": 0.38662445545196533
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.13134851138353765,
+          "pure_pregame": 0.3152364273204904,
+          "partial_draft": 0.1576182136602452,
+          "partial_items": 0.10507880910683012,
+          "duration_cond": 0.08406304728546411,
+          "items_cond": 0.06654991243432574,
+          "outcome_cond": 0.05253940455341506,
+          "kills_pair_probe": 0.05253940455341506,
+          "random_uniform": 0.03502626970227671
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.03696366589191191,
+            "mul": 1.2,
+            "before": 0.3,
+            "after": 0.36
+          },
+          "partial_draft": {
+            "gap": 0.26236,
+            "mul": 1.2,
+            "before": 0.15,
+            "after": 0.18
+          },
+          "partial_items": {
+            "gap": 0.4079896685737736,
+            "mul": 1.2,
+            "before": 0.1,
+            "after": 0.12
+          },
+          "duration_cond": {
+            "gap": 0.0710288901471593,
+            "mul": 1.2,
+            "before": 0.08,
+            "after": 0.096
+          },
+          "items_cond": {
+            "gap": -0.18150391669255495,
+            "mul": 0.95,
+            "before": 0.08,
+            "after": 0.076
+          },
+          "outcome_cond": {
+            "gap": 0.2663974702358246,
+            "mul": 1.2,
+            "before": 0.05,
+            "after": 0.06
+          },
+          "kills_pair_probe": {
+            "gap": 1.9519173502922058,
+            "mul": 1.2,
+            "before": 0.05,
+            "after": 0.06
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6101363341080881,
+          "partial_draft": 0.03764,
+          "duration_cond": 0.6089711098528408,
+          "items_cond": 0.981503916692555,
+          "outcome_cond": 0.13360252976417542,
+          "partial_items": 0.09201033142622639,
+          "kills_pair_probe": 0.5480826497077942
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "per_head_loss_avg": {
+        "win": 0.4481286964330137,
+        "dur": 0.021412534360706805,
+        "items": 0.08790101623249054,
+        "kills": 0.20731105779304504,
+        "deaths": 0.10829691150226593,
+        "assists": 0.13286399349098205,
+        "gpm": 0.04430532232556343,
+        "hd": 0.16923314466629027
+      },
+      "train_total_loss": 1.5445138365013122,
+      "wall_seconds": 558.0913228988647,
+      "lr": 0.0009858795532660216,
+      "scenarios": {
+        "pure_pregame": 3185,
+        "outcome_cond": 532,
+        "partial_items": 1063,
+        "random_uniform": 357,
+        "kills_pair_probe": 435,
+        "everything_visible": 1257,
+        "duration_cond": 826,
+        "items_cond": 611,
+        "partial_draft": 1500
+      },
+      "pure_pregame_val_auc": 0.6187087369040927,
+      "probe_results": {
+        "pure_pregame": 0.6168317492363323,
+        "partial_draft": 0.03938,
+        "duration_cond": 0.6172738722447061,
+        "items_cond": 0.9843422663260942,
+        "outcome_cond": 0.14523273706436157,
+        "partial_items": 0.09066840162717872,
+        "kills_pair_probe": 0.5497269034385681,
+        "gpm_probe": 0.19772031903266907,
+        "hd_probe": 0.3744521737098694
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.11420740063956143,
+          "pure_pregame": 0.32891731384193695,
+          "partial_draft": 0.16445865692096848,
+          "partial_items": 0.10963910461397898,
+          "duration_cond": 0.0877112836911832,
+          "items_cond": 0.054971828841175574,
+          "outcome_cond": 0.05481955230698949,
+          "kills_pair_probe": 0.05481955230698949,
+          "random_uniform": 0.030455306837216384
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.03026825076366768,
+            "mul": 1.2,
+            "before": 0.3152364273204904,
+            "after": 0.37828371278458844
+          },
+          "partial_draft": {
+            "gap": 0.26061999999999996,
+            "mul": 1.2,
+            "before": 0.1576182136602452,
+            "after": 0.18914185639229422
+          },
+          "partial_items": {
+            "gap": 0.4093315983728213,
+            "mul": 1.2,
+            "before": 0.10507880910683012,
+            "after": 0.12609457092819615
+          },
+          "duration_cond": {
+            "gap": 0.06272612775529396,
+            "mul": 1.2,
+            "before": 0.08406304728546411,
+            "after": 0.10087565674255693
+          },
+          "items_cond": {
+            "gap": -0.18434226632609418,
+            "mul": 0.95,
+            "before": 0.06654991243432574,
+            "after": 0.06322241681260946
+          },
+          "outcome_cond": {
+            "gap": 0.25476726293563845,
+            "mul": 1.2,
+            "before": 0.05253940455341506,
+            "after": 0.06304728546409807
+          },
+          "kills_pair_probe": {
+            "gap": 1.9502730965614319,
+            "mul": 1.2,
+            "before": 0.05253940455341506,
+            "after": 0.06304728546409807
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6168317492363323,
+          "partial_draft": 0.03938,
+          "duration_cond": 0.6172738722447061,
+          "items_cond": 0.9843422663260942,
+          "outcome_cond": 0.14523273706436157,
+          "partial_items": 0.09066840162717872,
+          "kills_pair_probe": 0.5497269034385681
+        }
+      }
+    },
+    {
+      "epoch": 3,
+      "per_head_loss_avg": {
+        "win": 0.45398148643051905,
+        "dur": 0.020862299226504566,
+        "items": 0.08517770398693085,
+        "kills": 0.1925508202512264,
+        "deaths": 0.10712485056619644,
+        "assists": 0.12609490228874684,
+        "gpm": 0.04093328484141827,
+        "hd": 0.15708766559920312
+      },
+      "train_total_loss": 1.5081644803527832,
+      "wall_seconds": 560.2180442810059,
+      "lr": 0.0009672837036471695,
+      "scenarios": {
+        "pure_pregame": 3139,
+        "partial_items": 1118,
+        "random_uniform": 302,
+        "partial_draft": 1611,
+        "duration_cond": 832,
+        "kills_pair_probe": 526,
+        "everything_visible": 1140,
+        "items_cond": 548,
+        "outcome_cond": 550
+      },
+      "pure_pregame_val_auc": 0.6213085574469379,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 4,
+      "per_head_loss_avg": {
+        "win": 0.45554654039619563,
+        "dur": 0.01995764790326357,
+        "items": 0.08042801933317184,
+        "kills": 0.17114125776910782,
+        "deaths": 0.09906674200353623,
+        "assists": 0.11747209494132996,
+        "gpm": 0.036572807129263876,
+        "hd": 0.14006561301689147
+      },
+      "train_total_loss": 1.4469765566612243,
+      "wall_seconds": 560.544750213623,
+      "lr": 0.0009413373532846393,
+      "scenarios": {
+        "partial_draft": 1578,
+        "duration_cond": 851,
+        "pure_pregame": 3222,
+        "everything_visible": 1136,
+        "kills_pair_probe": 548,
+        "outcome_cond": 548,
+        "items_cond": 527,
+        "random_uniform": 301,
+        "partial_items": 1055
+      },
+      "pure_pregame_val_auc": 0.628179103600823,
+      "probe_results": {
+        "pure_pregame": 0.6269720449288252,
+        "partial_draft": 0.02328,
+        "duration_cond": 0.6477527278877846,
+        "items_cond": 0.9863515912249924,
+        "outcome_cond": 0.25468987226486206,
+        "partial_items": 0.07983211723857839,
+        "kills_pair_probe": 0.5183654427528381,
+        "gpm_probe": 0.11205164343118668,
+        "hd_probe": 0.20204119384288788
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.09868226285007532,
+          "pure_pregame": 0.3410459004098603,
+          "partial_draft": 0.17052295020493016,
+          "partial_items": 0.11368196680328677,
+          "duration_cond": 0.09094557344262942,
+          "items_cond": 0.04512410939257778,
+          "outcome_cond": 0.05684098340164338,
+          "kills_pair_probe": 0.05684098340164338,
+          "random_uniform": 0.02631527009335342
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.02012795507117482,
+            "mul": 1.2,
+            "before": 0.32891731384193695,
+            "after": 0.3947007766103243
+          },
+          "partial_draft": {
+            "gap": 0.27671999999999997,
+            "mul": 1.2,
+            "before": 0.16445865692096848,
+            "after": 0.19735038830516216
+          },
+          "partial_items": {
+            "gap": 0.4201678827614216,
+            "mul": 1.2,
+            "before": 0.10963910461397898,
+            "after": 0.13156692553677476
+          },
+          "duration_cond": {
+            "gap": 0.03224727211221545,
+            "mul": 1.2,
+            "before": 0.0877112836911832,
+            "after": 0.10525354042941983
+          },
+          "items_cond": {
+            "gap": -0.18635159122499234,
+            "mul": 0.95,
+            "before": 0.054971828841175574,
+            "after": 0.052223237399116794
+          },
+          "outcome_cond": {
+            "gap": 0.14531012773513796,
+            "mul": 1.2,
+            "before": 0.05481955230698949,
+            "after": 0.06578346276838738
+          },
+          "kills_pair_probe": {
+            "gap": 1.9816345572471619,
+            "mul": 1.2,
+            "before": 0.05481955230698949,
+            "after": 0.06578346276838738
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6269720449288252,
+          "partial_draft": 0.02328,
+          "duration_cond": 0.6477527278877846,
+          "items_cond": 0.9863515912249924,
+          "outcome_cond": 0.25468987226486206,
+          "partial_items": 0.07983211723857839,
+          "kills_pair_probe": 0.5183654427528381
+        }
+      }
+    },
+    {
+      "epoch": 5,
+      "per_head_loss_avg": {
+        "win": 0.4682887583126333,
+        "dur": 0.019467167168098688,
+        "items": 0.075930434267807,
+        "kills": 0.17140496808919906,
+        "deaths": 0.098973305915308,
+        "assists": 0.11776650695700645,
+        "gpm": 0.03590358660268784,
+        "hd": 0.1379897761133194
+      },
+      "train_total_loss": 1.4605437545700073,
+      "wall_seconds": 618.2662510871887,
+      "lr": 0.0009084530598051238,
+      "scenarios": {
+        "kills_pair_probe": 559,
+        "random_uniform": 262,
+        "partial_draft": 1625,
+        "partial_items": 1158,
+        "outcome_cond": 522,
+        "duration_cond": 906,
+        "everything_visible": 954,
+        "pure_pregame": 3326,
+        "items_cond": 454
+      },
+      "pure_pregame_val_auc": 0.6319911506305514,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 6,
+      "per_head_loss_avg": {
+        "win": 0.46977406133855937,
+        "dur": 0.01903681962172389,
+        "items": 0.07335623491296768,
+        "kills": 0.1697008685441017,
+        "deaths": 0.09795590039625168,
+        "assists": 0.11650602951507569,
+        "gpm": 0.03534900357146263,
+        "hd": 0.13517433842029572
+      },
+      "train_total_loss": 1.4537225665763855,
+      "wall_seconds": 561.3468205928802,
+      "lr": 0.0008691536969802259,
+      "scenarios": {
+        "partial_items": 1114,
+        "partial_draft": 1682,
+        "duration_cond": 913,
+        "pure_pregame": 3366,
+        "items_cond": 425,
+        "random_uniform": 235,
+        "outcome_cond": 513,
+        "everything_visible": 989,
+        "kills_pair_probe": 529
+      },
+      "pure_pregame_val_auc": 0.6322103487079663,
+      "probe_results": {
+        "pure_pregame": 0.6311248102124494,
+        "partial_draft": 0.0229,
+        "duration_cond": 0.6507636630114024,
+        "items_cond": 0.9869604475837306,
+        "outcome_cond": 0.3115198314189911,
+        "partial_items": 0.07472768771093738,
+        "kills_pair_probe": 0.5172824859619141,
+        "gpm_probe": 0.10121895372867584,
+        "hd_probe": 0.15024490654468536
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.09007880995082597,
+          "pure_pregame": 0.31131236719005456,
+          "partial_draft": 0.18678742031403273,
+          "partial_items": 0.12452494687602182,
+          "duration_cond": 0.09961995750081745,
+          "items_cond": 0.03913053530533864,
+          "outcome_cond": 0.06226247343801091,
+          "kills_pair_probe": 0.06226247343801091,
+          "random_uniform": 0.024021015986886926
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.015975189787550637,
+            "mul": 1.0,
+            "before": 0.3410459004098603,
+            "after": 0.3410459004098603
+          },
+          "partial_draft": {
+            "gap": 0.2771,
+            "mul": 1.2,
+            "before": 0.17052295020493016,
+            "after": 0.2046275402459162
+          },
+          "partial_items": {
+            "gap": 0.4252723122890626,
+            "mul": 1.2,
+            "before": 0.11368196680328677,
+            "after": 0.13641836016394412
+          },
+          "duration_cond": {
+            "gap": 0.029236336988597622,
+            "mul": 1.2,
+            "before": 0.09094557344262942,
+            "after": 0.1091346881311553
+          },
+          "items_cond": {
+            "gap": -0.18696044758373054,
+            "mul": 0.95,
+            "before": 0.04512410939257778,
+            "after": 0.04286790392294889
+          },
+          "outcome_cond": {
+            "gap": 0.08848016858100893,
+            "mul": 1.2,
+            "before": 0.05684098340164338,
+            "after": 0.06820918008197206
+          },
+          "kills_pair_probe": {
+            "gap": 1.982717514038086,
+            "mul": 1.2,
+            "before": 0.05684098340164338,
+            "after": 0.06820918008197206
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6311248102124494,
+          "partial_draft": 0.0229,
+          "duration_cond": 0.6507636630114024,
+          "items_cond": 0.9869604475837306,
+          "outcome_cond": 0.3115198314189911,
+          "partial_items": 0.07472768771093738,
+          "kills_pair_probe": 0.5172824859619141
+        }
+      }
+    },
+    {
+      "epoch": 7,
+      "per_head_loss_avg": {
+        "win": 0.47312149214870336,
+        "dur": 0.019110760013309122,
+        "items": 0.07255101550683975,
+        "kills": 0.17234485941343308,
+        "deaths": 0.09915030092210769,
+        "assists": 0.11785346364331245,
+        "gpm": 0.03561704154372215,
+        "hd": 0.1365531687402725
+      },
+      "train_total_loss": 1.4541584715057374,
+      "wall_seconds": 566.3281157016754,
+      "lr": 0.0008240641408187502,
+      "scenarios": {
+        "pure_pregame": 3114,
+        "partial_draft": 1856,
+        "kills_pair_probe": 630,
+        "everything_visible": 848,
+        "partial_items": 1215,
+        "random_uniform": 211,
+        "items_cond": 361,
+        "duration_cond": 935,
+        "outcome_cond": 596
+      },
+      "pure_pregame_val_auc": 0.6370397999212618,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 8,
+      "per_head_loss_avg": {
+        "win": 0.46897688478899074,
+        "dur": 0.01866899960323535,
+        "items": 0.07132343950328827,
+        "kills": 0.17043475232076644,
+        "deaths": 0.09811999646024704,
+        "assists": 0.1163423058574438,
+        "gpm": 0.03500458463125229,
+        "hd": 0.13428927788181305
+      },
+      "train_total_loss": 1.4382759723564147,
+      "wall_seconds": 563.924723148346,
+      "lr": 0.0007739013337815325,
+      "scenarios": {
+        "partial_draft": 1812,
+        "items_cond": 364,
+        "duration_cond": 986,
+        "pure_pregame": 3090,
+        "everything_visible": 856,
+        "kills_pair_probe": 613,
+        "partial_items": 1191,
+        "random_uniform": 235,
+        "outcome_cond": 619
+      },
+      "pure_pregame_val_auc": 0.6373435713787182,
+      "probe_results": {
+        "pure_pregame": 0.6333419017401202,
+        "partial_draft": 0.02264,
+        "duration_cond": 0.6641498689284625,
+        "items_cond": 0.9873077864992096,
+        "outcome_cond": 0.31831249594688416,
+        "partial_items": 0.07403866773617776,
+        "kills_pair_probe": 0.513666570186615,
+        "gpm_probe": 0.0943199098110199,
+        "hd_probe": 0.10845597088336945
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.08279021389204998,
+          "pure_pregame": 0.2861229792109247,
+          "partial_draft": 0.20600854503186578,
+          "partial_items": 0.13733903002124387,
+          "duration_cond": 0.0915593533474959,
+          "items_cond": 0.036763458103962594,
+          "outcome_cond": 0.06866951501062193,
+          "kills_pair_probe": 0.06866951501062193,
+          "random_uniform": 0.022077390371213326
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.013758098259879836,
+            "mul": 1.0,
+            "before": 0.31131236719005456,
+            "after": 0.31131236719005456
+          },
+          "partial_draft": {
+            "gap": 0.27736,
+            "mul": 1.2,
+            "before": 0.18678742031403273,
+            "after": 0.22414490437683926
+          },
+          "partial_items": {
+            "gap": 0.42596133226382227,
+            "mul": 1.2,
+            "before": 0.12452494687602182,
+            "after": 0.1494299362512262
+          },
+          "duration_cond": {
+            "gap": 0.015850131071537543,
+            "mul": 1.0,
+            "before": 0.09961995750081745,
+            "after": 0.09961995750081745
+          },
+          "items_cond": {
+            "gap": -0.18730778649920954,
+            "mul": 0.95,
+            "before": 0.03913053530533864,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.08168750405311587,
+            "mul": 1.2,
+            "before": 0.06226247343801091,
+            "after": 0.0747149681256131
+          },
+          "kills_pair_probe": {
+            "gap": 1.986333429813385,
+            "mul": 1.2,
+            "before": 0.06226247343801091,
+            "after": 0.0747149681256131
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6333419017401202,
+          "partial_draft": 0.02264,
+          "duration_cond": 0.6641498689284625,
+          "items_cond": 0.9873077864992096,
+          "outcome_cond": 0.31831249594688416,
+          "partial_items": 0.07403866773617776,
+          "kills_pair_probe": 0.513666570186615
+        }
+      }
+    },
+    {
+      "epoch": 9,
+      "per_head_loss_avg": {
+        "win": 0.4656938761893957,
+        "dur": 0.01856770684006512,
+        "items": 0.07089227943134307,
+        "kills": 0.17118096076178552,
+        "deaths": 0.09838558939630986,
+        "assists": 0.11676440898556709,
+        "gpm": 0.03487307702550888,
+        "hd": 0.1346137510281563
+      },
+      "train_total_loss": 1.422529797885132,
+      "wall_seconds": 567.0574622154236,
+      "lr": 0.0007194628851018705,
+      "scenarios": {
+        "pure_pregame": 2787,
+        "partial_draft": 2052,
+        "duration_cond": 911,
+        "outcome_cond": 660,
+        "kills_pair_probe": 677,
+        "everything_visible": 777,
+        "partial_items": 1311,
+        "items_cond": 386,
+        "random_uniform": 205
+      },
+      "pure_pregame_val_auc": 0.6386474343341328,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 10,
+      "per_head_loss_avg": {
+        "win": 0.4646307325588195,
+        "dur": 0.01825482157984525,
+        "items": 0.0701182089753151,
+        "kills": 0.17020182626676558,
+        "deaths": 0.09774503763632775,
+        "assists": 0.11575774621055127,
+        "gpm": 0.034568094768714905,
+        "hd": 0.13319453107862472
+      },
+      "train_total_loss": 1.4164038700782775,
+      "wall_seconds": 566.2224497795105,
+      "lr": 0.0006616143884711436,
+      "scenarios": {
+        "pure_pregame": 2815,
+        "partial_draft": 2008,
+        "everything_visible": 791,
+        "items_cond": 359,
+        "outcome_cond": 644,
+        "duration_cond": 938,
+        "partial_items": 1339,
+        "kills_pair_probe": 660,
+        "random_uniform": 212
+      },
+      "pure_pregame_val_auc": 0.639830383300568,
+      "probe_results": {
+        "pure_pregame": 0.6394556995161034,
+        "partial_draft": 0.02528,
+        "duration_cond": 0.6668409990401366,
+        "items_cond": 0.9874563985458755,
+        "outcome_cond": 0.3216380476951599,
+        "partial_items": 0.07357534469191748,
+        "kills_pair_probe": 0.511963963508606,
+        "gpm_probe": 0.10946641862392426,
+        "hd_probe": 0.1309632509946823
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.0753066965525623,
+          "pure_pregame": 0.26025994328565527,
+          "partial_draft": 0.22486459099880612,
+          "partial_items": 0.14990972733253743,
+          "duration_cond": 0.08328318185140968,
+          "items_cond": 0.03638434689914176,
+          "outcome_cond": 0.07495486366626872,
+          "kills_pair_probe": 0.07495486366626872,
+          "random_uniform": 0.020081785747349944
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.007644300483896638,
+            "mul": 1.0,
+            "before": 0.2861229792109247,
+            "after": 0.2861229792109247
+          },
+          "partial_draft": {
+            "gap": 0.27471999999999996,
+            "mul": 1.2,
+            "before": 0.20600854503186578,
+            "after": 0.24721025403823893
+          },
+          "partial_items": {
+            "gap": 0.4264246553080825,
+            "mul": 1.2,
+            "before": 0.13733903002124387,
+            "after": 0.16480683602549265
+          },
+          "duration_cond": {
+            "gap": 0.013159000959863443,
+            "mul": 1.0,
+            "before": 0.0915593533474959,
+            "after": 0.0915593533474959
+          },
+          "items_cond": {
+            "gap": -0.18745639854587548,
+            "mul": 0.95,
+            "before": 0.036763458103962594,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07836195230484011,
+            "mul": 1.2,
+            "before": 0.06866951501062193,
+            "after": 0.08240341801274632
+          },
+          "kills_pair_probe": {
+            "gap": 1.988036036491394,
+            "mul": 1.2,
+            "before": 0.06866951501062193,
+            "after": 0.08240341801274632
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6394556995161034,
+          "partial_draft": 0.02528,
+          "duration_cond": 0.6668409990401366,
+          "items_cond": 0.9874563985458755,
+          "outcome_cond": 0.3216380476951599,
+          "partial_items": 0.07357534469191748,
+          "kills_pair_probe": 0.511963963508606
+        }
+      }
+    },
+    {
+      "epoch": 11,
+      "per_head_loss_avg": {
+        "win": 0.4571484731802441,
+        "dur": 0.018371902198937536,
+        "items": 0.06956416324462891,
+        "kills": 0.1704249977525711,
+        "deaths": 0.0978183561822176,
+        "assists": 0.11584436681606769,
+        "gpm": 0.03441266686496735,
+        "hd": 0.13353341621274947
+      },
+      "train_total_loss": 1.3942695135139465,
+      "wall_seconds": 626.7972292900085,
+      "lr": 0.000601275658743629,
+      "scenarios": {
+        "duration_cond": 826,
+        "partial_draft": 2138,
+        "pure_pregame": 2553,
+        "everything_visible": 747,
+        "items_cond": 326,
+        "kills_pair_probe": 759,
+        "outcome_cond": 750,
+        "partial_items": 1503,
+        "random_uniform": 164
+      },
+      "pure_pregame_val_auc": 0.6410231695230905,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 12,
+      "per_head_loss_avg": {
+        "win": 0.4519917252101875,
+        "dur": 0.018090900428542493,
+        "items": 0.06881715000343323,
+        "kills": 0.16885318320109843,
+        "deaths": 0.09686229716091156,
+        "assists": 0.11462951360151767,
+        "gpm": 0.03401698599860668,
+        "hd": 0.13201440982866286
+      },
+      "train_total_loss": 1.3777327402267456,
+      "wall_seconds": 570.6217682361603,
+      "lr": 0.0005394061065025585,
+      "scenarios": {
+        "outcome_cond": 750,
+        "pure_pregame": 2467,
+        "partial_draft": 2206,
+        "partial_items": 1459,
+        "everything_visible": 785,
+        "kills_pair_probe": 712,
+        "duration_cond": 831,
+        "random_uniform": 202,
+        "items_cond": 354
+      },
+      "pure_pregame_val_auc": 0.6413248873947484,
+      "probe_results": {
+        "pure_pregame": 0.6393450914238414,
+        "partial_draft": 0.0252,
+        "duration_cond": 0.6699543510281918,
+        "items_cond": 0.9877297134785324,
+        "outcome_cond": 0.3224022388458252,
+        "partial_items": 0.07341816985454598,
+        "kills_pair_probe": 0.5119031667709351,
+        "gpm_probe": 0.08456107974052429,
+        "hd_probe": 0.09976568818092346
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.06793246068014319,
+          "pure_pregame": 0.23477458411057486,
+          "partial_draft": 0.24341428880584398,
+          "partial_items": 0.16227619253722933,
+          "duration_cond": 0.07512786691538395,
+          "items_cond": 0.03608309156555709,
+          "outcome_cond": 0.08113809626861467,
+          "kills_pair_probe": 0.08113809626861467,
+          "random_uniform": 0.018115322848038184
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.00775490857615857,
+            "mul": 1.0,
+            "before": 0.26025994328565527,
+            "after": 0.26025994328565527
+          },
+          "partial_draft": {
+            "gap": 0.2748,
+            "mul": 1.2,
+            "before": 0.22486459099880612,
+            "after": 0.26983750919856736
+          },
+          "partial_items": {
+            "gap": 0.42658183014545403,
+            "mul": 1.2,
+            "before": 0.14990972733253743,
+            "after": 0.17989167279904492
+          },
+          "duration_cond": {
+            "gap": 0.010045648971808263,
+            "mul": 1.0,
+            "before": 0.08328318185140968,
+            "after": 0.08328318185140968
+          },
+          "items_cond": {
+            "gap": -0.1877297134785324,
+            "mul": 0.95,
+            "before": 0.03638434689914176,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07759776115417483,
+            "mul": 1.2,
+            "before": 0.07495486366626872,
+            "after": 0.08994583639952246
+          },
+          "kills_pair_probe": {
+            "gap": 1.988096833229065,
+            "mul": 1.2,
+            "before": 0.07495486366626872,
+            "after": 0.08994583639952246
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6393450914238414,
+          "partial_draft": 0.0252,
+          "duration_cond": 0.6699543510281918,
+          "items_cond": 0.9877297134785324,
+          "outcome_cond": 0.3224022388458252,
+          "partial_items": 0.07341816985454598,
+          "kills_pair_probe": 0.5119031667709351
+        }
+      }
+    },
+    {
+      "epoch": 13,
+      "per_head_loss_avg": {
+        "win": 0.4513475721180762,
+        "dur": 0.018231859846654534,
+        "items": 0.06821070142850875,
+        "kills": 0.17025720559556484,
+        "deaths": 0.09765229649636746,
+        "assists": 0.11559013959681988,
+        "gpm": 0.034102174686336514,
+        "hd": 0.1331405053513527
+      },
+      "train_total_loss": 1.3730393344947815,
+      "wall_seconds": 572.5970005989075,
+      "lr": 0.00047698948303782386,
+      "scenarios": {
+        "partial_draft": 2368,
+        "outcome_cond": 786,
+        "pure_pregame": 2295,
+        "kills_pair_probe": 770,
+        "duration_cond": 743,
+        "partial_items": 1590,
+        "items_cond": 366,
+        "random_uniform": 183,
+        "everything_visible": 665
+      },
+      "pure_pregame_val_auc": 0.6436627185715663,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 14,
+      "per_head_loss_avg": {
+        "win": 0.45244893552938525,
+        "dur": 0.018349204927513005,
+        "items": 0.06767181020636559,
+        "kills": 0.1706209609658003,
+        "deaths": 0.09780459073143005,
+        "assists": 0.11578628277196884,
+        "gpm": 0.034122804520714284,
+        "hd": 0.13346809197368623
+      },
+      "train_total_loss": 1.3744708341293335,
+      "wall_seconds": 573.301108121872,
+      "lr": 0.0004150182382964511,
+      "scenarios": {
+        "duration_cond": 690,
+        "partial_draft": 2370,
+        "kills_pair_probe": 819,
+        "pure_pregame": 2312,
+        "partial_items": 1575,
+        "everything_visible": 637,
+        "outcome_cond": 781,
+        "items_cond": 387,
+        "random_uniform": 195
+      },
+      "pure_pregame_val_auc": 0.6424590142918145,
+      "probe_results": {
+        "pure_pregame": 0.6417152313105992,
+        "partial_draft": 0.03124,
+        "duration_cond": 0.6740088488980835,
+        "items_cond": 0.988034018315399,
+        "outcome_cond": 0.3253260552883148,
+        "partial_items": 0.07313530361147703,
+        "kills_pair_probe": 0.5118273496627808,
+        "gpm_probe": 0.08116580545902252,
+        "hd_probe": 0.08472837507724762
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.06078911678248204,
+          "pure_pregame": 0.21008718760025794,
+          "partial_draft": 0.26138207532473684,
+          "partial_items": 0.1742547168831579,
+          "duration_cond": 0.06722790003208252,
+          "items_cond": 0.035793855352129665,
+          "outcome_cond": 0.08712735844157896,
+          "kills_pair_probe": 0.08712735844157896,
+          "random_uniform": 0.01621043114199521
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.005384768689400854,
+            "mul": 1.0,
+            "before": 0.23477458411057486,
+            "after": 0.23477458411057486
+          },
+          "partial_draft": {
+            "gap": 0.26876,
+            "mul": 1.2,
+            "before": 0.24341428880584398,
+            "after": 0.29209714656701274
+          },
+          "partial_items": {
+            "gap": 0.426864696388523,
+            "mul": 1.2,
+            "before": 0.16227619253722933,
+            "after": 0.1947314310446752
+          },
+          "duration_cond": {
+            "gap": 0.005991151101916503,
+            "mul": 1.0,
+            "before": 0.07512786691538395,
+            "after": 0.07512786691538395
+          },
+          "items_cond": {
+            "gap": -0.188034018315399,
+            "mul": 0.95,
+            "before": 0.03608309156555709,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.0746739447116852,
+            "mul": 1.2,
+            "before": 0.08113809626861467,
+            "after": 0.0973657155223376
+          },
+          "kills_pair_probe": {
+            "gap": 1.9881726503372192,
+            "mul": 1.2,
+            "before": 0.08113809626861467,
+            "after": 0.0973657155223376
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6417152313105992,
+          "partial_draft": 0.03124,
+          "duration_cond": 0.6740088488980835,
+          "items_cond": 0.988034018315399,
+          "outcome_cond": 0.3253260552883148,
+          "partial_items": 0.07313530361147703,
+          "kills_pair_probe": 0.5118273496627808
+        }
+      }
+    },
+    {
+      "epoch": 15,
+      "per_head_loss_avg": {
+        "win": 0.4536329008120991,
+        "dur": 0.01853924297942221,
+        "items": 0.06744410189781189,
+        "kills": 0.1721391038641691,
+        "deaths": 0.0986056113795042,
+        "assists": 0.11685530446605683,
+        "gpm": 0.03434899160351753,
+        "hd": 0.13477839357771873
+      },
+      "train_total_loss": 1.3741761084983826,
+      "wall_seconds": 575.7114369869232,
+      "lr": 0.00035447774052085087,
+      "scenarios": {
+        "partial_items": 1666,
+        "partial_draft": 2608,
+        "pure_pregame": 2117,
+        "duration_cond": 652,
+        "outcome_cond": 825,
+        "items_cond": 343,
+        "kills_pair_probe": 823,
+        "everything_visible": 559,
+        "random_uniform": 173
+      },
+      "pure_pregame_val_auc": 0.6443581425786405,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 16,
+      "per_head_loss_avg": {
+        "win": 0.44622629794999075,
+        "dur": 0.01814118619732708,
+        "items": 0.06651278685808182,
+        "kills": 0.17047935265979766,
+        "deaths": 0.09764977878894805,
+        "assists": 0.11553016523134708,
+        "gpm": 0.033845439356660845,
+        "hd": 0.13299943985171317
+      },
+      "train_total_loss": 1.3520627675888062,
+      "wall_seconds": 575.4436123371124,
+      "lr": 0.00029633060848908435,
+      "scenarios": {
+        "partial_draft": 2561,
+        "outcome_cond": 838,
+        "duration_cond": 656,
+        "partial_items": 1717,
+        "pure_pregame": 2030,
+        "everything_visible": 583,
+        "kills_pair_probe": 831,
+        "items_cond": 382,
+        "random_uniform": 168
+      },
+      "pure_pregame_val_auc": 0.6450355253585365,
+      "probe_results": {
+        "pure_pregame": 0.6440348771070588,
+        "partial_draft": 0.03116,
+        "duration_cond": 0.6762205406758053,
+        "items_cond": 0.9882762533480137,
+        "outcome_cond": 0.3264301121234894,
+        "partial_items": 0.07304662155346212,
+        "kills_pair_probe": 0.5117126703262329,
+        "gpm_probe": 0.08003649115562439,
+        "hd_probe": 0.07843505591154099
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.055549944053842296,
+          "pure_pregame": 0.191980606650079,
+          "partial_draft": 0.2741441905758225,
+          "partial_items": 0.18276279371721504,
+          "duration_cond": 0.06143379412802526,
+          "items_cond": 0.03655255874344301,
+          "outcome_cond": 0.09138139685860752,
+          "kills_pair_probe": 0.09138139685860752,
+          "random_uniform": 0.014813318414357946
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.003065122892941252,
+            "mul": 1.0,
+            "before": 0.21008718760025794,
+            "after": 0.21008718760025794
+          },
+          "partial_draft": {
+            "gap": 0.26883999999999997,
+            "mul": 1.2,
+            "before": 0.26138207532473684,
+            "after": 0.3
+          },
+          "partial_items": {
+            "gap": 0.4269533784465379,
+            "mul": 1.2,
+            "before": 0.1742547168831579,
+            "after": 0.2
+          },
+          "duration_cond": {
+            "gap": 0.003779459324194767,
+            "mul": 1.0,
+            "before": 0.06722790003208252,
+            "after": 0.06722790003208252
+          },
+          "items_cond": {
+            "gap": -0.18827625334801368,
+            "mul": 0.95,
+            "before": 0.035793855352129665,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07356988787651064,
+            "mul": 1.2,
+            "before": 0.08712735844157896,
+            "after": 0.1
+          },
+          "kills_pair_probe": {
+            "gap": 1.988287329673767,
+            "mul": 1.2,
+            "before": 0.08712735844157896,
+            "after": 0.1
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6440348771070588,
+          "partial_draft": 0.03116,
+          "duration_cond": 0.6762205406758053,
+          "items_cond": 0.9882762533480137,
+          "outcome_cond": 0.3264301121234894,
+          "partial_items": 0.07304662155346212,
+          "kills_pair_probe": 0.5117126703262329
+        }
+      }
+    },
+    {
+      "epoch": 17,
+      "per_head_loss_avg": {
+        "win": 0.45058978068757094,
+        "dur": 0.018458541457271577,
+        "items": 0.06644439012355804,
+        "kills": 0.17239049890742303,
+        "deaths": 0.0987148995204568,
+        "assists": 0.11701559864292145,
+        "gpm": 0.034241445169353485,
+        "hd": 0.13477639440917968
+      },
+      "train_total_loss": 1.3592267773529052,
+      "wall_seconds": 577.6532526016235,
+      "lr": 0.0002415014054809517,
+      "scenarios": {
+        "pure_pregame": 1892,
+        "kills_pair_probe": 909,
+        "partial_items": 1751,
+        "partial_draft": 2701,
+        "everything_visible": 519,
+        "duration_cond": 643,
+        "outcome_cond": 877,
+        "random_uniform": 122,
+        "items_cond": 352
+      },
+      "pure_pregame_val_auc": 0.6448394511881654,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 18,
+      "per_head_loss_avg": {
+        "win": 0.4449689834449746,
+        "dur": 0.01844097653415501,
+        "items": 0.06578283314657211,
+        "kills": 0.17162317984826564,
+        "deaths": 0.0982321643877387,
+        "assists": 0.11633882676928044,
+        "gpm": 0.03396274393119812,
+        "hd": 0.13417866025266648
+      },
+      "train_total_loss": 1.3480174433200836,
+      "wall_seconds": 635.3169384002686,
+      "lr": 0.00019086193834213412,
+      "scenarios": {
+        "pure_pregame": 1916,
+        "kills_pair_probe": 891,
+        "duration_cond": 566,
+        "partial_draft": 2681,
+        "partial_items": 1779,
+        "outcome_cond": 892,
+        "items_cond": 369,
+        "everything_visible": 512,
+        "random_uniform": 160
+      },
+      "pure_pregame_val_auc": 0.6462883143399317,
+      "probe_results": {
+        "pure_pregame": 0.6448113740062941,
+        "partial_draft": 0.0285,
+        "duration_cond": 0.6761715556227695,
+        "items_cond": 0.988402707135067,
+        "outcome_cond": 0.32735368609428406,
+        "partial_items": 0.07295995913703078,
+        "kills_pair_probe": 0.5112854838371277,
+        "gpm_probe": 0.07975471764802933,
+        "hd_probe": 0.08273545652627945
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.052219505986168084,
+          "pure_pregame": 0.18047061268819692,
+          "partial_draft": 0.2820138177036894,
+          "partial_items": 0.1880092118024596,
+          "duration_cond": 0.057750596060222995,
+          "items_cond": 0.03760184236049192,
+          "outcome_cond": 0.0940046059012298,
+          "kills_pair_probe": 0.0940046059012298,
+          "random_uniform": 0.01392520159631149
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.0022886259937059394,
+            "mul": 1.0,
+            "before": 0.191980606650079,
+            "after": 0.191980606650079
+          },
+          "partial_draft": {
+            "gap": 0.27149999999999996,
+            "mul": 1.2,
+            "before": 0.2741441905758225,
+            "after": 0.3
+          },
+          "partial_items": {
+            "gap": 0.4270400408629692,
+            "mul": 1.2,
+            "before": 0.18276279371721504,
+            "after": 0.2
+          },
+          "duration_cond": {
+            "gap": 0.003828444377230511,
+            "mul": 1.0,
+            "before": 0.06143379412802526,
+            "after": 0.06143379412802526
+          },
+          "items_cond": {
+            "gap": -0.1884027071350669,
+            "mul": 0.95,
+            "before": 0.03655255874344301,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07264631390571596,
+            "mul": 1.2,
+            "before": 0.09138139685860752,
+            "after": 0.1
+          },
+          "kills_pair_probe": {
+            "gap": 1.9887145161628723,
+            "mul": 1.2,
+            "before": 0.09138139685860752,
+            "after": 0.1
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6448113740062941,
+          "partial_draft": 0.0285,
+          "duration_cond": 0.6761715556227695,
+          "items_cond": 0.988402707135067,
+          "outcome_cond": 0.32735368609428406,
+          "partial_items": 0.07295995913703078,
+          "kills_pair_probe": 0.5112854838371277
+        }
+      }
+    },
+    {
+      "epoch": 19,
+      "per_head_loss_avg": {
+        "win": 0.43638172493604066,
+        "dur": 0.01814581328407079,
+        "items": 0.06488176515102387,
+        "kills": 0.17024705504276752,
+        "deaths": 0.09738226703349352,
+        "assists": 0.115291897260499,
+        "gpm": 0.03352167578420639,
+        "hd": 0.13285406848049164
+      },
+      "train_total_loss": 1.3224595658359528,
+      "wall_seconds": 635.8028030395508,
+      "lr": 0.0001452173953973049,
+      "scenarios": {
+        "everything_visible": 531,
+        "kills_pair_probe": 870,
+        "pure_pregame": 1722,
+        "partial_draft": 2762,
+        "items_cond": 381,
+        "partial_items": 1887,
+        "outcome_cond": 936,
+        "duration_cond": 544,
+        "random_uniform": 133
+      },
+      "pure_pregame_val_auc": 0.6461598801225394,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 20,
+      "per_head_loss_avg": {
+        "win": 0.440042846684352,
+        "dur": 0.018316623668031395,
+        "items": 0.0646913793856144,
+        "kills": 0.1710912278230667,
+        "deaths": 0.09790934009691477,
+        "assists": 0.11602084300687313,
+        "gpm": 0.033727256605541704,
+        "hd": 0.13364756203045844
+      },
+      "train_total_loss": 1.3295058894039153,
+      "wall_seconds": 635.8370456695557,
+      "lr": 0.00010529354362508295,
+      "scenarios": {
+        "kills_pair_probe": 955,
+        "outcome_cond": 919,
+        "pure_pregame": 1741,
+        "everything_visible": 502,
+        "partial_items": 1883,
+        "partial_draft": 2742,
+        "duration_cond": 524,
+        "items_cond": 375,
+        "random_uniform": 125
+      },
+      "pure_pregame_val_auc": 0.6470422023263835,
+      "probe_results": {
+        "pure_pregame": 0.6461995532941145,
+        "partial_draft": 0.02802,
+        "duration_cond": 0.6785937717587023,
+        "items_cond": 0.9885398390883515,
+        "outcome_cond": 0.3276793360710144,
+        "partial_items": 0.07288078012645535,
+        "kills_pair_probe": 0.5101072788238525,
+        "gpm_probe": 0.07886488735675812,
+        "hd_probe": 0.0686517208814621
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.05000115876016651,
+          "pure_pregame": 0.1728040046751355,
+          "partial_draft": 0.2872556402970041,
+          "partial_items": 0.19150376019800275,
+          "duration_cond": 0.055297281496043335,
+          "items_cond": 0.03830075203960055,
+          "outcome_cond": 0.09575188009900137,
+          "kills_pair_probe": 0.09575188009900137,
+          "random_uniform": 0.013333642336044404
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.0009004467058855159,
+            "mul": 1.0,
+            "before": 0.18047061268819692,
+            "after": 0.18047061268819692
+          },
+          "partial_draft": {
+            "gap": 0.27198,
+            "mul": 1.2,
+            "before": 0.2820138177036894,
+            "after": 0.3
+          },
+          "partial_items": {
+            "gap": 0.4271192198735446,
+            "mul": 1.2,
+            "before": 0.1880092118024596,
+            "after": 0.2
+          },
+          "duration_cond": {
+            "gap": 0.001406228241297769,
+            "mul": 1.0,
+            "before": 0.057750596060222995,
+            "after": 0.057750596060222995
+          },
+          "items_cond": {
+            "gap": -0.18853983908835148,
+            "mul": 0.95,
+            "before": 0.03760184236049192,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07232066392898562,
+            "mul": 1.2,
+            "before": 0.0940046059012298,
+            "after": 0.1
+          },
+          "kills_pair_probe": {
+            "gap": 1.9898927211761475,
+            "mul": 1.2,
+            "before": 0.0940046059012298,
+            "after": 0.1
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6461995532941145,
+          "partial_draft": 0.02802,
+          "duration_cond": 0.6785937717587023,
+          "items_cond": 0.9885398390883515,
+          "outcome_cond": 0.3276793360710144,
+          "partial_items": 0.07288078012645535,
+          "kills_pair_probe": 0.5101072788238525
+        }
+      }
+    },
+    {
+      "epoch": 21,
+      "per_head_loss_avg": {
+        "win": 0.43715923247866306,
+        "dur": 0.018257741321781276,
+        "items": 0.06437037314891815,
+        "kills": 0.17109894900966882,
+        "deaths": 0.09780422771137953,
+        "assists": 0.11584575511616468,
+        "gpm": 0.033654761010885235,
+        "hd": 0.1335225820045948
+      },
+      "train_total_loss": 1.3225055915527344,
+      "wall_seconds": 637.1993024349213,
+      "lr": 7.172518866500743e-05,
+      "scenarios": {
+        "partial_draft": 2798,
+        "pure_pregame": 1668,
+        "partial_items": 1906,
+        "everything_visible": 492,
+        "random_uniform": 134,
+        "outcome_cond": 962,
+        "duration_cond": 529,
+        "kills_pair_probe": 924,
+        "items_cond": 353
+      },
+      "pure_pregame_val_auc": 0.6473227344321524,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 22,
+      "per_head_loss_avg": {
+        "win": 0.4392444243285973,
+        "dur": 0.018186284072264285,
+        "items": 0.06400577265329362,
+        "kills": 0.17078876270211488,
+        "deaths": 0.09767075795694143,
+        "assists": 0.11568841485625654,
+        "gpm": 0.03361627591276169,
+        "hd": 0.13316522131066025
+      },
+      "train_total_loss": 1.32521783472929,
+      "wall_seconds": 637.0614757537842,
+      "lr": 4.504608114715981e-05,
+      "scenarios": {
+        "partial_draft": 2759,
+        "random_uniform": 127,
+        "items_cond": 348,
+        "duration_cond": 544,
+        "pure_pregame": 1719,
+        "kills_pair_probe": 934,
+        "outcome_cond": 913,
+        "partial_items": 1914,
+        "everything_visible": 508
+      },
+      "pure_pregame_val_auc": 0.6474592459973756,
+      "probe_results": {
+        "pure_pregame": 0.6463419636636812,
+        "partial_draft": 0.03002,
+        "duration_cond": 0.6794819880380241,
+        "items_cond": 0.9886253801271294,
+        "outcome_cond": 0.3279900848865509,
+        "partial_items": 0.07284069296376619,
+        "kills_pair_probe": 0.510857105255127,
+        "gpm_probe": 0.07732588797807693,
+        "hd_probe": 0.0602978952229023
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.04847722450029441,
+          "pure_pregame": 0.1675372878730175,
+          "partial_draft": 0.29085660634077454,
+          "partial_items": 0.19390440422718305,
+          "duration_cond": 0.05361193211936558,
+          "items_cond": 0.03878088084543661,
+          "outcome_cond": 0.09695220211359153,
+          "kills_pair_probe": 0.09695220211359153,
+          "random_uniform": 0.012927259866745177
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.0007580363363187681,
+            "mul": 1.0,
+            "before": 0.1728040046751355,
+            "after": 0.1728040046751355
+          },
+          "partial_draft": {
+            "gap": 0.26998,
+            "mul": 1.2,
+            "before": 0.2872556402970041,
+            "after": 0.3
+          },
+          "partial_items": {
+            "gap": 0.42715930703623384,
+            "mul": 1.2,
+            "before": 0.19150376019800275,
+            "after": 0.2
+          },
+          "duration_cond": {
+            "gap": 0.0005180119619759838,
+            "mul": 1.0,
+            "before": 0.055297281496043335,
+            "after": 0.055297281496043335
+          },
+          "items_cond": {
+            "gap": -0.18862538012712937,
+            "mul": 0.95,
+            "before": 0.03830075203960055,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07200991511344912,
+            "mul": 1.2,
+            "before": 0.09575188009900137,
+            "after": 0.1
+          },
+          "kills_pair_probe": {
+            "gap": 1.989142894744873,
+            "mul": 1.2,
+            "before": 0.09575188009900137,
+            "after": 0.1
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6463419636636812,
+          "partial_draft": 0.03002,
+          "duration_cond": 0.6794819880380241,
+          "items_cond": 0.9886253801271294,
+          "outcome_cond": 0.3279900848865509,
+          "partial_items": 0.07284069296376619,
+          "kills_pair_probe": 0.510857105255127
+        }
+      }
+    },
+    {
+      "epoch": 23,
+      "per_head_loss_avg": {
+        "win": 0.43944474867779904,
+        "dur": 0.01831336970266551,
+        "items": 0.06386864514665604,
+        "kills": 0.1711885345050931,
+        "deaths": 0.09791316622766257,
+        "assists": 0.11604344275051355,
+        "gpm": 0.03368511183853149,
+        "hd": 0.13364046614813804
+      },
+      "train_total_loss": 1.3260589755432128,
+      "wall_seconds": 636.5094196796417,
+      "lr": 2.568042983793928e-05,
+      "scenarios": {
+        "duration_cond": 506,
+        "kills_pair_probe": 897,
+        "partial_draft": 2894,
+        "everything_visible": 493,
+        "pure_pregame": 1664,
+        "outcome_cond": 925,
+        "partial_items": 1900,
+        "items_cond": 377,
+        "random_uniform": 110
+      },
+      "pure_pregame_val_auc": 0.647809250800416,
+      "probe_results": null,
+      "sampling_snapshot": null
+    },
+    {
+      "epoch": 24,
+      "per_head_loss_avg": {
+        "win": 0.43528102053973955,
+        "dur": 0.01833686235804856,
+        "items": 0.0639381259669304,
+        "kills": 0.17090997761315108,
+        "deaths": 0.09768027021701337,
+        "assists": 0.11575354776316882,
+        "gpm": 0.03364466031975746,
+        "hd": 0.13356225453193188
+      },
+      "train_total_loss": 1.3174775669754029,
+      "wall_seconds": 579.6781122684479,
+      "lr": 1.3936156546458163e-05,
+      "scenarios": {
+        "partial_draft": 2823,
+        "kills_pair_probe": 950,
+        "pure_pregame": 1628,
+        "items_cond": 391,
+        "everything_visible": 519,
+        "partial_items": 1822,
+        "outcome_cond": 995,
+        "duration_cond": 513,
+        "random_uniform": 125
+      },
+      "pure_pregame_val_auc": 0.6478918160641578,
+      "probe_results": {
+        "pure_pregame": 0.6466108165708221,
+        "partial_draft": 0.02904,
+        "duration_cond": 0.6799359535337117,
+        "items_cond": 0.9886793069156095,
+        "outcome_cond": 0.3281300663948059,
+        "partial_items": 0.07283549622269218,
+        "kills_pair_probe": 0.5107806921005249,
+        "gpm_probe": 0.07698880881071091,
+        "hd_probe": 0.05955328047275543
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.04740799851745968,
+          "pure_pregame": 0.16384204287634066,
+          "partial_draft": 0.2933831237626141,
+          "partial_items": 0.19558874917507607,
+          "duration_cond": 0.052429453720428995,
+          "items_cond": 0.03911774983501522,
+          "outcome_cond": 0.09779437458753804,
+          "kills_pair_probe": 0.09779437458753804,
+          "random_uniform": 0.01264213293798925
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.0004891834291779196,
+            "mul": 1.0,
+            "before": 0.1675372878730175,
+            "after": 0.1675372878730175
+          },
+          "partial_draft": {
+            "gap": 0.27096,
+            "mul": 1.2,
+            "before": 0.29085660634077454,
+            "after": 0.3
+          },
+          "partial_items": {
+            "gap": 0.4271645037773078,
+            "mul": 1.2,
+            "before": 0.19390440422718305,
+            "after": 0.2
+          },
+          "duration_cond": {
+            "gap": 6.404646628832555e-05,
+            "mul": 1.0,
+            "before": 0.05361193211936558,
+            "after": 0.05361193211936558
+          },
+          "items_cond": {
+            "gap": -0.1886793069156094,
+            "mul": 0.95,
+            "before": 0.03878088084543661,
+            "after": 0.04
+          },
+          "outcome_cond": {
+            "gap": 0.07186993360519411,
+            "mul": 1.2,
+            "before": 0.09695220211359153,
+            "after": 0.1
+          },
+          "kills_pair_probe": {
+            "gap": 1.989219307899475,
+            "mul": 1.2,
+            "before": 0.09695220211359153,
+            "after": 0.1
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.6466108165708221,
+          "partial_draft": 0.02904,
+          "duration_cond": 0.6799359535337117,
+          "items_cond": 0.9886793069156095,
+          "outcome_cond": 0.3281300663948059,
+          "partial_items": 0.07283549622269218,
+          "kills_pair_probe": 0.5107806921005249
+        }
+      }
+    },
+    {
+      "epoch": 25,
+      "per_head_loss_avg": {
+        "win": 0.43273843583585125,
+        "dur": 0.01819232686061114,
+        "items": 0.06383069696683884,
+        "kills": 0.17135697240228653,
+        "deaths": 0.0978188277413845,
+        "assists": 0.11582754570667744,
+        "gpm": 0.033581996802282334,
+        "hd": 0.13353809426841737
+      },
+      "train_total_loss": 1.3102497911312103,
+      "wall_seconds": 581.7867476940155,
+      "lr": 1.0000000041316776e-05,
+      "scenarios": {
+        "partial_draft": 2840,
+        "random_uniform": 145,
+        "partial_items": 1940,
+        "pure_pregame": 1529,
+        "duration_cond": 540,
+        "items_cond": 358,
+        "outcome_cond": 1021,
+        "everything_visible": 447,
+        "kills_pair_probe": 946
+      },
+      "pure_pregame_val_auc": 0.6479612327623001,
+      "probe_results": null,
+      "sampling_snapshot": null
+    }
+  ],
+  "scenario_distribution_final": {
+    "everything_visible": 0.04740799851745968,
+    "pure_pregame": 0.16384204287634066,
+    "partial_draft": 0.2933831237626141,
+    "partial_items": 0.19558874917507607,
+    "duration_cond": 0.052429453720428995,
+    "items_cond": 0.03911774983501522,
+    "outcome_cond": 0.09779437458753804,
+    "kills_pair_probe": 0.09779437458753804,
+    "random_uniform": 0.01264213293798925
+  },
+  "scenario_distribution_initial": {
+    "everything_visible": 0.15,
+    "pure_pregame": 0.3,
+    "partial_draft": 0.15,
+    "partial_items": 0.1,
+    "duration_cond": 0.08,
+    "items_cond": 0.08,
+    "outcome_cond": 0.05,
+    "kills_pair_probe": 0.05,
+    "random_uniform": 0.04
+  },
+  "scenario_loss_weights": {
+    "everything_visible": {
+      "win": 2.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "pure_pregame": {
+      "win": 2.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "partial_draft": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "partial_items": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 2.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "duration_cond": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "items_cond": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "outcome_cond": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 2.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "kills_pair_probe": {
+      "win": 1.0,
+      "dur": 1.5,
+      "items": 1.0,
+      "kills": 1.5,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "random_uniform": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    }
+  },
+  "scenario_targets": {
+    "everything_visible": 0.6471,
+    "pure_pregame": 0.6471,
+    "partial_draft": 0.3,
+    "partial_items": 0.5,
+    "duration_cond": 0.68,
+    "items_cond": 0.8,
+    "outcome_cond": 0.4,
+    "kills_pair_probe": 2.5
+  },
+  "model_hp": {
+    "embed_dim": 256,
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 6,
+    "ff_mult": 4,
+    "dropout": 0.0,
+    "decoder_n_layers": 2,
+    "decoder_n_heads": 8,
+    "use_team_team_bias": true,
+    "remove_first_layer_first_ln": true,
+    "use_canonical_sort": true
+  },
+  "optim_hp": {
+    "batch_size": 512,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "warmup_steps": 1000,
+    "cosine_min_lr": 1e-05,
+    "mixed_precision": true
+  },
+  "n_train_pre_subsample": 32641476,
+  "n_train_post_subsample": 5000000,
+  "n_val": 2419185,
+  "train_date_min": "2025-08-15",
+  "train_date_max": "2026-02-23",
+  "val_date_min": "2026-02-24",
+  "val_date_max": "2026-03-09",
+  "radiant_base_rate_val": 0.5326144695281982,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "item_vocab_size": 305,
+  "canonical_sort": true,
+  "default_patch_id": 1,
+  "train_patch_id_distribution": {
+    "1": 1994360,
+    "2": 621012,
+    "3": 2384628
+  },
+  "val_patch_id_distribution": {
+    "1": 2419185
+  },
+  "anchors": {
+    "v4_val_auc": 0.6471,
+    "iso_teambias_val_auc": 0.6493,
+    "baseline_multitask_repro_val_auc": 0.647,
+    "embedding_prelim_val_auc": 0.6476,
+    "cleanup_anchor_val_auc": 0.6477054,
+    "proposal_pure_pregame_target": 0.6471,
+    "proposal_items_cond_target": 0.8,
+    "proposal_duration_cond_target": 0.68
+  },
+  "delta_pure_pregame_vs_v4": 0.0008612327623001015,
+  "delta_pure_pregame_vs_iso_teambias": -0.0013387672376998783,
+  "delta_pure_pregame_vs_baseline_repro": 0.0009612327623000905,
+  "delta_pure_pregame_vs_target": 0.0008612327623001015,
+  "delta_items_cond_vs_target": 0.18868924422329125,
+  "delta_duration_cond_vs_target": 2.910243447151739e-05
+}

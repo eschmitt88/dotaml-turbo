@@ -1,0 +1,335 @@
+{
+  "ablation": "v7_unified",
+  "smoke": true,
+  "val_auc_pure_pregame": 0.48560241824115624,
+  "final_probe_results": {
+    "pure_pregame": 0.48499281851977016,
+    "partial_draft": 0.0215,
+    "duration_cond": 0.4919706223144885,
+    "items_cond": 0.4688063253351358,
+    "outcome_cond": 0.007265712600201368,
+    "partial_items": 0.4102968549031493,
+    "kills_pair_probe": 0.5569964647293091,
+    "gpm_probe": 0.28131622076034546,
+    "hd_probe": 0.4995502531528473
+  },
+  "best_epoch": 1,
+  "epochs_run": 1,
+  "max_epochs": 1,
+  "halted": false,
+  "halt_reasons": [],
+  "train_seconds": 7.736818075180054,
+  "data_seconds": 2.278136730194092,
+  "param_counts": {
+    "total": 6541032,
+    "trainable": 6541032,
+    "embedding": 136448,
+    "mask_embed": 2560,
+    "non_embedding": 6404584
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "per_head_loss_avg": {
+        "win": 0.698626150150299,
+        "dur": 1.2415291753065587,
+        "items": 0.644387349357605,
+        "kills": 0.29888613315582274,
+        "deaths": 0.37794120310783386,
+        "assists": 0.44597735391139987,
+        "gpm": 1.31154653195858,
+        "hd": 2.1553654841327665
+      },
+      "train_total_loss": 7.721365336151123,
+      "wall_seconds": 5.747326612472534,
+      "lr": 9.800000000000001e-05,
+      "scenarios": {
+        "partial_items": 12,
+        "pure_pregame": 27,
+        "duration_cond": 9,
+        "items_cond": 9,
+        "everything_visible": 22,
+        "partial_draft": 5,
+        "random_uniform": 2,
+        "outcome_cond": 5,
+        "kills_pair_probe": 7
+      },
+      "pure_pregame_val_auc": 0.48560241824115624,
+      "probe_results": {
+        "pure_pregame": 0.48499281851977016,
+        "partial_draft": 0.0215,
+        "duration_cond": 0.4919706223144885,
+        "items_cond": 0.4688063253351358,
+        "outcome_cond": 0.007265712600201368,
+        "partial_items": 0.4102968549031493,
+        "kills_pair_probe": 0.5569964647293091,
+        "gpm_probe": 0.28131622076034546,
+        "hd_probe": 0.4995502531528473
+      },
+      "sampling_snapshot": {
+        "probs_after": {
+          "everything_visible": 0.12908777969018934,
+          "pure_pregame": 0.3098106712564544,
+          "partial_draft": 0.1549053356282272,
+          "partial_items": 0.10327022375215146,
+          "duration_cond": 0.08261617900172118,
+          "items_cond": 0.08261617900172118,
+          "outcome_cond": 0.05163511187607573,
+          "kills_pair_probe": 0.05163511187607573,
+          "random_uniform": 0.034423407917383825
+        },
+        "deltas": {
+          "everything_visible": {
+            "gap": null,
+            "mul": 1.0
+          },
+          "pure_pregame": {
+            "gap": 0.16210718148022984,
+            "mul": 1.2,
+            "before": 0.3,
+            "after": 0.36
+          },
+          "partial_draft": {
+            "gap": 0.27849999999999997,
+            "mul": 1.2,
+            "before": 0.15,
+            "after": 0.18
+          },
+          "partial_items": {
+            "gap": 0.08970314509685068,
+            "mul": 1.2,
+            "before": 0.1,
+            "after": 0.12
+          },
+          "duration_cond": {
+            "gap": 0.18802937768551153,
+            "mul": 1.2,
+            "before": 0.08,
+            "after": 0.096
+          },
+          "items_cond": {
+            "gap": 0.33119367466486427,
+            "mul": 1.2,
+            "before": 0.08,
+            "after": 0.096
+          },
+          "outcome_cond": {
+            "gap": 0.39273428739979865,
+            "mul": 1.2,
+            "before": 0.05,
+            "after": 0.06
+          },
+          "kills_pair_probe": {
+            "gap": 1.943003535270691,
+            "mul": 1.2,
+            "before": 0.05,
+            "after": 0.06
+          },
+          "random_uniform": {
+            "gap": null,
+            "mul": 1.0
+          }
+        },
+        "probe_results": {
+          "pure_pregame": 0.48499281851977016,
+          "partial_draft": 0.0215,
+          "duration_cond": 0.4919706223144885,
+          "items_cond": 0.4688063253351358,
+          "outcome_cond": 0.007265712600201368,
+          "partial_items": 0.4102968549031493,
+          "kills_pair_probe": 0.5569964647293091
+        }
+      }
+    }
+  ],
+  "scenario_distribution_final": {
+    "everything_visible": 0.12908777969018934,
+    "pure_pregame": 0.3098106712564544,
+    "partial_draft": 0.1549053356282272,
+    "partial_items": 0.10327022375215146,
+    "duration_cond": 0.08261617900172118,
+    "items_cond": 0.08261617900172118,
+    "outcome_cond": 0.05163511187607573,
+    "kills_pair_probe": 0.05163511187607573,
+    "random_uniform": 0.034423407917383825
+  },
+  "scenario_distribution_initial": {
+    "everything_visible": 0.15,
+    "pure_pregame": 0.3,
+    "partial_draft": 0.15,
+    "partial_items": 0.1,
+    "duration_cond": 0.08,
+    "items_cond": 0.08,
+    "outcome_cond": 0.05,
+    "kills_pair_probe": 0.05,
+    "random_uniform": 0.04
+  },
+  "scenario_loss_weights": {
+    "everything_visible": {
+      "win": 2.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "pure_pregame": {
+      "win": 2.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "partial_draft": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "partial_items": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 2.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "duration_cond": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "items_cond": {
+      "win": 1.5,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "outcome_cond": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 2.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "kills_pair_probe": {
+      "win": 1.0,
+      "dur": 1.5,
+      "items": 1.0,
+      "kills": 1.5,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    },
+    "random_uniform": {
+      "win": 1.0,
+      "dur": 1.0,
+      "items": 1.0,
+      "kills": 1.0,
+      "deaths": 1.0,
+      "assists": 1.0,
+      "gpm": 1.0,
+      "hd": 1.0
+    }
+  },
+  "scenario_targets": {
+    "everything_visible": 0.6471,
+    "pure_pregame": 0.6471,
+    "partial_draft": 0.3,
+    "partial_items": 0.5,
+    "duration_cond": 0.68,
+    "items_cond": 0.8,
+    "outcome_cond": 0.4,
+    "kills_pair_probe": 2.5
+  },
+  "model_hp": {
+    "embed_dim": 256,
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 6,
+    "ff_mult": 4,
+    "dropout": 0.0,
+    "decoder_n_layers": 2,
+    "decoder_n_heads": 8,
+    "use_team_team_bias": true,
+    "remove_first_layer_first_ln": true,
+    "use_canonical_sort": true
+  },
+  "optim_hp": {
+    "batch_size": 512,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "warmup_steps": 1000,
+    "cosine_min_lr": 1e-05,
+    "mixed_precision": true
+  },
+  "n_train_pre_subsample": 401864,
+  "n_train_post_subsample": 50000,
+  "n_val": 5000,
+  "train_date_min": "2025-09-15",
+  "train_date_max": "2025-12-20",
+  "val_date_min": "2026-02-25",
+  "val_date_max": "2026-02-25",
+  "radiant_base_rate_val": 0.5314000248908997,
+  "feat_names": [
+    "n_games_log1p",
+    "smoothed_winrate",
+    "smoothed_winrate_hero",
+    "last10_winrate",
+    "days_since_last_log1p",
+    "n_games_hero_log1p",
+    "hero_diversity_log1p",
+    "is_anonymous"
+  ],
+  "n_player_feats": 8,
+  "item_vocab_size": 305,
+  "canonical_sort": true,
+  "default_patch_id": 1,
+  "train_patch_id_distribution": {
+    "1": 24448,
+    "3": 25552
+  },
+  "val_patch_id_distribution": {
+    "1": 5000
+  },
+  "anchors": {
+    "v4_val_auc": 0.6471,
+    "iso_teambias_val_auc": 0.6493,
+    "baseline_multitask_repro_val_auc": 0.647,
+    "embedding_prelim_val_auc": 0.6476,
+    "cleanup_anchor_val_auc": 0.6477054,
+    "proposal_pure_pregame_target": 0.6471,
+    "proposal_items_cond_target": 0.8,
+    "proposal_duration_cond_target": 0.68
+  },
+  "delta_pure_pregame_vs_v4": -0.16149758175884377,
+  "delta_pure_pregame_vs_iso_teambias": -0.16369758175884375,
+  "delta_pure_pregame_vs_baseline_repro": -0.16139758175884378,
+  "delta_pure_pregame_vs_target": -0.16149758175884377,
+  "delta_items_cond_vs_target": -0.33119367466486427,
+  "delta_duration_cond_vs_target": -0.18802937768551153
+}

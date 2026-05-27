@@ -1,0 +1,1 @@
+{"epoch": 1, "results": {"pure_pregame": 0.48499281851977016, "partial_draft": 0.0215, "duration_cond": 0.4919706223144885, "items_cond": 0.4688063253351358, "outcome_cond": 0.007265712600201368, "partial_items": 0.4102968549031493, "kills_pair_probe": 0.5569964647293091, "gpm_probe": 0.28131622076034546, "hd_probe": 0.4995502531528473}}

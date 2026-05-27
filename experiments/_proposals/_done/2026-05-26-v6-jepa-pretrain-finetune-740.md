@@ -2,7 +2,8 @@
 kind: proposal
 slug: v6-jepa-pretrain-finetune-740
 date: 2026-05-26
-status: proposed
+status: implemented
+experiment: experiments/2026-05-26-v6-jepa-pretrain-finetune-740/
 hypothesis: "JEPA-style self-supervised pre-training (predicting masked TOKEN REPRESENTATIONS in latent space, rather than reconstructing raw token values) avoids the over-specialization pathology that halted v5. The v5 mid-pretrain probe trajectory (0.4711 init → 0.5237 @ ep5 → 0.5304 @ ep10 → 0.5263 @ ep15) showed the encoder briefly held win-discriminative features at epoch 5 then drifted toward reconstruction-only representations. JEPA optimizes for semantic prediction (what does the masked content MEAN in context) instead of token-level fidelity (what exact values were there), so the encoder should not drift away from useful features as training continues. Targets — same as v5: mid-probe trajectory must show val_auc monotone-increasing past 0.55 by epoch 10 (else halt); Phase 2A linear probe ≥ 0.6300; Phase 2B full fine-tune ≥ 0.6485 (closes 50% of v4 → iso_teambias gap), ≥ 0.6493 beats iso_teambias on extended."
 rationale: >
   v5-pretrain-finetune-740 (2026-05-26) HALTED at Phase 1 epoch 16/20
