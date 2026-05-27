@@ -65,7 +65,35 @@ EXTENDED cross-patch corpus.
 
 ## Result
 
-Fill in after the run. Point at `metrics.json` (validation split).
+**OUTCOME (b) CONFIRMED.** See `metrics_v4_iso_teambias_extended.json`
+(mirrored to `metrics.json`).
+
+| Metric | Value |
+|---|---|
+| val_auc | **0.6471** @ epoch 16 (early-stopped epoch 21) |
+| train_seconds | 14,203 (3.95h) |
+| Δ vs iso_teambias (0.6493, target) | **−0.0022** (extended-data penalty) |
+| Δ vs v3 (0.6462) | **+0.0009** (v4 slightly beats v3) |
+| Δ vs baseline_multitask_repro (0.6470) | +0.0001 (tied) |
+| Δ vs cleanup-740 (0.6477) | −0.0006 (tied within noise) |
+
+Coverage buckets:
+- low (n=805k): 0.6375 (vs v3 0.6364, +0.0011)
+- medium (n=808k): 0.6455 (vs v3 0.6450, +0.0005)
+- high (n=805k): 0.6574 (vs v3 0.6565, +0.0009) — approaches
+  transformer-plus-features-extended record (0.6588)
+
+Attribution math:
+```
+iso_teambias (7.40-only):       0.6493
+v4 (extended, iso_teambias arch): 0.6471  → extended-data penalty: -0.0022
+v3 (extended, full stack):       0.6462  → composition penalty:    -0.0009
+                                            (vs v4, same data)
+total v3 regression vs iso_teambias =       -0.0031  ✓ (matches)
+```
+
+So ~70% of v3's loss came from the extended cross-patch data; ~30%
+from PMAE + patch_token + dur-regression composition.
 
 ## Interpretation
 

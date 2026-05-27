@@ -121,15 +121,100 @@ A persistent True across an epoch is a hard halt signal.
 
 ## Result
 
-Fill in after the run. `metrics_finetune.json` (best val on the
-multi-task fine-tune; mirrored to `metrics.json`). Linear probe in
-`metrics_linear_probe.json`. Pre-train trajectories in
-`results/pretrain_history.json` and `results/mid_probe_history.json`.
+**HALTED at Phase 1 epoch 11/20** — classic JEPA representation
+collapse. Phase 2A linear probe + Phase 2B fine-tune never ran.
+See `mid_probe_history.json`.
+
+| Phase | Status | Outcome |
+|---|---|---|
+| Phase 1 (JEPA pre-train) | HALTED ep 11/20 | representation collapse |
+| Phase 2A (linear probe) | not run | — |
+| Phase 2B (full fine-tune) | not run | — |
+
+Collapse trajectory (per epoch):
+
+| Epoch | jepa_loss | rep_l2_mean | pairwise_cos | mid_probe val_auc |
+|---|---|---|---|---|
+| 1 | 0.0284 | 14.44 | 0.972 | — |
+| 5 | 0.0021 | 4.39 | 0.967 | 0.5013 |
+| 10 | 0.0014 | 2.54 | 0.911 | 0.5017 |
+| 11 | 0.0014 | 2.45 | 0.903 | — (halted) |
+
+What the trajectory shows:
+- **jepa_loss collapsed toward 0** (0.0284 → 0.0014, plateau) —
+  student found a trivial solution.
+- **rep_l2_mean shrank steadily** (14.4 → 2.5, still decreasing at
+  halt) — reps becoming small-magnitude.
+- **pairwise_cos DID decrease** (0.972 → 0.903) — slots differentiated,
+  but into a low-information manifold.
+- **mid_probe val_auc stuck at random** (0.5013 @ ep5, 0.5017 @ ep10) —
+  zero win-discriminative signal extractable from the reps.
+
+v6 was actually WORSE than v5 on the mid_probe diagnostic
+(v5 peaked at 0.5304 @ ep10; v6 never broke 0.502). Two of three
+pre-committed halt criteria fired (mid_probe ≤ 0.51 AND rep L2
+shrinking). Saved ~10h fine-tune compute.
+
+Missing standard JEPA collapse mitigations (VICReg variance +
+covariance regularization, normalized predictor target) — see
+[[_meta/deferred-foundation-paths]] for the v7-jepa-vicreg variant
+that would address this if we ever revisit JEPA on this data.
 
 ## Interpretation
 
-TBD.
+The v6 collapse was structural: with only a latent-space prediction
+loss and no normalization / variance regularization, the student
+found the trivial solution of producing small-magnitude reps that
+are easy to predict. The EMA-teacher mechanism alone is insufficient
+to prevent this — it prevents student=teacher collapse (the v3 PMAE
+"Bug A" pattern) but not student-output-collapses-to-low-magnitude.
+
+The encoder DID learn to differentiate slots (pairwise cosine
+dropped from 0.972 to 0.903), but the differentiation was into a
+low-information subspace that doesn't carry win-discriminative
+features. The mid_probe linear-probe at 0.50 confirms this directly.
+
+Combined with v5's reconstruction over-specialization, this rules out
+"SSL-only training on this data" as a viable approach without
+substantially stronger collapse mitigations. v7 took the lesson:
+combine masked-input augmentation with an always-on multi-task
+supervised anchor, where the supervised losses keep the encoder
+honest about predicting win-discriminative features.
+
+The v4 diagnostic (hero embeddings cluster by role; encoder PCA-1
+correlates +0.98 with win_pred) had already shown the underlying
+FT-Transformer architecture is sound. v5 and v6 demonstrated that
+the SSL OBJECTIVE family (without supervised anchor) is what fails
+on this data, not the architecture.
 
 ## Diagnostics
 
-TBD - filled in by the implementer post-run.
+- intended_effect_confirmed: NO — encoder collapsed to predictable
+  low-magnitude reps; mid_probe val_auc never exceeded random.
+  Trajectory in `mid_probe_history.json`.
+- leakage_check: HCE strict, `data.py:assert_no_test_dates` passed;
+  halted before any fine-tune so no risk of val drift.
+- overfitting_signal: n/a (halted during pre-train, no fine-tune).
+  However the jepa_loss decreasing while mid_probe stays flat IS the
+  collapse signature in latent-prediction space.
+- delta_from_prior: vs v5 mid_probe peak (0.5304) the v6 ceiling was
+  WORSE (0.5017). Vs v4 anchor (0.6471) the model never came close;
+  pre-train collapsed before fine-tune started.
+- unexpected_findings: v6 was WORSE than v5 on the very probe that
+  was designed to compare them. The JEPA loss form not only failed
+  to fix v5's over-specialization, it introduced a distinct collapse
+  pattern. Pairwise cosine DID improve over training (slot
+  differentiation worked), but the encoder collapsed in MAGNITUDE
+  rather than in DIRECTION — a JEPA failure mode that VICReg-style
+  variance + covariance regularization is designed to prevent but
+  which our implementation lacks.
+- seeds_run: 1 (single halted attempt).
+- metric_aggregation: single-run.
+- next_candidates:
+  - v7-unified-masked-multitask-740 (the actual next step taken — and
+    it succeeded; see [[experiments/2026-05-26-v7-unified-masked-multitask-740]]).
+  - v7-jepa-vicreg (if we ever revisit JEPA): add VICReg variance +
+    covariance regularization to prevent magnitude collapse. See
+    [[_meta/deferred-foundation-paths]].
+  - v7-cvae (if foundation framing needs an explicit generative
+    model with KL regularization). See deferred-foundation-paths.

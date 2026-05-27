@@ -63,15 +63,31 @@ the project (~12.5h wall).
 
 ## Result
 
-Fill in after the run. Reads from `metrics_finetune.json` (best val on
-the multi-task fine-tune; this file is mirrored to `metrics.json`).
-Linear probe lives in `metrics_linear_probe.json`. Pre-train
-trajectories live in `results/pretrain_history.json` and
-`results/mid_probe_history.json`.
+**HALTED at Phase 1 epoch 16/20** per pre-committed mid-pretrain probe
+halt criterion. Phase 2A linear probe + Phase 2B fine-tune never ran.
+See `mid_probe_history.json` for trajectory.
 
-## Interpretation
+| Phase | Status | Best metric |
+|---|---|---|
+| Phase 1 (PMAE pre-train) | HALTED ep 16/20 | per-group recon losses ↓ but win-discriminative signal ↑ then ↓ |
+| Phase 2A (linear probe) | not run | — |
+| Phase 2B (full fine-tune) | not run | — |
 
-TBD.
+Mid-pretrain probe trajectory (small linear probe on 50k val every 5 epochs):
+
+| Probe Epoch | val_auc | Δ vs random (0.50) |
+|---|---|---|
+| 1 (smoke init) | 0.4711 | −0.029 |
+| 5 | 0.5237 | +0.024 (encoder briefly held useful features) |
+| 10 | 0.5304 | +0.030 (plateau) |
+| 15 | **0.5263** | +0.026 (REGRESSION — encoder drifted) |
+
+Per-group reconstruction losses kept decreasing throughout
+(hero CE 1.55 → 1.41 over 16 epochs, all per-group losses slowly
+improving). The encoder was getting better at token reconstruction
+WHILE simultaneously losing its briefly-held win-discriminative
+signal — classic SSL over-specialization. Halted to save ~10h of
+fine-tune compute that would have built on a degraded encoder.
 
 ## Interpretation
 
