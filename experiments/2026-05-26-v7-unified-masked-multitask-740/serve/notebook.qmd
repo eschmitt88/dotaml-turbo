@@ -1,0 +1,234 @@
+---
+title: "v7 downstream queries — interactive demo"
+format:
+  html:
+    toc: true
+    code-fold: false
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+---
+
+# v7 downstream queries on Dota 2 Turbo
+
+This notebook demonstrates the seven query functions built on the
+trained v7-unified-masked-multitask foundation model. All queries
+share a single loaded `V7Foundation` instance and complete in 1-10
+seconds on the RTX 5080.
+
+```{python}
+import sys, time
+from pathlib import Path
+
+EXP_DIR = Path('..').resolve()
+sys.path.insert(0, str(EXP_DIR))
+
+from serve.v7_inference import V7Foundation
+from serve.lookups import (
+    hero_id, hero_name, hero_id_to_roles, hero_id_to_attr,
+    item_name, item_cost, item_id_to_info,
+    get_player_features_or_default, lookup_player_features,
+    ANON_ACCOUNT_IDS,
+)
+from serve import queries
+
+# Load the trained v7 foundation
+t0 = time.time()
+f = V7Foundation()
+print(f'v7 loaded in {time.time()-t0:.1f}s on device={f.device}')
+print(f'  hero vocab: {f.n_heroes}, item vocab: {f.item_vocab_size}')
+
+# My account (non-anonymous, regular player, HIGH coverage bucket)
+USER_ACCT = 3303652
+my_feats = get_player_features_or_default(USER_ACCT)
+print(f'\nmy account {USER_ACCT} averaged player features (across val matches):')
+for name, val in zip(
+    ['n_games_log1p', 'smoothed_winrate', 'smoothed_winrate_hero',
+     'last10_winrate', 'days_since_last_log1p', 'n_games_hero_log1p',
+     'hero_diversity_log1p', 'is_anonymous'],
+    my_feats,
+):
+    print(f'  {name:<25} {val:.4f}')
+```
+
+## Example draft
+
+Throughout the notebook we use this draft as a running example:
+
+**Radiant**: Anti-Mage, Drow Ranger, Zeus, Rubick, Mars
+**Dire**: Crystal Maiden, Shadow Fiend, Puck, Pudge, Sniper
+
+```{python}
+draft = [hero_id(n) for n in
+    ['Anti-Mage', 'Drow Ranger', 'Zeus', 'Rubick', 'Mars',
+     'Crystal Maiden', 'Shadow Fiend', 'Puck', 'Pudge', 'Sniper']]
+print('draft hero ids:', draft)
+print('  radiant:', [hero_name(h) for h in draft[:5]])
+print('  dire:   ', [hero_name(h) for h in draft[5:]])
+```
+
+## Query 1 — personal_winprob
+
+Given a full 10-hero draft, return P(radiant_win).
+
+```{python}
+wp = queries.personal_winprob(f, heroes=draft)
+print(f'  P(radiant_win) = {wp:.4f}  (anonymous players)')
+
+# Now with my account at radiant slot 2 (Zeus)
+accts = [None, None, USER_ACCT, None, None] + [None]*5
+wp = queries.personal_winprob(f, heroes=draft, account_ids=accts)
+print(f'  P(radiant_win) = {wp:.4f}  (me on Zeus)')
+```
+
+## Query 2 — lineup_matchup
+
+Same as `personal_winprob` but returns a richer result with the
+predicted duration as well.
+
+```{python}
+m = queries.lineup_matchup(f, radiant=draft[:5], dire=draft[5:])
+print(f'  P(radiant_win) = {m["radiant_win_prob"]:.4f}')
+print(f'  predicted duration = {m["predicted_duration_sec"]/60:.1f} min')
+```
+
+## Query 3 — win_vs_duration
+
+Sweep duration as an INPUT to the model. Tells you "where's my edge"
+— early game, late game, or even.
+
+```{python}
+pts = queries.win_vs_duration(
+    f, heroes=draft, account_ids=accts,
+    duration_minutes=[10, 15, 20, 25, 30, 35, 40, 50])
+print('  duration → P(radiant_win)')
+for p in pts:
+    bar = '█' * int(p.win_prob * 50)
+    print(f'  {p.duration_minutes:>3.0f} min: {p.win_prob:.4f}  {bar}')
+```
+
+Interpretation: this draft favors radiant strongly in the
+20-35 minute window (Anti-Mage and Drow Ranger come online). It loses
+hard in early game (too few teamfight tools) and weakens slightly at
+very long games (Sniper / SF can scale and out-position).
+
+## Query 4 — hero_pick_rec (partial draft)
+
+You're picking on radiant. Anti-Mage and Drow are already locked on
+your team. What hero maximizes your team's win probability?
+
+The model doesn't have a "mask hero" capability that's well-trained
+(it was never given a hero-reconstruction objective). Instead we use
+a candidate-sweep approach: for each candidate hero, sample several
+plausible completions of the unknown enemy and ally slots from the
+empirical hero distribution, average the predicted win probability.
+
+```{python}
+known_radiant = [hero_id('Anti-Mage'), hero_id('Drow Ranger')]
+known_dire = []   # no enemies known yet
+
+t0 = time.time()
+recs = queries.hero_pick_rec(
+    f,
+    known_radiant=known_radiant,
+    known_dire=known_dire,
+    my_side='radiant',
+    account_id=USER_ACCT,
+    n_samples=16,
+    top_k=12,
+)
+print(f'  swept {len(recs)} candidates returned (top 12) in {time.time()-t0:.1f}s')
+print()
+print(f'  {"hero":<25} {"win_prob":>9}  {"role":<30}')
+for r in recs:
+    roles = ', '.join(hero_id_to_roles().get(r.hero_id, []))
+    print(f'  {r.hero_name:<25} {r.mean_winprob:>9.4f}  {roles}')
+```
+
+## Query 5 — item_rec_for_winprob
+
+Given the full draft + my hero (Zeus, slot 2), recommend items that
+maximize my team's predicted win probability. Budget filter excludes
+items I can't afford. Counterfactual style: for each candidate, add
+it to my current bag and recompute win probability; the marginal is
+my predicted win-prob lift.
+
+**Important caveat**: these are CORRELATIONAL, not causal. The model
+sees that winning teams often have these items, but it doesn't prove
+the items caused the wins. Hodge2017-style propensity-score-weighted
+analysis would give cleaner causal effects — that's future work.
+
+```{python}
+recs = queries.item_rec_for_winprob(
+    f, heroes=draft, my_slot=2,
+    current_bag=[],
+    account_ids=accts,
+    gold_budget=2500, top_k=10)
+
+print(f'  Top items for Zeus (budget = 2500 gold):')
+print(f'  {"item":<30} {"marginal":>10} {"cost":>8}')
+for r in recs:
+    print(f'  {r.item_name:<30} {r.score:+10.4f} {r.cost:>6}g')
+```
+
+## Query 6 — item_rec_given_win
+
+Different question: given that my team DOES win, what items typically
+end up in my final bag? This conditions the model on the outcome,
+using v7's `win-as-input` capability.
+
+```{python}
+recs = queries.item_rec_given_win(
+    f, heroes=draft, my_slot=2,
+    account_ids=accts, top_k=12)
+
+print(f'  Items most likely in Zeus final bag given radiant wins:')
+print(f'  {"item":<30} {"P(in bag)":>10} {"cost":>8}')
+for r in recs:
+    print(f'  {r.item_name:<30} {r.score:>10.3f} {r.cost:>6}g')
+```
+
+These are the "textbook" Zeus items the model has learned from winning
+match data: Refresher Orb (chain ults), Octarine Core (cooldown),
+Aghanim's Scepter (extra-charge passive), Arcane Boots (mana sustain),
+Yasha & Kaya (Zeus shard buff), Boots of Travel (split push).
+
+## Query 7 — kills_per_minute_pair
+
+For a subset of 1-5 ally heroes, predict the (kills + assists) per
+minute contribution. The model fills in the missing slots from
+sampling. Useful for "fun pair" exploration.
+
+```{python}
+test_pairs = [
+    [hero_id('Anti-Mage'), hero_id('Mars')],
+    [hero_id('Zeus'), hero_id('Rubick')],
+    [hero_id('Pudge'), hero_id('Tinker')] if hero_id('Tinker') else [hero_id('Pudge')],
+    [hero_id('Sniper'), hero_id('Bounty Hunter')] if hero_id('Bounty Hunter') else [hero_id('Sniper')],
+]
+
+print(f'  {"pair":<40} {"K+A":>8} {"dur":>8} {"K+A/min":>9}')
+for pair in test_pairs:
+    res = queries.kills_per_minute_pair(
+        f, hero_subset=pair, account_ids=[None]*len(pair), n_samples=12)
+    names = ' + '.join(hero_name(h) for h in pair)
+    total_ka = res.predicted_total_kills + res.predicted_assists
+    print(f'  {names:<40} {total_ka:>8.1f} {res.predicted_duration_min:>6.1f}m {res.kills_per_min:>9.3f}')
+```
+
+## Notes / limitations
+
+- **Item rec is correlational, not causal.** Proper causal estimation
+  via propensity-score weighting is future work.
+- **Item progression (early vs late) is not supported.** We don't
+  have item-timing data in rich_cols — only final inventories. A
+  build-order heuristic could be assembled from item costs + predicted
+  GPM + duration, but isn't built here.
+- **Hero pick rec uses sampling.** v7 has no trained hero mask token,
+  so we sample empirical completions instead. Results are stochastic
+  but stabilize at `n_samples ≥ 16`.
+- **Anonymous slots in 66% of Turbo player slots**. Lookup falls back
+  to ANON_FEATS defaults when an account isn't found in val.
+- **HCE preserved.** Test window (2026-03-10 to 2026-03-23) is sealed
+  and the val data we look up from is strictly before that window.
