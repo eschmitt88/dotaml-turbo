@@ -18,7 +18,8 @@ the parent experiment's README for the model itself and the
   - `hero_pick_rec(known_radiant, known_dire, my_side, account_id, ...)` — top-K heroes via v7's trained hero mask token, single forward pass per candidate
   - `item_rec_marginal_sweep(heroes, my_slot, current_bag, ...)` — DIAGNOSTIC BASELINE: top-K items by marginal win-prob lift (strongly confounded)
   - `item_rec_odds_ratio(heroes, my_slot, current_bag, ...)` — Design A: rank items by P(item|win) / P(item|loss), draft+player context held fixed
-  - `build_path(heroes, my_slot, ...)` — Design B: ordered budget-aware progression using odds_ratio + predicted GPM × duration
+  - `build_path(heroes, my_slot, ...)` — Design B: ordered budget-aware full-item progression using odds_ratio + predicted GPM × duration
+  - `build_path_components(heroes, my_slot, ...)` — Design C: decomposes the build path into a component-level shopping timeline (recursive item recipes from OpenDota constants), with per-component cost + cumulative + expected-minute
   - `item_rec_given_win(heroes, my_slot, ...)` — top-K items P(in bag | my-team wins) — descriptive, not prescriptive
   - `win_vs_duration(heroes, duration_minutes=[...])` — sweep duration as input
   - `kills_per_minute_pair(hero_subset, ...)` — predicted K+A per minute for a 1-5 hero subset
@@ -56,6 +57,8 @@ All queries run in 1-10s on RTX 5080 after the model is loaded
 - `item_rec_marginal_sweep`, `item_rec_given_win`: ~1.2s (1 + 150 rows batched)
 - `item_rec_odds_ratio`: ~1.2s (2 forward passes, 150-item ranking from outputs)
 - `build_path` (6 steps): ~8s (one odds_ratio call per build step)
+- `build_path_components` (5 items → ~16 components): ~12s
+  (build_path + cheap CPU-side recipe decomposition)
 - `kills_per_minute_pair`: ~1.3s (12 rows batched)
 - `hero_pick_rec` (full 148-candidate sweep via hero mask token): ~5s
   (148 rows batched in a single forward pass — single mask-token query
@@ -72,11 +75,19 @@ a single `.to(device)` call.
   probabilities, which is a partial mitigation — but proper causal
   estimation via propensity-score weighting or DR estimators would
   give stronger guarantees. Future work.
-- **`build_path` progression is heuristic.** Uses predicted GPM ×
-  predicted duration as a gold budget; `expected_minute` is
-  `cumulative_cost / GPM` assuming linear gold accumulation. Real
-  item timing data (e.g. parsed-replay events) is not available, so
-  this is an estimate, not a guaranteed acquisition schedule.
+- **`build_path` / `build_path_components` progression is heuristic.**
+  Uses predicted GPM × predicted duration as a gold budget;
+  `expected_minute` is `cumulative_cost / GPM` assuming linear gold
+  accumulation. Real item timing data (parsed-replay events) is not
+  available, so this is an estimate, not a guaranteed schedule.
+- **Item costs are current-patch, not 7.40-exact.** `serve/items.json`
+  is an OpenDota constants snapshot reflecting the live patch at fetch
+  time. Dota item costs drift across patches, so the budget/timing math
+  is approximate for the patch-7.40 frozen snapshot. Re-fetch
+  `serve/items.json` after a patch to refresh
+  (`curl -sf https://api.opendota.com/api/constants/items -o items.json`).
+  A proper fix would need patch-7.40-archived item costs, which OpenDota's
+  constants endpoint doesn't directly expose — deferred.
 - **Hero pick rec uses v7's trained hero mask token** (`hero_mask_embed`).
   v7's `partial_draft` training scenario explicitly trained the win
   head on partial drafts and converged to highest adaptive sampling

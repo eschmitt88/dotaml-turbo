@@ -189,7 +189,7 @@ for r in recs:
 ```
 
 ```{python}
-print('=== Design B: build_path (ordered progression) ===')
+print('=== Design B: build_path (ordered full-item progression) ===')
 print('Greedy: at each step, pick best-odds item within remaining gold')
 print('budget. Budget = predicted GPM * predicted duration * safety_factor.')
 print('Naturally avoids "rush divine rapier" because expensive items')
@@ -204,6 +204,29 @@ for s in path:
     print(f'  {s.step:<5} {s.item_name:<26} {s.cost:>5}g  '
           f'{s.expected_minute:>5.1f}m  {s.cumulative_cost:>5}g  '
           f'{s.odds_ratio_at_pick:>5.2f}x')
+```
+
+```{python}
+print('=== Design C: build_path_components (component-level shopping) ===')
+print('Decomposes each full item from build_path into its component +')
+print('recipe purchases, producing a single flattened shopping timeline —')
+print('what you would actually buy, in order, as gold accumulates.')
+print()
+print('CAVEAT: item costs are from the current OpenDota constants snapshot,')
+print('not patch-7.40-exact. Costs drift across patches; timing is approximate.')
+print()
+steps = queries.build_path_components(
+    f, heroes=draft, my_slot=2, account_ids=accts,
+    max_items=5, min_cost=300)
+print(f'  {"#":>2} {"component":<26} {"cost":>6} {"cum":>7} {"@min":>6}  building →')
+cur_target = None
+for s in steps:
+    marker = ''
+    if s.target_item_name != cur_target:
+        marker = f'   ┌─ {s.target_item_name}'
+        cur_target = s.target_item_name
+    print(f'  {s.global_step:>2} {s.component_name:<26} {s.cost:>5}g '
+          f'{s.cumulative_cost:>6}g {s.expected_minute:>5.1f}m{marker}')
 ```
 
 ## Query 6 — item_rec_given_win (descriptive, not prescriptive)

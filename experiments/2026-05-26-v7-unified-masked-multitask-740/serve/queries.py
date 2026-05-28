@@ -23,8 +23,8 @@ import numpy as np
 import torch
 
 from .lookups import (
-    ANON_ACCOUNT_IDS, get_player_features_or_default, hero_name,
-    item_cost, item_id_to_info, item_name, sample_unknown_heroes,
+    ANON_ACCOUNT_IDS, decompose_item, get_player_features_or_default,
+    hero_name, item_cost, item_id_to_info, item_name, sample_unknown_heroes,
 )
 from .v7_inference import V7Foundation, canonical_hero_sort
 
@@ -580,6 +580,99 @@ def build_path(f: V7Foundation,
     return progression
 
 
+@dataclass
+class ComponentStep:
+    global_step: int                 # purchase order across the whole build
+    target_item_id: int              # the full item this component builds toward
+    target_item_name: str
+    component_item_id: int | None    # None = recipe purchase
+    component_name: str              # "RECIPE" for recipe steps
+    cost: int
+    cumulative_cost: int
+    expected_minute: float           # cumulative_cost / GPM (linear-accrual estimate)
+
+
+def build_path_components(f: V7Foundation,
+                            heroes: list[int],
+                            my_slot: int,
+                            account_ids: list[int | None] | None = None,
+                            gpm: float | None = None,
+                            duration_minutes: float | None = None,
+                            budget_safety_factor: float = 0.85,
+                            max_items: int = 6,
+                            min_cost: int = 300,
+                            candidate_pool_size: int = 30) -> list[ComponentStep]:
+    """Design C: component-aware build progression.
+
+    Runs build_path() to get the ordered full-item sequence, then
+    decomposes each full item into its component + recipe purchases via
+    lookups.decompose_item(). Produces a SINGLE flattened shopping
+    timeline at the component level — what you'd actually buy, in order,
+    as gold accumulates.
+
+    Each ComponentStep is annotated with the full item it builds toward,
+    its cost, cumulative cost, and an expected-minute estimate
+    (cumulative_cost / GPM, assuming linear gold accrual).
+
+    Within each full item, components are ordered cheapest-first
+    (decompose_item's convention), with the recipe last.
+
+    NOTE on item costs: costs come from the current OpenDota constants
+    snapshot (serve/items.json), NOT patch-7.40-exact costs. Dota item
+    costs drift across patches; the timing estimates are approximate.
+    Re-fetch serve/items.json after a patch to refresh.
+
+    Cost: same as build_path (~6 forward passes for a 6-item build) +
+    cheap CPU-side decomposition. <1s beyond build_path.
+    """
+    if account_ids is None:
+        account_ids = [None] * 10
+
+    # Derive GPM once (for both build_path budget AND component timing).
+    if gpm is None or duration_minutes is None:
+        sorted_heroes, sorted_accts, my_sorted_slot = \
+            _sort_draft_track_my_slot(heroes, my_slot, account_ids)
+        bi = f.empty_inputs(batch_size=1)
+        bi["hero_ids"][0, :] = torch.tensor(sorted_heroes, dtype=torch.long, device=f.device)
+        pf = np.stack([get_player_features_or_default(a) for a in sorted_accts], axis=0)
+        bi["player_feats"][0, :, :] = torch.tensor(pf, dtype=torch.float32, device=f.device)
+        bo = f.predict(inputs=bi, masks=f.pure_pregame_mask(batch_size=1))
+        if gpm is None:
+            gpm = float(bo.gpm()[0, my_sorted_slot].cpu())
+        if duration_minutes is None:
+            duration_minutes = float(bo.dur_seconds()[0].cpu()) / 60.0
+
+    # Get the full-item build path (passes the derived gpm/duration so the
+    # budget matches the timing denominator)
+    full_path = build_path(
+        f, heroes=heroes, my_slot=my_slot, account_ids=account_ids,
+        gpm=gpm, duration_minutes=duration_minutes,
+        budget_safety_factor=budget_safety_factor,
+        max_items=max_items, min_cost=min_cost,
+        candidate_pool_size=candidate_pool_size)
+
+    # Flatten each full item into component purchases
+    steps: list[ComponentStep] = []
+    cumulative = 0
+    gstep = 0
+    for item_step in full_path:
+        leaves = decompose_item(item_step.item_id)
+        for comp_id, cost in leaves:
+            gstep += 1
+            cumulative += int(cost)
+            steps.append(ComponentStep(
+                global_step=gstep,
+                target_item_id=item_step.item_id,
+                target_item_name=item_step.item_name,
+                component_item_id=comp_id,
+                component_name=("RECIPE" if comp_id is None else item_name(comp_id)),
+                cost=int(cost),
+                cumulative_cost=cumulative,
+                expected_minute=(cumulative / gpm) if gpm and gpm > 0 else 0.0,
+            ))
+    return steps
+
+
 def item_rec_given_win(f: V7Foundation,
                          heroes: list[int],
                          my_slot: int,
@@ -795,10 +888,10 @@ def kills_per_minute_pair(f: V7Foundation,
 
 __all__ = [
     "HeroPickRec", "ItemRec", "WinDurationPoint", "KillsPerMinResult",
-    "BuildStep",
+    "BuildStep", "ComponentStep",
     "personal_winprob", "lineup_matchup",
     "hero_pick_rec",
     "item_rec_marginal_sweep", "item_rec_odds_ratio", "item_rec_given_win",
-    "build_path",
+    "build_path", "build_path_components",
     "win_vs_duration", "kills_per_minute_pair",
 ]

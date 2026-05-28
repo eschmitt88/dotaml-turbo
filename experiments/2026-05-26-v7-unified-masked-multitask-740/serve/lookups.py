@@ -116,6 +116,77 @@ def item_cost(iid: int) -> int:
     return int(info["cost"]) if info else 0
 
 
+@lru_cache(maxsize=1)
+def _item_name_to_id() -> dict[str, int]:
+    """Map item slug (e.g. 'point_booster') -> integer id."""
+    out = {}
+    for slug, info in _items_json().items():
+        iid = info.get("id")
+        if iid is not None:
+            out[slug] = int(iid)
+    return out
+
+
+@lru_cache(maxsize=1)
+def item_id_to_components() -> dict[int, list[int]]:
+    """Map item_id -> list of immediate component item_ids.
+
+    Empty-string component placeholders (recipe markers in OpenDota) are
+    dropped here; the recipe gold cost is recovered in decompose_item()
+    as (item total cost - sum of component costs).
+    """
+    name2id = _item_name_to_id()
+    out: dict[int, list[int]] = {}
+    for slug, info in _items_json().items():
+        iid = info.get("id")
+        if iid is None:
+            continue
+        comps = info.get("components") or []
+        comp_ids = [name2id[c] for c in comps if c and c in name2id]
+        out[int(iid)] = comp_ids
+    return out
+
+
+def decompose_item(iid: int, _depth: int = 0) -> list[tuple[int | None, int]]:
+    """Recursively decompose a built item into its purchasable pieces.
+
+    Returns an ordered list of (component_item_id, cost) tuples representing
+    the base components + recipe costs that sum to the item's total cost.
+    A recipe step is returned as (None, recipe_cost).
+
+    Components within an item are ordered cheapest-first (matches the way
+    gold trickles in — you buy affordable pieces as you go, then combine).
+    Recipes are appended last (you complete the item once components are in).
+
+    Example: decompose_item(110)  # Refresher Orb
+      -> [(base components of ring_of_tarrasque...), (recipe, X),
+          (base components of tiara_of_selemene...), (recipe, Y),
+          (refresher recipe, Z)]
+    """
+    info = item_id_to_info().get(int(iid))
+    if info is None:
+        return [(int(iid), 0)]
+    comp_ids = item_id_to_components().get(int(iid), [])
+    if not comp_ids:
+        # Base item — leaf
+        return [(int(iid), int(info["cost"]))]
+
+    # Recurse into each component, cheapest-component-first
+    comp_sorted = sorted(comp_ids, key=lambda c: item_cost(c))
+    leaves: list[tuple[int | None, int]] = []
+    comp_cost_sum = 0
+    for c in comp_sorted:
+        sub = decompose_item(c, _depth + 1)
+        leaves.extend(sub)
+        comp_cost_sum += sum(cost for _, cost in sub)
+
+    # Recipe cost = this item's total cost - sum of all component costs
+    recipe_cost = int(info["cost"]) - comp_cost_sum
+    if recipe_cost > 0:
+        leaves.append((None, recipe_cost))  # None marks a recipe purchase
+    return leaves
+
+
 # ----- Account → player features -----
 
 
@@ -276,6 +347,7 @@ __all__ = [
     "hero_id_to_name", "hero_name_to_id", "hero_id_to_roles", "hero_id_to_attr",
     "hero_name", "hero_id",
     "item_id_to_info", "item_name", "item_cost",
+    "item_id_to_components", "decompose_item",
     "lookup_player_features", "get_player_features_or_default",
     "hero_pick_distribution", "sample_unknown_heroes",
 ]
