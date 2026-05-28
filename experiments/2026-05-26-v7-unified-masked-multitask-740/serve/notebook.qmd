@@ -118,11 +118,17 @@ very long games (Sniper / SF can scale and out-position).
 You're picking on radiant. Anti-Mage and Drow are already locked on
 your team. What hero maximizes your team's win probability?
 
-The model doesn't have a "mask hero" capability that's well-trained
-(it was never given a hero-reconstruction objective). Instead we use
-a candidate-sweep approach: for each candidate hero, sample several
-plausible completions of the unknown enemy and ally slots from the
-empirical hero distribution, average the predicted win probability.
+v7's `partial_draft` training scenario explicitly masked 1-5 hero
+slots and trained the win head to predict win probability conditional
+on a partial draft. By end of training, this scenario had the highest
+adaptive sampling probability (0.293, up from 0.150 init) — meaning
+the model saw a lot of partial drafts and the win head learned to
+handle them robustly.
+
+The query: for each candidate hero, fill its slot, mask the unknown
+enemy/ally slots with v7's learned `hero_mask_embed` token, predict
+win_prob. One forward pass per candidate; ~150 candidates batched into
+a single forward call ≈ 5s on RTX 5080.
 
 ```{python}
 known_radiant = [hero_id('Anti-Mage'), hero_id('Drow Ranger')]
@@ -135,7 +141,6 @@ recs = queries.hero_pick_rec(
     known_dire=known_dire,
     my_side='radiant',
     account_id=USER_ACCT,
-    n_samples=16,
     top_k=12,
 )
 print(f'  swept {len(recs)} candidates returned (top 12) in {time.time()-t0:.1f}s')
@@ -146,37 +151,68 @@ for r in recs:
     print(f'  {r.hero_name:<25} {r.mean_winprob:>9.4f}  {roles}')
 ```
 
-## Query 5 — item_rec_for_winprob
+## Query 5 — item_rec: three flavors side-by-side
 
-Given the full draft + my hero (Zeus, slot 2), recommend items that
-maximize my team's predicted win probability. Budget filter excludes
-items I can't afford. Counterfactual style: for each candidate, add
-it to my current bag and recompute win probability; the marginal is
-my predicted win-prob lift.
-
-**Important caveat**: these are CORRELATIONAL, not causal. The model
-sees that winning teams often have these items, but it doesn't prove
-the items caused the wins. Hodge2017-style propensity-score-weighted
-analysis would give cleaner causal effects — that's future work.
+Three different ways to answer "what items should Zeus build?" Each
+has different statistical properties and trade-offs. Run all three on
+the same input so we can compare.
 
 ```{python}
-recs = queries.item_rec_for_winprob(
+print('=== Design (baseline): item_rec_marginal_sweep ===')
+print('Counterfactual: for each candidate item, add to bag and ask the')
+print('win head "how much does this raise my win prob?" Strongly')
+print('confounded — winning teams build winning items.')
+print()
+recs = queries.item_rec_marginal_sweep(
     f, heroes=draft, my_slot=2,
-    current_bag=[],
-    account_ids=accts,
-    gold_budget=2500, top_k=10)
-
-print(f'  Top items for Zeus (budget = 2500 gold):')
+    current_bag=[], account_ids=accts,
+    gold_budget=2500, top_k=6)
 print(f'  {"item":<30} {"marginal":>10} {"cost":>8}')
 for r in recs:
     print(f'  {r.item_name:<30} {r.score:+10.4f} {r.cost:>6}g')
 ```
 
-## Query 6 — item_rec_given_win
+```{python}
+print('=== Design A: item_rec_odds_ratio ===')
+print('Ranks items by P(item|win=1, draft, player) / P(item|win=0, ...).')
+print('Items DISTINCTIVELY associated with winning in this context.')
+print('Cleaner than the marginal sweep — draft+player context is held')
+print('fixed across both conditional probabilities, so confound is controlled.')
+print()
+recs = queries.item_rec_odds_ratio(
+    f, heroes=draft, my_slot=2,
+    current_bag=[], account_ids=accts,
+    gold_budget=2500, top_k=10)
+print(f'  {"item":<30} {"odds_ratio":>12} {"cost":>8}')
+for r in recs:
+    print(f'  {r.item_name:<30} {r.score:>12.3f} {r.cost:>6}g')
+```
+
+```{python}
+print('=== Design B: build_path (ordered progression) ===')
+print('Greedy: at each step, pick best-odds item within remaining gold')
+print('budget. Budget = predicted GPM * predicted duration * safety_factor.')
+print('Naturally avoids "rush divine rapier" because expensive items')
+print('only become affordable after earlier items have been built.')
+print()
+path = queries.build_path(
+    f, heroes=draft, my_slot=2, account_ids=accts,
+    max_items=6, min_cost=300)
+print(f'  {"step":<5} {"item":<26} {"cost":>6}  '
+      f'{"@min":>6}  {"cum":>6}  {"odds":>5}')
+for s in path:
+    print(f'  {s.step:<5} {s.item_name:<26} {s.cost:>5}g  '
+          f'{s.expected_minute:>5.1f}m  {s.cumulative_cost:>5}g  '
+          f'{s.odds_ratio_at_pick:>5.2f}x')
+```
+
+## Query 6 — item_rec_given_win (descriptive, not prescriptive)
 
 Different question: given that my team DOES win, what items typically
 end up in my final bag? This conditions the model on the outcome,
-using v7's `win-as-input` capability.
+using v7's `win-as-input` capability. **Descriptive** ("what do
+winning Zeuses build?") rather than prescriptive ("what should I
+build to win?") — for the latter, use build_path above.
 
 ```{python}
 recs = queries.item_rec_given_win(
@@ -219,16 +255,20 @@ for pair in test_pairs:
 
 ## Notes / limitations
 
-- **Item rec is correlational, not causal.** Proper causal estimation
-  via propensity-score weighting is future work.
-- **Item progression (early vs late) is not supported.** We don't
-  have item-timing data in rich_cols — only final inventories. A
-  build-order heuristic could be assembled from item costs + predicted
-  GPM + duration, but isn't built here.
-- **Hero pick rec uses sampling.** v7 has no trained hero mask token,
-  so we sample empirical completions instead. Results are stochastic
-  but stabilize at `n_samples ≥ 16`.
-- **Anonymous slots in 66% of Turbo player slots**. Lookup falls back
-  to ANON_FEATS defaults when an account isn't found in val.
+- **Item rec is correlational, not causal.** `item_rec_odds_ratio`
+  controls for draft+player context which is a partial mitigation,
+  but proper causal estimation via propensity-score weighting (or DR
+  estimators) would give stronger guarantees. Future work.
+- **Item progression** uses a budget heuristic (predicted GPM ×
+  predicted duration), not actual item-timing data — rich_cols only
+  has final inventories. The `expected_minute` column is an estimate
+  assuming linear gold accumulation, not a guaranteed acquisition time.
+- **Hero pick rec uses v7's trained hero mask token.** v7's
+  `partial_draft` scenario explicitly trained the win head on partial
+  drafts (1-5 hero slots masked + all post-game masked); by end of
+  training this scenario had the HIGHEST adaptive sampling probability
+  (0.293, up from 0.150 init). Single forward pass per candidate.
+- **Anonymous slots in 66% of Turbo player slots.** Lookup falls back
+  to `ANON_FEATS` defaults when an account isn't found in val.
 - **HCE preserved.** Test window (2026-03-10 to 2026-03-23) is sealed
   and the val data we look up from is strictly before that window.

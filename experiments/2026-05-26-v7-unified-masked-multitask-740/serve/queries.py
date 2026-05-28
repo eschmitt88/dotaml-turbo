@@ -139,28 +139,32 @@ def hero_pick_rec(f: V7Foundation,
                     known_dire: list[int],
                     my_side: str,
                     account_id: int | None = None,
-                    n_samples: int = 24,
                     top_k: int = 10,
-                    candidate_heroes: list[int] | None = None,
-                    seed: int = 42) -> list[HeroPickRec]:
-    """Recommend top-K heroes for ME to pick.
+                    candidate_heroes: list[int] | None = None) -> list[HeroPickRec]:
+    """Recommend top-K heroes for ME to pick, using v7's trained hero-mask
+    token for unknown enemy/ally slots.
 
     known_radiant: heroes locked on radiant (excluding mine — 0 to 4 of them).
     known_dire:    heroes locked on dire (0 to 5 of them).
     my_side: 'radiant' or 'dire' (which team I'm on).
     account_id: my account ID (None = anonymous defaults).
-    n_samples: number of (unknown enemy/ally) lineup completions to average over.
-    candidate_heroes: which hero IDs to consider; default = all 150 known heroes.
+    candidate_heroes: which hero IDs to consider; default = all 150 heroes
+                     minus already-locked ones.
 
     Returns a list of HeroPickRec sorted descending by mean_winprob.
 
-    Mechanism: for each candidate hero in my open slot, fill the remaining
-    unknown slots by sampling from the empirical hero distribution
-    (without replacement; excludes already-locked heroes). Average
-    win_prob across n_samples completions. Top-K by mean.
+    Mechanism: for each candidate hero in my open slot, the unknown
+    enemy/ally hero slots are filled with v7's learned `hero_mask_embed`
+    token. v7 was trained on the partial_draft scenario (1-5 random hero
+    slots masked + all post-game masked) — by end of training this
+    scenario had the HIGHEST adaptive sampling probability (0.293),
+    meaning the model saw a lot of partial drafts and the win head
+    learned to predict P(win | partial draft + features). Single forward
+    pass per candidate; total ~150 candidates batched ≈ 0.5s.
 
-    Note v7 has NO mask token for heroes that we use here — instead we
-    sample concrete completions. This matches the actual inference pattern.
+    Player_feats for unknown slots default to ANON_FEATS (~66% of Turbo
+    slots are anonymous; this matches the training distribution).
+    n_samples=1 in the returned dataclass (no longer a sampling estimator).
     """
     assert my_side in ("radiant", "dire")
     assert len(known_radiant) <= 4 if my_side == "radiant" else len(known_radiant) <= 5
@@ -174,107 +178,90 @@ def hero_pick_rec(f: V7Foundation,
 
     n_unknown_radiant = 5 - len(known_radiant) - (1 if my_side == "radiant" else 0)
     n_unknown_dire    = 5 - len(known_dire)    - (1 if my_side == "dire"    else 0)
-    n_unknown_total = n_unknown_radiant + n_unknown_dire
 
-    rng = np.random.default_rng(seed)
-
-    # Pre-generate n_samples completions of unknown slots (one set per sample).
-    # Each completion is sampled independently of the candidate (so the
-    # comparison across candidates is on the same shared random ALLIES/ENEMIES).
-    sample_unknowns: list[tuple[list[int], list[int]]] = []
-    for _ in range(n_samples):
-        unknown_picks = sample_unknown_heroes(
-            n_unknown_total, exclude=locked, rng=rng)
-        radiant_unknown = unknown_picks[:n_unknown_radiant]
-        dire_unknown    = unknown_picks[n_unknown_radiant:]
-        sample_unknowns.append((radiant_unknown, dire_unknown))
-
-    # Vectorize fully: build CPU numpy arrays in a python loop (fast), do
-    # ONE GPU transfer for the whole batch. Per-row torch.tensor(...).to(device)
-    # was the bottleneck — ~1.2s/row from cudaMemcpy overhead.
-    B = len(candidate_heroes) * n_samples
+    from .v7_inference import ANON_FEATS
     my_feats = get_player_features_or_default(account_id)
 
-    # Cache anonymous default features once
-    from .v7_inference import ANON_FEATS
-    anon_pf = ANON_FEATS
+    N = len(candidate_heroes)
+    hero_ids_np = np.zeros((N, 10), dtype=np.int64)
+    hero_mask_np = np.zeros((N, 10), dtype=bool)
+    player_feats_np = np.tile(ANON_FEATS, (N, 10, 1)).astype(np.float32)
 
-    hero_ids_np = np.zeros((B, 10), dtype=np.int64)
-    player_feats_np = np.tile(anon_pf, (B, 10, 1)).astype(np.float32)
-    config_index: list[tuple[int, int]] = []  # (candidate_idx, sample_idx)
-
-    row_idx = 0
     for ci, cand in enumerate(candidate_heroes):
-        for si, (r_unk, d_unk) in enumerate(sample_unknowns):
-            if my_side == "radiant":
-                radiant_5 = list(known_radiant) + [cand] + list(r_unk)
-                dire_5    = list(known_dire) + list(d_unk)
-            else:
-                radiant_5 = list(known_radiant) + list(r_unk)
-                dire_5    = list(known_dire) + [cand] + list(d_unk)
+        if my_side == "radiant":
+            # Pre-sort radiant_5: known heroes + candidate + masked placeholders (hero_id=0)
+            radiant_5 = list(known_radiant) + [cand] + [0] * n_unknown_radiant
+            radiant_mask = [False] * len(known_radiant) + [False] + [True] * n_unknown_radiant
+            dire_5 = list(known_dire) + [0] * n_unknown_dire
+            dire_mask = [False] * len(known_dire) + [True] * n_unknown_dire
+            my_orig_slot_in_team = len(known_radiant)  # my slot index in radiant_5
+        else:
+            radiant_5 = list(known_radiant) + [0] * n_unknown_radiant
+            radiant_mask = [False] * len(known_radiant) + [True] * n_unknown_radiant
+            dire_5 = list(known_dire) + [cand] + [0] * n_unknown_dire
+            dire_mask = [False] * len(known_dire) + [False] + [True] * n_unknown_dire
+            my_orig_slot_in_team = len(known_dire)
 
-            # Apply canonical sort + track my slot via stable-sort indices
-            r_argsort = sorted(range(5), key=lambda i: radiant_5[i])
-            d_argsort = sorted(range(5), key=lambda i: dire_5[i])
-            sorted_r = [radiant_5[i] for i in r_argsort]
-            sorted_d = [dire_5[i] for i in d_argsort]
+        # Canonical sort by (is_masked, hero_id) — keeps masked slots together
+        # at end of each team (deterministic order for masked positions)
+        r_argsort = sorted(range(5), key=lambda i: (radiant_mask[i], radiant_5[i]))
+        d_argsort = sorted(range(5), key=lambda i: (dire_mask[i], dire_5[i]))
 
-            # Set my slot's account features (only ONE position has my account)
-            if my_side == "radiant":
-                orig_my_slot_in_r = len(known_radiant)  # my slot in radiant_5 (before sort)
-                new_my_slot = r_argsort.index(orig_my_slot_in_r)
-                player_feats_np[row_idx, new_my_slot, :] = my_feats
-            else:
-                orig_my_slot_in_d = len(known_dire)
-                new_my_slot = 5 + d_argsort.index(orig_my_slot_in_d)
-                player_feats_np[row_idx, new_my_slot, :] = my_feats
+        sorted_r = [radiant_5[i] for i in r_argsort]
+        sorted_r_mask = [radiant_mask[i] for i in r_argsort]
+        sorted_d = [dire_5[i] for i in d_argsort]
+        sorted_d_mask = [dire_mask[i] for i in d_argsort]
 
-            hero_ids_np[row_idx, :5] = sorted_r
-            hero_ids_np[row_idx, 5:] = sorted_d
-            config_index.append((ci, si))
-            row_idx += 1
+        hero_ids_np[ci, :5] = sorted_r
+        hero_ids_np[ci, 5:] = sorted_d
+        hero_mask_np[ci, :5] = sorted_r_mask
+        hero_mask_np[ci, 5:] = sorted_d_mask
 
-    # ONE GPU transfer for the batch
-    inputs = f.empty_inputs(batch_size=B)
+        # Place my player features at my new slot position
+        if my_side == "radiant":
+            new_my_slot = r_argsort.index(my_orig_slot_in_team)
+            player_feats_np[ci, new_my_slot, :] = my_feats
+        else:
+            new_my_slot = 5 + d_argsort.index(my_orig_slot_in_team)
+            player_feats_np[ci, new_my_slot, :] = my_feats
+
+    # ONE GPU transfer + ONE forward pass
+    inputs = f.empty_inputs(batch_size=N)
     inputs["hero_ids"]    = torch.from_numpy(hero_ids_np).to(f.device, non_blocking=True)
     inputs["player_feats"] = torch.from_numpy(player_feats_np).to(f.device, non_blocking=True)
-    masks = f.pure_pregame_mask(batch_size=B)
+    masks = f.pure_pregame_mask(batch_size=N)
+    masks["hero"] = torch.from_numpy(hero_mask_np).to(f.device, non_blocking=True)
 
     out = f.predict(inputs=inputs, masks=masks)
-    winp = out.win_prob().cpu().numpy()  # [B]
-
-    # If my_side == 'dire', we want my-team winrate, which = 1 - radiant_winrate.
+    winp = out.win_prob().cpu().numpy()
     my_winp = winp if my_side == "radiant" else (1.0 - winp)
 
-    # Aggregate per candidate
-    by_cand: dict[int, list[float]] = {ci: [] for ci in range(len(candidate_heroes))}
-    for row, (ci, _si) in enumerate(config_index):
-        by_cand[ci].append(float(my_winp[row]))
-
-    recs: list[HeroPickRec] = []
-    for ci, hid in enumerate(candidate_heroes):
-        scores = by_cand[ci]
-        recs.append(HeroPickRec(
-            hero_id=hid, hero_name=hero_name(hid),
-            mean_winprob=float(np.mean(scores)), n_samples=len(scores)))
-
+    recs = [HeroPickRec(hero_id=hid, hero_name=hero_name(hid),
+                          mean_winprob=float(p), n_samples=1)
+            for hid, p in zip(candidate_heroes, my_winp)]
     recs.sort(key=lambda r: -r.mean_winprob)
     return recs[:top_k]
 
 
-def item_rec_for_winprob(f: V7Foundation,
-                           heroes: list[int],
-                           my_slot: int,
-                           current_bag: list[int] | None = None,
-                           account_ids: list[int | None] | None = None,
-                           gold_budget: int | None = None,
-                           top_k: int = 10,
-                           min_cost: int = 200) -> list[ItemRec]:
-    """For each candidate item, compute the MARGINAL win_prob increase from
+def item_rec_marginal_sweep(f: V7Foundation,
+                              heroes: list[int],
+                              my_slot: int,
+                              current_bag: list[int] | None = None,
+                              account_ids: list[int | None] | None = None,
+                              gold_budget: int | None = None,
+                              top_k: int = 10,
+                              min_cost: int = 200) -> list[ItemRec]:
+    """DIAGNOSTIC BASELINE: marginal-win-prob counterfactual sweep.
+
+    For each candidate item, compute the MARGINAL win_prob increase from
     adding it to my current_bag. Return top-K by that lift.
 
-    heroes:       [r0..r4, d0..d4] hero IDs (NOT yet canonical-sorted —
-                  function does the sort and tracks my_slot).
+    Caveat — strongly confounded: items that winning teams build will
+    push the model's win prediction up even if the items aren't causal.
+    Use item_rec_odds_ratio for a cleaner draft-contextual signal, or
+    build_path for an ordered budget-aware progression.
+
+    heroes:       [r0..r4, d0..d4] hero IDs (NOT yet canonical-sorted).
     my_slot:      0..9 index of MY slot in the input heroes array.
     current_bag:  list of item IDs already in my bag (default: empty).
     account_ids:  10-list of account IDs (None for unknown).
@@ -282,16 +269,6 @@ def item_rec_for_winprob(f: V7Foundation,
     top_k:        number of items to return.
     min_cost:     exclude items below this cost (filters out boots-1, etc.,
                   consumables, components that aren't really build choices).
-
-    Approach: fix everything except items at my_slot. For each candidate item:
-    - baseline_inputs: my items = current_bag (multi-hot). Mask: items
-      UNMASKED (we're conditioning on items as input). All other post-game
-      info masked. Get baseline_winprob.
-    - candidate_inputs: my items = current_bag + [cand]. Same masks.
-      Get candidate_winprob.
-    - marginal = candidate_winprob - baseline_winprob.
-
-    Sorted descending by marginal.
     """
     assert 0 <= my_slot < 10
     if current_bag is None:
@@ -384,6 +361,223 @@ def item_rec_for_winprob(f: V7Foundation,
 
     recs.sort(key=lambda r: -r.score)
     return recs[:top_k]
+
+
+def _sort_draft_track_my_slot(heroes: list[int], my_slot: int,
+                                account_ids: list[int | None] | None
+                                ) -> tuple[list[int], list[int | None], int]:
+    """Canonical-sort heroes within each team, returning (sorted_heroes,
+    sorted_accts, new_my_slot)."""
+    if account_ids is None:
+        account_ids = [None] * 10
+    r_pairs = sorted(enumerate(zip(heroes[:5], account_ids[:5])),
+                      key=lambda p: p[1][0])
+    d_pairs = sorted(enumerate(zip(heroes[5:], account_ids[5:])),
+                      key=lambda p: p[1][0])
+    new_slot_of_original: dict[int, int] = {}
+    for new_idx, (orig_idx, _) in enumerate(r_pairs):
+        new_slot_of_original[orig_idx] = new_idx
+    for new_idx, (orig_idx, _) in enumerate(d_pairs):
+        new_slot_of_original[5 + orig_idx] = 5 + new_idx
+    sorted_heroes = [p[1][0] for p in r_pairs] + [p[1][0] for p in d_pairs]
+    sorted_accts  = [p[1][1] for p in r_pairs] + [p[1][1] for p in d_pairs]
+    return sorted_heroes, sorted_accts, new_slot_of_original[my_slot]
+
+
+def item_rec_odds_ratio(f: V7Foundation,
+                         heroes: list[int],
+                         my_slot: int,
+                         current_bag: list[int] | None = None,
+                         account_ids: list[int | None] | None = None,
+                         top_k: int = 10,
+                         min_cost: int = 200,
+                         gold_budget: int | None = None,
+                         smoothing: float = 1e-3) -> list[ItemRec]:
+    """Design A: rank items by P(item | win=1) / P(item | win=0).
+
+    For each item X, compute the odds ratio:
+      P(item=X ∈ my final bag | draft, player, current_bag, my-team-wins=1)
+      ÷ P(item=X ∈ my final bag | draft, player, current_bag, my-team-wins=0)
+
+    Items with odds ratio >> 1 are DISTINCTIVELY associated with winning
+    in this draft+player context. Items equally common in winning and
+    losing bags get ratio ≈ 1 and rank low.
+
+    Much cleaner than item_rec_marginal_sweep because draft/player
+    context is held FIXED across both conditional distributions, so
+    confounding with team strength is controlled.
+
+    Cost: 2 forward passes total (one batch with win=1, one with win=0),
+    each on a single match. ~0.3s.
+
+    Returns ItemRec sorted descending by odds ratio (stored in `score`).
+    """
+    assert 0 <= my_slot < 10
+    if current_bag is None:
+        current_bag = []
+    if account_ids is None:
+        account_ids = [None] * 10
+
+    sorted_heroes, sorted_accts, my_sorted_slot = \
+        _sort_draft_track_my_slot(heroes, my_slot, account_ids)
+    my_team_is_radiant = (my_sorted_slot < 5)
+
+    pf = np.stack([get_player_features_or_default(a) for a in sorted_accts], axis=0)
+    bag_vec = f.items_multihot(list(int(x) for x in current_bag))
+
+    # Build a batch of size 2: row 0 = win=1, row 1 = win=0 (from MY-team POV)
+    inputs = f.empty_inputs(batch_size=2)
+    inputs["hero_ids"][:, :] = torch.tensor(
+        sorted_heroes, dtype=torch.long, device=f.device).unsqueeze(0)
+    inputs["player_feats"][:, :, :] = torch.tensor(
+        pf, dtype=torch.float32, device=f.device).unsqueeze(0)
+    inputs["items"][:, my_sorted_slot, :] = torch.tensor(bag_vec, device=f.device)
+    # Win token: row 0 sets my-team-wins, row 1 sets my-team-loses
+    if my_team_is_radiant:
+        inputs["win_idx"][0] = 1
+        inputs["win_idx"][1] = 0
+    else:
+        inputs["win_idx"][0] = 0  # row 0 = dire wins = my team
+        inputs["win_idx"][1] = 1
+
+    masks = f.pure_pregame_mask(batch_size=2)
+    masks["items"] = torch.zeros((2, 10), dtype=torch.bool, device=f.device)
+    masks["win"] = torch.zeros((2,), dtype=torch.bool, device=f.device)
+
+    out = f.predict(inputs=inputs, masks=masks)
+    item_probs = out.item_probs().cpu().numpy()   # [2, 10, 305]
+    p_my_win  = item_probs[0, my_sorted_slot, :]
+    p_my_lose = item_probs[1, my_sorted_slot, :]
+
+    odds = (p_my_win + smoothing) / (p_my_lose + smoothing)
+
+    # Rank — skip PAD/RARE + min_cost + gold_budget filter + skip items in bag
+    in_bag = set(int(x) for x in current_bag)
+    vocab_to_iid = f.vocab_idx_to_item_id
+    info_map = item_id_to_info()
+    scored: list[tuple[float, int, int, int]] = []  # (odds, vidx, iid, cost)
+    for vidx in range(2, f.item_vocab_size):
+        iid = vocab_to_iid.get(vidx)
+        if iid is None or iid in in_bag:
+            continue
+        cost = int(info_map.get(iid, {}).get("cost", 0))
+        if cost < min_cost:
+            continue
+        if gold_budget is not None and cost > gold_budget:
+            continue
+        scored.append((float(odds[vidx]), vidx, iid, cost))
+
+    scored.sort(reverse=True)
+    out_recs: list[ItemRec] = []
+    for odds_val, vidx, iid, cost in scored[:top_k]:
+        info = info_map.get(iid, {})
+        out_recs.append(ItemRec(
+            vocab_idx=vidx, item_id=iid,
+            item_name=info.get("dname", f"item_{iid}"),
+            score=odds_val, cost=cost))
+    return out_recs
+
+
+@dataclass
+class BuildStep:
+    step: int
+    item_id: int
+    item_name: str
+    cost: int
+    cumulative_cost: int
+    expected_minute: float        # cumulative_cost / GPM
+    odds_ratio_at_pick: float
+    remaining_budget: int
+
+
+def build_path(f: V7Foundation,
+                 heroes: list[int],
+                 my_slot: int,
+                 account_ids: list[int | None] | None = None,
+                 gpm: float | None = None,
+                 duration_minutes: float | None = None,
+                 budget_safety_factor: float = 0.85,
+                 max_items: int = 6,
+                 min_cost: int = 200,
+                 candidate_pool_size: int = 30) -> list[BuildStep]:
+    """Design B: greedy build progression with budget.
+
+    Step-by-step build path:
+    1. Predict GPM and game duration from v7's heads (if not provided)
+    2. total_gold = GPM × duration_min × budget_safety_factor
+       (safety factor leaves room for consumables / pings / wards)
+    3. Loop until 6 items or budget exhausted:
+         a. Run item_rec_odds_ratio with the current bag as input
+         b. Filter by remaining budget
+         c. Pick top-1 affordable item; add to bag, subtract cost
+    4. Return ordered list of BuildStep records
+
+    Each step's `expected_minute` = cumulative_cost / GPM, an estimate
+    of when in the game you'd typically have enough gold to buy that
+    item assuming linear gold accumulation.
+
+    The model naturally avoids "rush Divine Rapier (6300g)" because at
+    minute 8 the budget can't afford it; by the time it can, the bag
+    already has earlier items and Rapier may have a different odds ratio.
+
+    Cost: ~6 forward passes (one per build step) plus 1 to predict
+    baseline GPM/duration. <1 second total.
+    """
+    assert 0 <= my_slot < 10
+    if account_ids is None:
+        account_ids = [None] * 10
+
+    sorted_heroes, sorted_accts, my_sorted_slot = \
+        _sort_draft_track_my_slot(heroes, my_slot, account_ids)
+    info_map = item_id_to_info()
+
+    # Predict baseline GPM and duration (single forward pass with everything masked)
+    if gpm is None or duration_minutes is None:
+        baseline_inputs = f.empty_inputs(batch_size=1)
+        baseline_inputs["hero_ids"][0, :] = torch.tensor(
+            sorted_heroes, dtype=torch.long, device=f.device)
+        pf = np.stack([get_player_features_or_default(a) for a in sorted_accts], axis=0)
+        baseline_inputs["player_feats"][0, :, :] = torch.tensor(
+            pf, dtype=torch.float32, device=f.device)
+        baseline_masks = f.pure_pregame_mask(batch_size=1)
+        baseline_out = f.predict(inputs=baseline_inputs, masks=baseline_masks)
+        if gpm is None:
+            gpm = float(baseline_out.gpm()[0, my_sorted_slot].cpu())
+        if duration_minutes is None:
+            duration_minutes = float(baseline_out.dur_seconds()[0].cpu()) / 60.0
+
+    total_gold = int(gpm * duration_minutes * budget_safety_factor)
+    bag: list[int] = []
+    remaining = total_gold
+    progression: list[BuildStep] = []
+
+    for step in range(max_items):
+        # Get top affordable items by odds ratio, conditioned on current bag
+        recs = item_rec_odds_ratio(
+            f, heroes=heroes, my_slot=my_slot,
+            current_bag=bag, account_ids=account_ids,
+            top_k=candidate_pool_size,
+            min_cost=min_cost, gold_budget=remaining)
+        if not recs:
+            break
+        best = recs[0]
+        bag.append(int(best.item_id))
+        remaining -= int(best.cost)
+        cumulative = total_gold - remaining
+        progression.append(BuildStep(
+            step=step + 1,
+            item_id=int(best.item_id),
+            item_name=best.item_name,
+            cost=int(best.cost),
+            cumulative_cost=cumulative,
+            expected_minute=(cumulative / gpm) if gpm > 0 else 0.0,
+            odds_ratio_at_pick=float(best.score),
+            remaining_budget=max(0, remaining),
+        ))
+        if remaining < min_cost:
+            break
+
+    return progression
 
 
 def item_rec_given_win(f: V7Foundation,
@@ -601,7 +795,10 @@ def kills_per_minute_pair(f: V7Foundation,
 
 __all__ = [
     "HeroPickRec", "ItemRec", "WinDurationPoint", "KillsPerMinResult",
+    "BuildStep",
     "personal_winprob", "lineup_matchup",
-    "hero_pick_rec", "item_rec_for_winprob", "item_rec_given_win",
+    "hero_pick_rec",
+    "item_rec_marginal_sweep", "item_rec_odds_ratio", "item_rec_given_win",
+    "build_path",
     "win_vs_duration", "kills_per_minute_pair",
 ]
