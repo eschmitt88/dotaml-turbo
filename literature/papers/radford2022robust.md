@@ -8,12 +8,17 @@ authors:
   - Greg Brockman
   - Christine McLeavey
   - Ilya Sutskever
+institutions: ["OpenAI"]
 year: 2022
 venue: "arXiv:2212.04356 (OpenAI; subsequently published at ICML 2023)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2212.04356"
+code_url: "https://github.com/openai/whisper"
+citations: null
 source: "raw/papers/radford2022robust.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 5
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -178,3 +183,9 @@ decay to zero. Five model sizes: 39M, 74M, 244M, 769M, 1550M.
   readout token + frozen trunk) for that ability. Combine both:
   task-as-token for inference flexibility, Octo modularity for
   post-hoc extension.
+
+## Trust signals
+
+- **Credibility:** 5 — OpenAI, subsequently published at ICML 2023, with
+  released models + inference code (github.com/openai/whisper) and an
+  enormous citation/adoption footprint. Strong on every axis.

@@ -1,0 +1,110 @@
+{
+  "smoke": false,
+  "build_seconds": 12988.676682472229,
+  "n_raw_read": 36548292,
+  "n_bad_json": 0,
+  "n_emitted": 35060661,
+  "n_filt_forfeit": 1584,
+  "n_filt_empty_inv": 138,
+  "n_train_emitted": 32641476,
+  "n_val_emitted": 2419185,
+  "n_days_total": 196,
+  "days_processed": [
+    "2025-08-15",
+    "2026-03-09"
+  ],
+  "n_prepatch_days_walked": 112,
+  "n_inpatch_days_walked": 84,
+  "n_unique_account_ids_tracked": 1771158,
+  "raw_roots": [
+    "/mnt/projects/research/dotaml-turbo/data/history/turbo",
+    "/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/raw/turbo"
+  ],
+  "aggregator_clamp_events_total": 0,
+  "aggregator_clamp_events_by_feat": {
+    "n_games_log1p": 0,
+    "smoothed_winrate": 0,
+    "smoothed_winrate_hero": 0,
+    "last10_winrate": 0,
+    "days_since_last_log1p": 0,
+    "n_games_hero_log1p": 0,
+    "hero_diversity_log1p": 0,
+    "is_anonymous": 0
+  },
+  "anonymous_per_match_hist": {
+    "min": 0,
+    "max": 10,
+    "mean": 6.576265575825852,
+    "p50": 7,
+    "p95": 10
+  },
+  "train_window": [
+    "2025-08-15",
+    "2026-02-23"
+  ],
+  "val_window": [
+    "2026-02-24",
+    "2026-03-09"
+  ],
+  "patch_edges": [
+    [
+      "2025-08-01",
+      2
+    ],
+    [
+      "2025-09-10",
+      3
+    ],
+    [
+      "2025-12-16",
+      1
+    ]
+  ],
+  "train_patch_id_distribution": {
+    "2": 4052988,
+    "3": 15570095,
+    "1": 13018393
+  },
+  "val_patch_id_distribution": {
+    "1": 2419185
+  },
+  "config": {
+    "alpha": 5.0,
+    "hero_alpha": 5.0,
+    "recent_window": 10
+  },
+  "feat_bounds": {
+    "n_games_log1p": [
+      0.0,
+      25.0
+    ],
+    "smoothed_winrate": [
+      0.0,
+      1.0
+    ],
+    "smoothed_winrate_hero": [
+      0.0,
+      1.0
+    ],
+    "last10_winrate": [
+      0.0,
+      1.0
+    ],
+    "days_since_last_log1p": [
+      0.0,
+      25.0
+    ],
+    "n_games_hero_log1p": [
+      0.0,
+      25.0
+    ],
+    "hero_diversity_log1p": [
+      0.0,
+      10.0
+    ],
+    "is_anonymous": [
+      0.0,
+      1.0
+    ]
+  }
+}

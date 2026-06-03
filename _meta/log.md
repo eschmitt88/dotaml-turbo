@@ -117,3 +117,6 @@ skills; read by `/lint`.
 2026-05-26 19:08 implement v7-unified-masked-multitask-740 → experiments/2026-05-26-v7-unified-masked-multitask-740/ seeds=1 model=claude-opus-4-6 + main-agent fix (log1p targets for k/d/a/gpm/hd to keep multi-task losses commensurate; halt thresholds updated to log1p units)
 2026-05-26 20:12 retry v7-unified-masked-multitask-740 — disabled bogus partial_draft halt criterion (probe measured encoder-output-at-masked-slot ~ hero-embedding cosine, but no hero-reconstruction loss in training so probe is misaligned with actual hero pick rec use case). Other 3 probes (pure_pregame=0.618, items_cond=0.984, duration_cond=0.619 at ep4) were healthy and on track. ~50 min compute lost on first attempt.
 2026-05-27 02:53 wrap v7-unified-masked-multitask-740 SUCCEEDS val_auc=0.6480 (+0.0009 vs v4) — first foundation experiment to meet ALL THREE success criteria (pure_pregame 0.6480, items_cond 0.9887, duration_cond 0.6800). Masking-augmentation + supervised-anchor combo is the winning recipe. v7 is the recommended foundation; ready to build serve/ subdirectory with downstream queries.
+2026-05-27 09:32 session_end session=3d581b91-40c9-4ff4-a157-ed233e3f8568
+2026-06-03 18:45 session_end session=fb42480f-67bb-4309-9f4b-23831e75a7a9
+2026-06-03 18:46 session_end session=13856bcf-e587-4691-a643-05c8455dacdb

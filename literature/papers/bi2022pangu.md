@@ -8,12 +8,17 @@ authors:
   - Xin Chen
   - Xiaotao Gu
   - Qi Tian
+institutions: ["Huawei Cloud Computing"]
 year: 2022
 venue: "arXiv:2211.02556 (later published in Nature 2023 as Pangu-Weather)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2211.02556"
+code_url: null
+citations: null
 source: "raw/papers/bi2022pangu.pdf"
 added: "2026-05-22"
 relevance: 4
+credibility: 5
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -140,3 +145,11 @@ Loss is plain L1 against ERA5 ground truth at the specified lead time.
 - No information on whether the bias parameters themselves overfit
   on small-data regimes; we should monitor train-val gap on the bias
   parameters specifically (low-rank vs full-rank ablation is cheap).
+
+## Trust signals
+
+- **Credibility:** 5 — Huawei Cloud research group; the arXiv tech report
+  was subsequently published in Nature (2023), i.e. peer-reviewed at a
+  top venue; large-scale reproducible result with public follow-on
+  weather-model ecosystem. No code link named in this PDF, hence not a
+  full 5-on-every-axis, but venue + peer review carry it.

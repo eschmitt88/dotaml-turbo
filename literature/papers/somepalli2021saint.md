@@ -7,12 +7,17 @@ authors:
   - Avi Schwarzschild
   - C. Bayan Bruss
   - Tom Goldstein
+institutions: ["University of Maryland, College Park", "Capital One"]
 year: 2021
 venue: "arXiv:2106.01342 [cs.LG]"
+peer_reviewed: false
 url: "https://arxiv.org/abs/2106.01342"
+code_url: null
+citations: null
 source: "raw/papers/somepalli2021saint.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 3
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -135,3 +140,11 @@ labeled set with cross-entropy / MSE head on the `[CLS]` token.
   contrastive + denoising, then fine-tune jointly on win + duration +
   items + KDA with UW-SO from [[kirchdorfer2024analytical]]. No paper
   in this batch combines all three; we'd be assembling.
+
+## Trust signals
+
+- **Credibility:** 3 — strong group (Tom Goldstein's lab at University of
+  Maryland, with Capital One) and a widely-cited tabular-DL method.
+  Held at 3 because this remains an arXiv preprint (not formally
+  peer-reviewed at a main venue) and no code/artifact link is named on
+  the PDF first page or in this note.

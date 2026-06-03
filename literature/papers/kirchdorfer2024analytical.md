@@ -8,12 +8,17 @@ authors:
   - Heiner Stuckenschmidt
   - Lukas Schott
   - Jan M. Köhler
+institutions: ["University of Mannheim", "MPI for Intelligent Systems, Tübingen", "Bosch Center for AI"]
 year: 2024
 venue: "arXiv:2408.07985 [cs.LG]"
+peer_reviewed: false
 url: "https://arxiv.org/abs/2408.07985"
+code_url: null
+citations: null
 source: "raw/papers/kirchdorfer2024analytical.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 3
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -131,3 +136,11 @@ heads, sum of weighted losses.
 - The "stop-gradient + softmax" trick is also what [[wang2025player]]'s
   HIGFormer uses for its MoE gating — same recipe, different
   motivation; flag for cross-reference.
+
+## Trust signals
+
+- **Credibility:** 3 — credible affiliations (University of Mannheim,
+  MPI for Intelligent Systems, Bosch Center for AI) and an extensive,
+  well-controlled MTL benchmark. Held at 3 because this is an arXiv
+  preprint (not yet peer-reviewed in this form) and no code/artifact link
+  is named, so reproducibility rests on the method description alone.

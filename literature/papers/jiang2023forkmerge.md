@@ -9,12 +9,17 @@ authors:
   - Dapeng Liu
   - Jie Jiang
   - Mingsheng Long
+institutions: ["Tsinghua University (BNRist, School of Software)", "Tencent Inc"]
 year: 2023
 venue: "NeurIPS 2023 (arXiv:2301.12618)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2301.12618"
+code_url: null
+citations: null
 source: "raw/papers/jiang2023forkmerge.pdf"
 added: "2026-05-22"
 relevance: 4
+credibility: 4
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -148,3 +153,10 @@ which auxiliaries to keep.
   stage is untested in the literature — but architecturally, ForkMerge
   operates entirely at fine-tuning time, so the pre-training stage
   doesn't interact with it directly.
+
+## Trust signals
+
+- **Credibility:** 4 — strong group (Mingsheng Long's lab at Tsinghua
+  BNRist + Tencent), peer-reviewed at NeurIPS 2023, with clear ablations
+  on standard ATL benchmarks. Docked from 5 only because no code/artifact
+  link is named in the PDF first page or this note.

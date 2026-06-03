@@ -5,12 +5,17 @@ authors:
   - Jungkyu Kim
   - Kibok Lee
   - Taeyoung Park
+institutions: ["Yonsei University"]
 year: 2024
 venue: "AAAI 2025 (arXiv:2412.19152)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2412.19152"
+code_url: "https://github.com/normal-kim/PMAE"
+citations: null
 source: "raw/papers/kim2024predict.pdf"
 added: "2026-05-22"
 relevance: 4
+credibility: 4
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -127,3 +132,11 @@ encoder-decoder, optimizer, and evaluation protocol mirror ReMasker
   top, so this composes cleanly with the multi-task setup from
   [[2026-05-20-rich-supervision-multitask-740]] and the UW-SO loss
   weighting from [[kirchdorfer2024analytical]].
+
+## Trust signals
+
+- **Credibility:** 4 — reputable academic group (Yonsei University Dept.
+  of Statistics & Data Science), peer-reviewed at AAAI 2025, with public
+  code (github.com/normal-kim/PMAE) and a reproducible benchmark over UCI
+  datasets. Docked from 5 because the evaluation is on small tables and
+  the method is a focused increment rather than a broadly-cited landmark.

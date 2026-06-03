@@ -7,12 +7,17 @@ authors:
   - Michael Horton
   - Joachim Gudmundsson
   - Zhiyong Wang
+institutions: ["The University of Sydney", "Stats Perform Limited"]
 year: 2025
 venue: "KDD 2025 (arXiv:2507.10626)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2507.10626"
+code_url: null
+citations: null
 source: "raw/papers/wang2025player.pdf"
 added: "2026-05-22"
 relevance: 4
+credibility: 3
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -140,3 +145,12 @@ end fine-tune.
   val_auc scale directly. The relative ranking of architectural
   choices (two-stream beats one-stream, het-edges beats hom-edges) is
   what's transferable; the absolute lift is not.
+
+## Trust signals
+
+- **Credibility:** 3 — peer-reviewed at KDD 2025, with credible
+  affiliations (University of Sydney + Stats Perform). Held at 3 rather
+  than higher because no code/artifact link is named (results on the
+  public WyScout dataset are in principle reproducible, but reproduction
+  rests on the method description) and it is a recent, not-yet-widely-
+  cited paper from a non-marquee ML lab.

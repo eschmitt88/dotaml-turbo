@@ -8,12 +8,17 @@ authors:
   - Florian Block
   - Anders Drachen
   - Peter Cowling
+institutions: ["Digital Creativity Labs, University of York"]
 year: 2017
 venue: "arXiv:1711.06498 [cs.AI]"
+peer_reviewed: false
 url: "https://arxiv.org/abs/1711.06498"
+code_url: null
+citations: null
 source: "raw/papers/hodge2017win.pdf"
 added: "2026-05-17"
 relevance: 4
+credibility: 3
 status: skimmed
 related_experiments:
   - 2026-05-15-plateau-baseline-740
@@ -119,6 +124,15 @@ present in the draft alone.
   mixed-hero band).
 - **Dataset gone.** No public link to the 1820+113 match set. The
   methodology is reproducible; the specific numbers are not.
+
+## Trust signals
+
+- **Credibility:** 3 — established academic group (Digital Creativity
+  Labs, University of York), and the hero-only-ceiling result is
+  well-cited and independently corroborates our baseline. Held at 3 (not
+  higher) because this is an arXiv preprint (not formally peer-reviewed
+  in this form), no code is released, and the underlying 1820+113-match
+  dataset is not public, so the specific numbers are not reproducible.
 
 ## Follow-up
 

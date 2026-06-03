@@ -21,12 +21,17 @@ authors:
   - Dorsa Sadigh
   - Chelsea Finn
   - Sergey Levine
+institutions: ["UC Berkeley", "Stanford University", "Carnegie Mellon University", "Google DeepMind"]
 year: 2024
 venue: "RSS 2024 (arXiv:2405.12213)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2405.12213"
+code_url: "https://octo-models.github.io"
+citations: null
 source: "raw/papers/ghosh2024octo.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 5
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -179,3 +184,10 @@ both at inference.
 - Octo uses a frozen T5-base (111M) just to embed language — this is
   not counted in their 27M/93M backbone size. For us there is no
   language modality, so no analogous frozen-encoder cost.
+
+## Trust signals
+
+- **Credibility:** 5 — top robotics-learning labs (UC Berkeley, Stanford,
+  CMU, Google DeepMind), peer-reviewed at RSS 2024, fully open-source
+  with released models + code (octo-models.github.io), and widely cited
+  as a generalist-policy reference. Strong on every axis.

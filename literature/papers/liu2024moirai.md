@@ -12,12 +12,17 @@ authors:
   - Silvio Savarese
   - Caiming Xiong
   - Doyen Sahoo
+institutions: ["Salesforce AI Research", "National University of Singapore", "Hong Kong University of Science and Technology (Guangzhou)"]
 year: 2024
 venue: "arXiv:2410.10469 (Salesforce AI Research preprint)"
+peer_reviewed: false
 url: "https://arxiv.org/abs/2410.10469"
+code_url: null
+citations: null
 source: "raw/papers/liu2024moirai.pdf"
 added: "2026-05-22"
 relevance: 4
+credibility: 4
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -147,3 +152,11 @@ Inference is autoregressive over patches.
 - The k-means-from-pretrained gating requires having a pretrained
   dense model first. Bootstrap cost: train dense first, cluster,
   then init MoE. Worth it only if MoE is on the roadmap.
+
+## Trust signals
+
+- **Credibility:** 4 — major industrial lab (Salesforce AI Research) with
+  NUS/HKUST(GZ), part of the well-known Moirai/uni2ts time-series-
+  foundation-model line that ships open weights and code. Marked an arXiv
+  preprint (not yet peer-reviewed) and no code link is named on the PDF
+  first page, so it lands at 4 rather than 5.

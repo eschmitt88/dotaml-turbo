@@ -3583,3 +3583,1015 @@
     "WebFetch": 6
   }
 }
+{
+  "timestamp": "2026-05-25T18:03:04Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6683,
+  "output_tokens": 5117778,
+  "cache_read_tokens": 1417154932,
+  "cache_creation_tokens": 97695434,
+  "tools_used_summary": {
+    "Bash": 650,
+    "Read": 268,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 346,
+    "AskUserQuestion": 21,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-25T19:33:27Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6699,
+  "output_tokens": 5123896,
+  "cache_read_tokens": 1418453591,
+  "cache_creation_tokens": 98299730,
+  "tools_used_summary": {
+    "Bash": 651,
+    "Read": 269,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 346,
+    "AskUserQuestion": 21,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-25T21:04:29Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6715,
+  "output_tokens": 5132449,
+  "cache_read_tokens": 1419769553,
+  "cache_creation_tokens": 98914253,
+  "tools_used_summary": {
+    "Bash": 652,
+    "Read": 270,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 346,
+    "AskUserQuestion": 21,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-25T22:35:16Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6729,
+  "output_tokens": 5138087,
+  "cache_read_tokens": 1420454717,
+  "cache_creation_tokens": 99534985,
+  "tools_used_summary": {
+    "Bash": 652,
+    "Read": 271,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 346,
+    "AskUserQuestion": 21,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T01:39:10Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6757,
+  "output_tokens": 5170820,
+  "cache_read_tokens": 1423914605,
+  "cache_creation_tokens": 100503964,
+  "tools_used_summary": {
+    "Bash": 654,
+    "Read": 272,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 349,
+    "AskUserQuestion": 22,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T01:40:41Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6769,
+  "output_tokens": 5178302,
+  "cache_read_tokens": 1424613839,
+  "cache_creation_tokens": 100504160,
+  "tools_used_summary": {
+    "Bash": 654,
+    "Read": 272,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 76,
+    "Edit": 349,
+    "AskUserQuestion": 22,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T01:54:47Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6791,
+  "output_tokens": 5226940,
+  "cache_read_tokens": 1427082216,
+  "cache_creation_tokens": 100542400,
+  "tools_used_summary": {
+    "Bash": 654,
+    "Read": 272,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 77,
+    "Edit": 349,
+    "AskUserQuestion": 23,
+    "Agent": 35,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T02:15:37Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6819,
+  "output_tokens": 5254480,
+  "cache_read_tokens": 1433860602,
+  "cache_creation_tokens": 100576580,
+  "tools_used_summary": {
+    "Bash": 658,
+    "Read": 274,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 77,
+    "Edit": 353,
+    "AskUserQuestion": 23,
+    "Agent": 36,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T04:17:29Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6839,
+  "output_tokens": 5271843,
+  "cache_read_tokens": 1437011759,
+  "cache_creation_tokens": 101339636,
+  "tools_used_summary": {
+    "Bash": 660,
+    "Read": 275,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 77,
+    "Edit": 353,
+    "AskUserQuestion": 23,
+    "Agent": 36,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T07:46:48Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6851,
+  "output_tokens": 5280521,
+  "cache_read_tokens": 1437046459,
+  "cache_creation_tokens": 102099628,
+  "tools_used_summary": {
+    "Bash": 660,
+    "Read": 275,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 77,
+    "Edit": 353,
+    "AskUserQuestion": 23,
+    "Agent": 36,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T08:11:33Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6893,
+  "output_tokens": 5334708,
+  "cache_read_tokens": 1448279347,
+  "cache_creation_tokens": 102174285,
+  "tools_used_summary": {
+    "Bash": 666,
+    "Read": 277,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T09:43:23Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6910,
+  "output_tokens": 5350471,
+  "cache_read_tokens": 1450484430,
+  "cache_creation_tokens": 103020205,
+  "tools_used_summary": {
+    "Bash": 667,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T13:05:28Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6941,
+  "output_tokens": 5389011,
+  "cache_read_tokens": 1456411352,
+  "cache_creation_tokens": 104338854,
+  "tools_used_summary": {
+    "Bash": 673,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T15:26:34Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6953,
+  "output_tokens": 5400775,
+  "cache_read_tokens": 1456446052,
+  "cache_creation_tokens": 105235022,
+  "tools_used_summary": {
+    "Bash": 673,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T15:38:12Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6965,
+  "output_tokens": 5414317,
+  "cache_read_tokens": 1457376920,
+  "cache_creation_tokens": 105246866,
+  "tools_used_summary": {
+    "Bash": 673,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T16:17:56Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 6977,
+  "output_tokens": 5426893,
+  "cache_read_tokens": 1458319632,
+  "cache_creation_tokens": 105260456,
+  "tools_used_summary": {
+    "Bash": 673,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T16:32:24Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7003,
+  "output_tokens": 5446974,
+  "cache_read_tokens": 1463657911,
+  "cache_creation_tokens": 105307071,
+  "tools_used_summary": {
+    "Bash": 677,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T16:52:02Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7031,
+  "output_tokens": 5471940,
+  "cache_read_tokens": 1472794490,
+  "cache_creation_tokens": 105342992,
+  "tools_used_summary": {
+    "Bash": 689,
+    "Read": 278,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 78,
+    "Edit": 357,
+    "AskUserQuestion": 23,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T17:13:16Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7060,
+  "output_tokens": 5502811,
+  "cache_read_tokens": 1480227498,
+  "cache_creation_tokens": 105381597,
+  "tools_used_summary": {
+    "Bash": 692,
+    "Read": 279,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 79,
+    "Edit": 358,
+    "AskUserQuestion": 24,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T17:37:02Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7072,
+  "output_tokens": 5515243,
+  "cache_read_tokens": 1481311372,
+  "cache_creation_tokens": 105383563,
+  "tools_used_summary": {
+    "Bash": 692,
+    "Read": 279,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 79,
+    "Edit": 358,
+    "AskUserQuestion": 24,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T17:50:46Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7084,
+  "output_tokens": 5533539,
+  "cache_read_tokens": 1482397212,
+  "cache_creation_tokens": 105396091,
+  "tools_used_summary": {
+    "Bash": 692,
+    "Read": 279,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 79,
+    "Edit": 358,
+    "AskUserQuestion": 24,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T18:19:25Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7096,
+  "output_tokens": 5548775,
+  "cache_read_tokens": 1483495580,
+  "cache_creation_tokens": 105415543,
+  "tools_used_summary": {
+    "Bash": 692,
+    "Read": 279,
+    "Skill": 35,
+    "ToolSearch": 9,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 79,
+    "Edit": 358,
+    "AskUserQuestion": 24,
+    "Agent": 37,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T19:08:54Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7143,
+  "output_tokens": 5612947,
+  "cache_read_tokens": 1505361925,
+  "cache_creation_tokens": 105507912,
+  "tools_used_summary": {
+    "Bash": 704,
+    "Read": 283,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 361,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T20:13:17Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7177,
+  "output_tokens": 5647223,
+  "cache_read_tokens": 1520149251,
+  "cache_creation_tokens": 105542365,
+  "tools_used_summary": {
+    "Bash": 712,
+    "Read": 286,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T21:44:15Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7193,
+  "output_tokens": 5656505,
+  "cache_read_tokens": 1522696024,
+  "cache_creation_tokens": 106772029,
+  "tools_used_summary": {
+    "Bash": 713,
+    "Read": 287,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-26T23:15:08Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7209,
+  "output_tokens": 5665300,
+  "cache_read_tokens": 1525264873,
+  "cache_creation_tokens": 108012474,
+  "tools_used_summary": {
+    "Bash": 714,
+    "Read": 288,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T00:16:09Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7225,
+  "output_tokens": 5672689,
+  "cache_read_tokens": 1529095682,
+  "cache_creation_tokens": 108020050,
+  "tools_used_summary": {
+    "Bash": 715,
+    "Read": 289,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T01:16:56Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7241,
+  "output_tokens": 5680326,
+  "cache_read_tokens": 1532951862,
+  "cache_creation_tokens": 108027528,
+  "tools_used_summary": {
+    "Bash": 716,
+    "Read": 290,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T02:04:06Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7258,
+  "output_tokens": 5689098,
+  "cache_read_tokens": 1537480751,
+  "cache_creation_tokens": 108035931,
+  "tools_used_summary": {
+    "Bash": 717,
+    "Read": 291,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 362,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T02:54:28Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7282,
+  "output_tokens": 5699079,
+  "cache_read_tokens": 1543368276,
+  "cache_creation_tokens": 108054701,
+  "tools_used_summary": {
+    "Bash": 720,
+    "Read": 292,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 363,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T03:11:08Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7299,
+  "output_tokens": 5711410,
+  "cache_read_tokens": 1548022970,
+  "cache_creation_tokens": 108069034,
+  "tools_used_summary": {
+    "Bash": 721,
+    "Read": 293,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 364,
+    "AskUserQuestion": 24,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T03:28:47Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7339,
+  "output_tokens": 5737795,
+  "cache_read_tokens": 1568430001,
+  "cache_creation_tokens": 108102748,
+  "tools_used_summary": {
+    "Bash": 727,
+    "Read": 299,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 80,
+    "Edit": 368,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T03:50:35Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7417,
+  "output_tokens": 5847734,
+  "cache_read_tokens": 1614129102,
+  "cache_creation_tokens": 108216620,
+  "tools_used_summary": {
+    "Bash": 753,
+    "Read": 300,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 373,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T04:28:37Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7429,
+  "output_tokens": 5848290,
+  "cache_read_tokens": 1615647226,
+  "cache_creation_tokens": 108218724,
+  "tools_used_summary": {
+    "Bash": 753,
+    "Read": 300,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 373,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T09:49:22Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7443,
+  "output_tokens": 5851994,
+  "cache_read_tokens": 1617209666,
+  "cache_creation_tokens": 109715426,
+  "tools_used_summary": {
+    "Bash": 754,
+    "Read": 300,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 373,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T09:50:57Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7455,
+  "output_tokens": 5854248,
+  "cache_read_tokens": 1618742390,
+  "cache_creation_tokens": 109715450,
+  "tools_used_summary": {
+    "Bash": 754,
+    "Read": 300,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 373,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-27T20:32:38Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7467,
+  "output_tokens": 5864696,
+  "cache_read_tokens": 1618776152,
+  "cache_creation_tokens": 111217038,
+  "tools_used_summary": {
+    "Bash": 754,
+    "Read": 300,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 373,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-28T02:12:12Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7511,
+  "output_tokens": 5943739,
+  "cache_read_tokens": 1639505637,
+  "cache_creation_tokens": 113550532,
+  "tools_used_summary": {
+    "Bash": 758,
+    "Read": 301,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 384,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-28T02:43:19Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7587,
+  "output_tokens": 5991152,
+  "cache_read_tokens": 1670331967,
+  "cache_creation_tokens": 113597034,
+  "tools_used_summary": {
+    "Bash": 766,
+    "Read": 303,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 393,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-28T02:46:43Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7591,
+  "output_tokens": 5999120,
+  "cache_read_tokens": 1671981683,
+  "cache_creation_tokens": 113598420,
+  "tools_used_summary": {
+    "Bash": 766,
+    "Read": 303,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 393,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-28T02:54:49Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7595,
+  "output_tokens": 6014788,
+  "cache_read_tokens": 1673640753,
+  "cache_creation_tokens": 113598520,
+  "tools_used_summary": {
+    "Bash": 766,
+    "Read": 303,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 393,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-29T18:14:41Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7611,
+  "output_tokens": 6044520,
+  "cache_read_tokens": 1677889610,
+  "cache_creation_tokens": 116082610,
+  "tools_used_summary": {
+    "Bash": 768,
+    "Read": 303,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 393,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-05-29T18:44:36Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 7615,
+  "output_tokens": 6060726,
+  "cache_read_tokens": 1679588730,
+  "cache_creation_tokens": 116082852,
+  "tools_used_summary": {
+    "Bash": 768,
+    "Read": 303,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 86,
+    "Edit": 393,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}
+{
+  "timestamp": "2026-06-03T19:13:09Z",
+  "session_id": "fb42480f-67bb-4309-9f4b-23831e75a7a9",
+  "input_tokens": 36639,
+  "output_tokens": 6266216,
+  "cache_read_tokens": 1740346315,
+  "cache_creation_tokens": 118195657,
+  "tools_used_summary": {
+    "Bash": 785,
+    "Read": 309,
+    "Skill": 35,
+    "ToolSearch": 10,
+    "TaskCreate": 49,
+    "TaskUpdate": 107,
+    "Write": 87,
+    "Edit": 415,
+    "AskUserQuestion": 25,
+    "Agent": 38,
+    "TaskList": 8,
+    "WebSearch": 20,
+    "WebFetch": 6
+  }
+}

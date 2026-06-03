@@ -6,12 +6,17 @@ authors:
   - Ivan Rubachev
   - Valentin Khrulkov
   - Artem Babenko
+institutions: ["Yandex", "Moscow Institute of Physics and Technology", "National Research University Higher School of Economics"]
 year: 2021
 venue: "NeurIPS 2021 (arXiv:2106.11959)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2106.11959"
+code_url: "https://github.com/yandex-research/tabular-dl-revisiting-models"
+citations: null
 source: "raw/papers/gorishniy2021revisiting.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 5
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -116,3 +121,10 @@ exceptions).
   contrastive objectives from [[somepalli2021saint]] and
   [[kim2024predict]] is genuinely novel territory and is the
   foundation-mvp-740 ask.
+
+## Trust signals
+
+- **Credibility:** 5 — Yandex Research with MIPT/HSE, peer-reviewed at
+  NeurIPS 2021, public code (github.com/yandex-research/tabular-dl-
+  revisiting-models), and the de-facto FT-Transformer baseline reference
+  in tabular DL (heavily cited). Strong on every axis.

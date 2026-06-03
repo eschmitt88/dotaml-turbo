@@ -8,12 +8,17 @@ authors:
   - Zachary W. Ulissi
   - C. Lawrence Zitnick
   - Brandon M. Wood
+institutions: ["Fundamental AI Research (FAIR) at Meta", "Carnegie Mellon University"]
 year: 2023
 venue: "ICLR 2024 (arXiv:2310.16802)"
+peer_reviewed: true
 url: "https://arxiv.org/abs/2310.16802"
+code_url: "https://nima.sh/jmp"
+citations: null
 source: "raw/papers/shoghi2023molecules.pdf"
 added: "2026-05-22"
 relevance: 5
+credibility: 5
 status: skimmed
 related_experiments: []
 related_concepts:
@@ -160,3 +165,9 @@ underperformed the fixed-heuristic recipe in this setting.
   pre-training heads ARE the inference heads. This is the
   multi-query foundation model pattern from [[cui2022m6]] (M6-Rec),
   not the JMP pattern. We follow M6's deployment but JMP's training.
+
+## Trust signals
+
+- **Credibility:** 5 — FAIR at Meta + CMU, peer-reviewed at ICLR 2024,
+  with a public project/artifact page (nima.sh/jmp) and a large, rigorous
+  benchmark (40 downstream tasks). Strong on every axis.

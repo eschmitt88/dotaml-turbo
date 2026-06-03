@@ -1,0 +1,109 @@
+{
+  "smoke": true,
+  "build_seconds": 162.03551697731018,
+  "n_raw_read": 647706,
+  "n_bad_json": 0,
+  "n_emitted": 565054,
+  "n_filt_forfeit": 0,
+  "n_filt_empty_inv": 0,
+  "n_train_emitted": 401864,
+  "n_val_emitted": 163190,
+  "n_days_total": 3,
+  "days_processed": [
+    "2025-09-15",
+    "2026-02-25"
+  ],
+  "n_prepatch_days_walked": 1,
+  "n_inpatch_days_walked": 2,
+  "n_unique_account_ids_tracked": 494458,
+  "raw_roots": [
+    "/mnt/projects/research/dotaml-turbo/data/history/turbo",
+    "/mnt/projects/research/dotaml-turbo/data/snapshots/7.40-2025-12-16/raw/turbo"
+  ],
+  "aggregator_clamp_events_total": 0,
+  "aggregator_clamp_events_by_feat": {
+    "n_games_log1p": 0,
+    "smoothed_winrate": 0,
+    "smoothed_winrate_hero": 0,
+    "last10_winrate": 0,
+    "days_since_last_log1p": 0,
+    "n_games_hero_log1p": 0,
+    "hero_diversity_log1p": 0,
+    "is_anonymous": 0
+  },
+  "anonymous_per_match_hist": {
+    "min": 0,
+    "max": 10,
+    "mean": 6.597302204745033,
+    "p50": 7,
+    "p95": 10
+  },
+  "train_window": [
+    "2025-08-15",
+    "2026-02-23"
+  ],
+  "val_window": [
+    "2026-02-24",
+    "2026-03-09"
+  ],
+  "patch_edges": [
+    [
+      "2025-08-01",
+      2
+    ],
+    [
+      "2025-09-10",
+      3
+    ],
+    [
+      "2025-12-16",
+      1
+    ]
+  ],
+  "train_patch_id_distribution": {
+    "3": 205773,
+    "1": 196091
+  },
+  "val_patch_id_distribution": {
+    "1": 163190
+  },
+  "config": {
+    "alpha": 5.0,
+    "hero_alpha": 5.0,
+    "recent_window": 10
+  },
+  "feat_bounds": {
+    "n_games_log1p": [
+      0.0,
+      25.0
+    ],
+    "smoothed_winrate": [
+      0.0,
+      1.0
+    ],
+    "smoothed_winrate_hero": [
+      0.0,
+      1.0
+    ],
+    "last10_winrate": [
+      0.0,
+      1.0
+    ],
+    "days_since_last_log1p": [
+      0.0,
+      25.0
+    ],
+    "n_games_hero_log1p": [
+      0.0,
+      25.0
+    ],
+    "hero_diversity_log1p": [
+      0.0,
+      10.0
+    ],
+    "is_anonymous": [
+      0.0,
+      1.0
+    ]
+  }
+}
