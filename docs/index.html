@@ -266,11 +266,15 @@ async function vHome() {
     const rows = await expRows(b.exps.slice(0, 8));
     $("#expHome").innerHTML = expTable(rows);
   }
-  const lg = await raw("_meta/log.md");
+  const notes = await raw("NOTES.md");
   const al = $("#actHome");
-  if (al) al.innerHTML = lg
-    ? `<div class="fm"><pre style="margin:0;white-space:pre-wrap;font-size:12.5px">${esc(lg.split("\n").filter(l => l.trim()).slice(-6).reverse().join("\n"))}</pre></div>`
-    : `<p class="muted">No activity log yet.</p>`;
+  if (al) {
+    const sess = parseSessions(notes);
+    if (sess.length) {
+      const s0 = sess[0], did = _subsection(s0.body, "Did");
+      al.innerHTML = `<div class="card"><div class="m muted" style="margin-bottom:6px">latest session — ${esc(s0.heading)}</div><div class="doc">${md(did || s0.body.slice(0, 600))}</div></div>`;
+    } else al.innerHTML = `<p class="muted">No session notes yet — run /wrap to record one.</p>`;
+  }
 }
 
 async function expRows(slugs) {
@@ -420,15 +424,30 @@ function _ago(iso) {
   if (s < 86400 * 14) return `${Math.floor(s / 86400)}d ago`;
   return d.toISOString().slice(0, 10);
 }
+// Parse NOTES.md into dated sessions (## YYYY-MM-DD … with ### Did/Findings/Next),
+// newest first. Split on H2 only (the negative lookahead leaves ### intact).
+function parseSessions(notes) {
+  const out = [];
+  for (const part of (notes || "").split(/\n(?=## )/)) {
+    const m = part.match(/^##\s+(.+)$/m);
+    if (!m || !/^\d{4}-\d{2}-\d{2}/.test(m[1].trim())) continue;
+    out.push({ heading: m[1].trim(), body: part.replace(/^##\s+.+\n?/, "") });
+  }
+  return out.reverse();
+}
+function _subsection(body, name) {
+  const m = body.match(new RegExp(`###\\s*${name}\\s*([\\s\\S]*?)(?=\\n###|$)`, "i"));
+  return m ? m[1].trim() : "";
+}
 async function vActivity() {
   setActive("activity");
-  view.innerHTML = `<h1>Activity</h1><p class="lead">What's been happening in this repo — recent commits and the project's own activity log.</p>
+  view.innerHTML = `<h1>Activity</h1><p class="lead">What's been happening in this repo — granular commit history, and the human session journal (Did / Findings / Next).</p>
     <h2>Recent commits</h2><div id="commits"><span class="spin"></span></div>
-    <h2>Activity log <span class="muted" style="font-size:13px">_meta/log.md</span></h2><div id="alog"><span class="spin"></span></div>`;
-  // commits via the GitHub API (1 call); log.md via the raw CDN.
-  const [commitsR, logText] = await Promise.all([
+    <h2>Session notes <span class="muted" style="font-size:13px">NOTES.md</span></h2><div id="sessions"><span class="spin"></span></div>`;
+  // commits via the GitHub API (1 call); NOTES.md via the raw CDN.
+  const [commitsR, notesText] = await Promise.all([
     fetch(`${API}/commits?per_page=40&sha=${CONFIG.branch}`).then(r => r.ok ? r.json() : []).catch(() => []),
-    raw("_meta/log.md").catch(() => null),
+    raw("NOTES.md").catch(() => null),
   ]);
   const rows = (Array.isArray(commitsR) ? commitsR : []).map(c => {
     const subj = esc((c.commit?.message || "").split("\n")[0]);
@@ -441,12 +460,12 @@ async function vActivity() {
   $("#commits").innerHTML = rows
     ? `<table><thead><tr><th>when</th><th>change</th><th>commit</th></tr></thead><tbody>${rows}</tbody></table>`
     : `<p class="empty">No commits readable (the GitHub API may be rate-limited — try again shortly).</p>`;
-  if (logText) {
-    const lines = logText.split("\n").filter(l => l.trim()).slice(-60).reverse();
-    $("#alog").innerHTML = `<div class="fm" style="max-height:520px;overflow:auto"><pre style="margin:0;white-space:pre-wrap;font-size:12.5px">${esc(lines.join("\n"))}</pre></div>`;
-  } else {
-    $("#alog").innerHTML = `<p class="empty">No _meta/log.md in this repo.</p>`;
-  }
+  const sessions = parseSessions(notesText);
+  $("#sessions").innerHTML = sessions.length
+    ? sessions.slice(0, 6).map(s =>
+        `<div class="card" style="margin:10px 0"><h3 style="margin:0 0 6px">${esc(s.heading)}</h3>
+         <div class="doc">${md(s.body)}</div></div>`).join("")
+    : `<p class="empty">No NOTES.md sessions yet — run /wrap to record one.</p>`;
 }
 async function vDecisions() {
   setActive("decisions");
