@@ -35,6 +35,13 @@ the parent experiment's README for the model itself and the
   the (core-blind) odds ratio.
   - `win_vs_duration(heroes, duration_minutes=[...])` — sweep duration as input
   - `kills_per_minute_pair(hero_subset, ...)` — predicted K+A per minute for a 1-5 hero subset
+- `test_counter_items.py` — matchup probe: controlled-swap experiment
+  testing whether v7 recommends counter-items against specific enemies.
+  Run directly (`python serve/test_counter_items.py`) or
+  `from serve.test_counter_items import run_all`. Findings: v7 learned
+  the hard near-universal counters (MKB vs PA ~2x, detection vs
+  Riki/Clinkz ~1.5x, cleave vs Phantom Lancer) from win-correlation
+  alone, but NOT softer/situational ones (silence vs mobile, break vs PA).
 - `notebook.qmd` — Quarto notebook demonstrating all queries on
   account 3303652. Render with `quarto render notebook.qmd`.
 - `heroes.json` / `items.json` — OpenDota constants snapshot

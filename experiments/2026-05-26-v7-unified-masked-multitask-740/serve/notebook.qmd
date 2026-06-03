@@ -321,6 +321,41 @@ for pair in test_pairs:
     print(f'  {names:<40} {total_ka:>8.1f} {res.predicted_duration_min:>6.1f}m {res.kills_per_min:>9.3f}')
 ```
 
+## Matchup probe — did v7 learn counter-itemization?
+
+A controlled-swap experiment: hold my hero + team + most enemies fixed,
+swap ONE enemy slot between a target hero and a neutral filler, and
+measure the change in `P(counter_item | win, dur)`. If v7 learned
+matchup itemization, the counter rises while a matchup-neutral control
+item stays flat. See `serve/test_counter_items.py`.
+
+```{python}
+from serve.test_counter_items import run_all
+_ = run_all(f, account_id=USER_ACCT)
+```
+
+Headline findings (your mileage varies with the random val sample):
+
+- **MKB vs Phantom Assassin: ~2.0x** — P(Monkey King Bar) DOUBLES when
+  PA is on the enemy team (true-strike pierces PA's evasion). The
+  single cleanest counter-itemization signal.
+- **Detection (Dust/Gem) vs Riki & Clinkz: ~1.5x** — detection items
+  rise sharply against permanent-invisibility heroes.
+- **Cleave (Battle Fury/Mjollnir/Maelstrom) vs Phantom Lancer:** all
+  three cleave items rise (+0.03 to +0.05 absolute) with flat controls
+  — a real if smaller signal (the ratio looks modest only because
+  Battle Fury's base rate is already high).
+- **Silence vs Anti-Mage/Weaver, Break vs PA: no signal** — v7 did NOT
+  learn these softer/situational counters. Plausibly because in fast
+  Turbo games MKB is *the* answer to PA (not Silver Edge), and
+  silence-pickoff itemization is rarer. An honest negative.
+
+So v7 learned the HARD, near-universal "must-build" counters (true-strike
+vs evasion, detection vs invisibility, cleave vs illusions) from
+win-correlation alone, but not the subtler ones. This is a genuine
+capability — counter-itemization emerges in the item head conditioned
+on the enemy draft, with no explicit matchup supervision.
+
 ## Notes / limitations
 
 - **Item rec is correlational, not causal.** `item_rec_odds_ratio`
