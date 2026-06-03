@@ -351,12 +351,13 @@ async function vLiterature() {
     const k = it.path.split("/")[1];
     (groups[k] || groups.other).push(it);
   }
-  const sec = (name, arr) => !arr.length ? "" : `<h2>${name} (${arr.length})</h2><table><thead><tr><th>rel</th><th>title</th><th>status</th><th>year</th></tr></thead><tbody>${
+  const sec = (name, arr) => !arr.length ? "" : `<h2>${name} (${arr.length})</h2><table><thead><tr><th>rel</th><th>cred</th><th>title</th><th>status</th><th>year</th></tr></thead><tbody>${
     arr.sort((a, z) => (+z.fm.relevance || 0) - (+a.fm.relevance || 0)).map(it => `<tr>
       <td><span class="rel rel-${it.fm.relevance || 0}">${it.fm.relevance ?? "·"}</span></td>
-      <td><a href="#/note/${it.path}">${esc(it.fm.title || it.fm.name || slug(it.path))}</a></td>
+      <td><span class="rel rel-${it.fm.credibility || 0}">${it.fm.credibility ?? "·"}</span></td>
+      <td><a href="#/note/${it.path}">${esc(it.fm.title || it.fm.name || slug(it.path))}</a>${it.fm.institutions && it.fm.institutions.length ? ` <span class="muted" style="font-size:11px">— ${esc(it.fm.institutions.slice(0,2).join(", "))}</span>` : ""}</td>
       <td>${tag(it.fm.status, "s-")}</td><td class="mono">${esc(it.fm.year || "")}</td></tr>`).join("")}</tbody></table>`;
-  view.innerHTML = `<h1>Literature</h1><p class="lead">${items.length} processed notes. Relevance is a 0–5 score.</p>
+  view.innerHTML = `<h1>Literature</h1><p class="lead">${items.length} processed notes. <b>rel</b> = relevance, <b>cred</b> = credibility (both 0–5).</p>
     ${sec("Papers", groups.papers)}${sec("Repos", groups.repos)}${sec("Posts", groups.posts)}${sec("Other", groups.other)}`;
 }
 async function vNote(path) {
@@ -366,10 +367,10 @@ async function vNote(path) {
   const { fm, body } = parseFM(text);
   view.innerHTML = `<div class="crumb"><a href="#/literature">Literature</a> / ${esc(path.replace("literature/", ""))}</div>
     <h1>${esc(fm.title || fm.name || slug(path))}</h1>
-    <div>${tag(fm.kind)}${fm.relevance != null ? `<span class="tag">relevance ${fm.relevance}</span>` : ""}${tag(fm.status, "s-")}
+    <div>${tag(fm.kind)}${fm.relevance != null ? `<span class="tag">relevance ${fm.relevance}</span>` : ""}${fm.credibility != null ? `<span class="tag">credibility ${fm.credibility}</span>` : ""}${fm.peer_reviewed === "true" ? `<span class="tag s-done">peer-reviewed</span>` : (fm.peer_reviewed === "false" ? `<span class="tag s-seedling">preprint</span>` : "")}${tag(fm.status, "s-")}
       ${list(fm.tags, t => tag(t))}</div>
-    ${fm.url ? `<p><a href="${fm.url}" target="_blank" rel="noopener">${esc(fm.url)}</a></p>` : ""}
-    ${fmBlock(fm, ["authors", "venue", "source", "related_concepts", "related_experiments"])}
+    ${fm.url ? `<p><a href="${fm.url}" target="_blank" rel="noopener">${esc(fm.url)}</a>${fm.code_url ? ` · <a href="${fm.code_url}" target="_blank" rel="noopener">code ↗</a>` : ""}</p>` : ""}
+    ${fmBlock(fm, ["authors", "institutions", "venue", "citations", "code_url", "source", "related_concepts", "related_experiments"])}
     <div class="doc">${md(body)}</div>`;
 }
 
