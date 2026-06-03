@@ -219,7 +219,7 @@ function buckets() {
   const lit = P.filter(p => p.startsWith("literature/") && isMd(p) && notUnderscore(p));
   const con = P.filter(p => /^concepts\/[^/]+\.md$/.test(p) && notUnderscore(p));
   const moc = P.filter(p => /^mocs\/[^/]+\.md$/.test(p) && notUnderscore(p));
-  const can = P.filter(p => p.startsWith("raw/_candidates/") && isMd(p) && notUnderscore(p));
+  const can = P.filter(p => p.startsWith("raw/_candidates/") && isMd(p) && notUnderscore(p) && p.split("/").length === 3);
   const dec = P.filter(p => p.startsWith("docs/decisions/") && isMd(p) && notUnderscore(p));
   const exps = [...new Set(P.map(p => (p.match(expDir) || [])[1]).filter(Boolean))].sort().reverse();
   return { lit, con, moc, can, dec, exps };
