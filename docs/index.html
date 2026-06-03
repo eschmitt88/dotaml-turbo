@@ -81,6 +81,7 @@
     <div class="brand" id="navBrand">research repo</div>
     <div class="brandsub mono" id="navSub">loading…</div>
     <a class="lnk" href="#/" data-v="home"><span>Overview</span></a>
+    <a class="lnk" href="#/activity" data-v="activity"><span>Activity</span></a>
     <a class="lnk" href="#/experiments" data-v="experiments"><span>Experiments</span><span class="ct" id="ctExp">·</span></a>
     <a class="lnk" href="#/concepts" data-v="concepts"><span>Concepts</span><span class="ct" id="ctCon">·</span></a>
     <a class="lnk" href="#/literature" data-v="literature"><span>Literature</span><span class="ct" id="ctLit">·</span></a>
@@ -256,6 +257,8 @@ async function vHome() {
     ${b.exps.length ? `<h2>Recent experiments</h2><div id="expHome"><span class="spin"></span></div>` : ""}
     ${b.moc.length ? `<h2>Maps of Content</h2><div class="grid">${list(b.moc, p =>
       `<a class="card" href="#/moc/${slug(p)}"><div class="t">${esc(slug(p))}</div><div class="m">map of content</div></a>`)}</div>` : ""}
+    <h2>Recent activity <a href="#/activity" style="font-size:13px;font-weight:400">→ all</a></h2>
+    <div id="actHome"><span class="spin"></span></div>
     <p class="muted" style="margin-top:30px;font-size:12.5px">Live view of
       <a href="${API.replace('api.github.com/repos','github.com')}" target="_blank" rel="noopener">${CONFIG.owner}/${CONFIG.repo}</a>
       @ ${CONFIG.branch}. Reads the repo's structured files directly — no build step.</p>`;
@@ -263,6 +266,11 @@ async function vHome() {
     const rows = await expRows(b.exps.slice(0, 8));
     $("#expHome").innerHTML = expTable(rows);
   }
+  const lg = await raw("_meta/log.md");
+  const al = $("#actHome");
+  if (al) al.innerHTML = lg
+    ? `<div class="fm"><pre style="margin:0;white-space:pre-wrap;font-size:12.5px">${esc(lg.split("\n").filter(l => l.trim()).slice(-6).reverse().join("\n"))}</pre></div>`
+    : `<p class="muted">No activity log yet.</p>`;
 }
 
 async function expRows(slugs) {
@@ -405,6 +413,41 @@ async function vCandidate(path) {
   view.innerHTML = `<div class="crumb"><a href="#/candidates">Candidates</a> / ${esc(slug(path))}</div><div class="doc">${md(body)}</div>`;
 }
 
+function _ago(iso) {
+  const d = new Date(iso), s = (Date.now() - d.getTime()) / 1000;
+  if (s < 3600) return `${Math.max(1, Math.floor(s / 60))}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  if (s < 86400 * 14) return `${Math.floor(s / 86400)}d ago`;
+  return d.toISOString().slice(0, 10);
+}
+async function vActivity() {
+  setActive("activity");
+  view.innerHTML = `<h1>Activity</h1><p class="lead">What's been happening in this repo — recent commits and the project's own activity log.</p>
+    <h2>Recent commits</h2><div id="commits"><span class="spin"></span></div>
+    <h2>Activity log <span class="muted" style="font-size:13px">_meta/log.md</span></h2><div id="alog"><span class="spin"></span></div>`;
+  // commits via the GitHub API (1 call); log.md via the raw CDN.
+  const [commitsR, logText] = await Promise.all([
+    fetch(`${API}/commits?per_page=40&sha=${CONFIG.branch}`).then(r => r.ok ? r.json() : []).catch(() => []),
+    raw("_meta/log.md").catch(() => null),
+  ]);
+  const rows = (Array.isArray(commitsR) ? commitsR : []).map(c => {
+    const subj = esc((c.commit?.message || "").split("\n")[0]);
+    const when = c.commit?.author?.date;
+    return `<tr>
+      <td class="mono muted" style="white-space:nowrap">${when ? _ago(when) : ""}</td>
+      <td>${subj}</td>
+      <td class="mono"><a href="${c.html_url}" target="_blank" rel="noopener">${(c.sha || "").slice(0, 7)}</a></td></tr>`;
+  }).join("");
+  $("#commits").innerHTML = rows
+    ? `<table><thead><tr><th>when</th><th>change</th><th>commit</th></tr></thead><tbody>${rows}</tbody></table>`
+    : `<p class="empty">No commits readable (the GitHub API may be rate-limited — try again shortly).</p>`;
+  if (logText) {
+    const lines = logText.split("\n").filter(l => l.trim()).slice(-60).reverse();
+    $("#alog").innerHTML = `<div class="fm" style="max-height:520px;overflow:auto"><pre style="margin:0;white-space:pre-wrap;font-size:12.5px">${esc(lines.join("\n"))}</pre></div>`;
+  } else {
+    $("#alog").innerHTML = `<p class="empty">No _meta/log.md in this repo.</p>`;
+  }
+}
 async function vDecisions() {
   setActive("decisions");
   const b = buckets();
@@ -437,6 +480,7 @@ function notFound(path) {
 /* ============================ ROUTER ============================ */
 const routes = [
   [/^\/?$/, vHome],
+  [/^\/activity$/, vActivity],
   [/^\/experiments$/, vExperiments],
   [/^\/experiment\/(.+)$/, m => vExperiment(decodeURIComponent(m[1]))],
   [/^\/concepts$/, vConcepts],
