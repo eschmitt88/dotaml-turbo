@@ -229,6 +229,51 @@ for s in steps:
           f'{s.cumulative_cost:>6}g {s.expected_minute:>5.1f}m{marker}')
 ```
 
+## Query 5d — optimize_build (time-integrated build optimizer)
+
+The most sophisticated item query: a full build PROGRESSION (buy + sell
++ consume over game time), not a static 6-item bag. It maximizes a
+time-integrated objective:
+
+    J = sum_t  p_tau(t | draft) * sum_{X in I(t)} P(X in bag | win, dur=t)
+          - lambda * (gross gold spent)
+
+Key properties:
+- **No single-duration commitment** — integrates over the distribution
+  p_tau(t) of when the game might end (global empirical, lightly
+  draft-shifted). A tempo build scores on the short-t mass; a luxury
+  build on the long-t mass.
+- **Gold budget** estimated by Monte-Carlo over duration (survival-
+  weighted GPM), so the build is realizable as gold accrues.
+- **Selling + 6-slot cap + component upgrades** are explicit, so tempo
+  items get bought early then sold when luxury items fill the slots.
+- **Objective is P(X | win, dur)** -- imitate winning builds, NOT the
+  win head (which is reverse-causal -- "having luxury items = already
+  snowballing") and NOT the odds ratio (which only flags flex picks and
+  misses the core build).
+- **Consumable-buff items** (Aghanim's Scepter/Shard, Moon Shard) are
+  consumed into permanent buffs and LEAVE the inventory the model trained
+  on -- so their late-game P is understated and dropping them is relabeled
+  "consume" (frees slot, no gold).
+
+```{python}
+from serve import build_optimizer as bo
+
+plan = bo.optimize_build(f, draft, my_slot=2, account_ids=accts)
+print(bo.format_plan(plan))
+```
+
+Note the emergent behaviors: a tempo stat item is bought early and SOLD
+once luxury items arrive; component upgrades (Kaya -> Yasha & Kaya)
+consume the sub-item; the final 6 slots hold a coherent luxury build.
+
+```{python}
+# Same optimizer on a CARRY (Anti-Mage, slot 0) produces a totally
+# different, hero-appropriate build — farming + survivability + damage.
+plan_am = bo.optimize_build(f, draft, my_slot=0)
+print(bo.format_plan(plan_am))
+```
+
 ## Query 6 — item_rec_given_win (descriptive, not prescriptive)
 
 Different question: given that my team DOES win, what items typically

@@ -21,6 +21,18 @@ the parent experiment's README for the model itself and the
   - `build_path(heroes, my_slot, ...)` — Design B: ordered budget-aware full-item progression using odds_ratio + predicted GPM × duration
   - `build_path_components(heroes, my_slot, ...)` — Design C: decomposes the build path into a component-level shopping timeline (recursive item recipes from OpenDota constants), with per-component cost + cumulative + expected-minute
   - `item_rec_given_win(heroes, my_slot, ...)` — top-K items P(in bag | my-team wins) — descriptive, not prescriptive
+- `build_optimizer.py` — `optimize_build(heroes, my_slot, ...)`: the
+  time-integrated build optimizer. Returns a full BuildPlan (buy / sell /
+  consume sequence) rather than a static bag. Beam-searches to maximize
+  `J = sum_t p_tau(t) * sum_{X in I(t)} P(X | win, dur=t) - lambda*spend`,
+  integrating over the game-end-time distribution so tempo items get
+  bought early then sold for luxury items as their duration-conditioned
+  value decays. Models the 6-slot cap, component upgrades, selling (50%),
+  consumable-buff items (Aghs Scepter/Shard, Moon Shard -> consume, no
+  gold), boots exclusivity, and a Monte-Carlo gold budget. `format_plan()`
+  pretty-prints. See the module docstring for the full math + why the
+  objective uses P(X|win,dur) rather than the (reverse-causal) win head or
+  the (core-blind) odds ratio.
   - `win_vs_duration(heroes, duration_minutes=[...])` — sweep duration as input
   - `kills_per_minute_pair(hero_subset, ...)` — predicted K+A per minute for a 1-5 hero subset
 - `notebook.qmd` — Quarto notebook demonstrating all queries on
@@ -59,6 +71,8 @@ All queries run in 1-10s on RTX 5080 after the model is loaded
 - `build_path` (6 steps): ~8s (one odds_ratio call per build step)
 - `build_path_components` (5 items → ~16 components): ~12s
   (build_path + cheap CPU-side recipe decomposition)
+- `optimize_build` (full beam search, ~44 1-min steps): ~5-10s
+  (T forward passes to precompute P(X|win,dur); beam loop is pure CPU)
 - `kills_per_minute_pair`: ~1.3s (12 rows batched)
 - `hero_pick_rec` (full 148-candidate sweep via hero mask token): ~5s
   (148 rows batched in a single forward pass — single mask-token query
