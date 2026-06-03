@@ -226,6 +226,15 @@ def hypotheses() -> list[Hypothesis]:
             counter_items=[SILVER_EDGE],
             control_items=CTRL,
             rationale="Silver Edge break disables PA's Blur + Coup de Grace"),
+        Hypothesis(
+            label="Break (Silver Edge) vs Bristleback (passive-defined)",
+            my_hero=JUGG, my_slot=0, allies=ALLIES,
+            base_enemies=ENEMY_BASE, swap_slot=4, target_enemy=BRISTLE,
+            counter_items=[SILVER_EDGE],
+            control_items=CTRL,
+            rationale="Silver Edge break disables Bristleback's signature "
+                      "Bristleback passive (back damage reduction) -- the "
+                      "textbook break target"),
     ]
 
 

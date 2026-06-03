@@ -345,9 +345,13 @@ Headline findings (your mileage varies with the random val sample):
   three cleave items rise (+0.03 to +0.05 absolute) with flat controls
   — a real if smaller signal (the ratio looks modest only because
   Battle Fury's base rate is already high).
-- **Silence vs Anti-Mage/Weaver, Break vs PA: no signal** — v7 did NOT
-  learn these softer/situational counters. Plausibly because in fast
-  Turbo games MKB is *the* answer to PA (not Silver Edge), and
+- **Break (Silver Edge) vs Bristleback vs PA:** directionally correct
+  but below the noise floor. Silver Edge responds MORE to Bristleback
+  (1.22x — the textbook break target, his whole kit is the passive)
+  than to PA (1.05x), but neither clears the control noise. A marginal,
+  correctly-ordered signal rather than a strong one.
+- **Silence vs Anti-Mage/Weaver: no signal** — v7 did NOT learn these
+  softer/situational counters. Plausibly because in fast Turbo games
   silence-pickoff itemization is rarer. An honest negative.
 
 So v7 learned the HARD, near-universal "must-build" counters (true-strike
