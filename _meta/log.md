@@ -120,3 +120,5 @@ skills; read by `/lint`.
 2026-05-27 09:32 session_end session=3d581b91-40c9-4ff4-a157-ed233e3f8568
 2026-06-03 18:45 session_end session=fb42480f-67bb-4309-9f4b-23831e75a7a9
 2026-06-03 18:46 session_end session=13856bcf-e587-4691-a643-05c8455dacdb
+2026-06-03 20:24 wrap v7 serve/ downstream-query layer: V7Foundation wrapper + lookups + 10 query functions + time-integrated build optimizer + counter-item matchup probe. Key findings: win head reverse-causal for itemization; P(X|win,dur) is the right build objective (duration-conditioning tempers expensive-item bias); v7 learned counter-itemization from win-correlation alone (MKB vs PA 2x, detection vs invis 1.5x); hero-appropriate builds. Committed 5f73cd4..b3ae951.
+2026-06-03 20:24 wrap-skip-structured reason=cwd-not-in-experiment (serve/ tooling on completed v7, no new train/val metrics)

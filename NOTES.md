@@ -1370,3 +1370,88 @@ next_candidates:
   - "Build serve/ subdirectory with concrete query functions on v7 foundation"
   - "v8 to reweight outcome_cond if item-rec-conditional-on-win underperforms in actual use"
 ```
+
+## 2026-06-03 — v7 serve/ downstream-query layer
+
+### Did
+Built the full `serve/` subdirectory under the v7 experiment — a
+research-capability demonstration of downstream queries on the frozen
+v7 foundation (no training; HCE-clean, all val data pre-test-window).
+- **Core wrapper** (`v7_inference.py`): `V7Foundation` loads the v7
+  checkpoint, provides a maskable forward + tensor builders. 0.3s cold
+  load on cuda.
+- **Lookups** (`lookups.py`): hero/item ID↔name (OpenDota constants
+  snapshot, re-fetched + confirmed current), per-account player-feature
+  lookup from val parquet + sidecar, empirical hero pick distribution,
+  recursive item recipe `decompose_item()` (0 cost-reconciliation
+  mismatches across 242 priced vocab items).
+- **Queries** (`queries.py`): personal_winprob, lineup_matchup,
+  hero_pick_rec (rewritten to use v7's TRAINED hero-mask token — 9.2s→
+  1.2s, no sampling), item_rec_marginal_sweep (diagnostic baseline),
+  item_rec_odds_ratio (Design A), build_path + build_path_components
+  (Designs B/C), item_rec_given_win, win_vs_duration,
+  kills_per_minute_pair.
+- **Build optimizer** (`build_optimizer.py`): time-integrated build
+  optimization with selling. Beam-searches
+  J = Σ_t p_τ(t|draft)·Σ_{X∈I(t)} P(X|win,dur=t) − λ·spend, integrating
+  over the game-end-time distribution (global empirical PMF lightly
+  draft-shifted, ±15% clamp), with a Monte-Carlo survival-weighted gold
+  curve, 6-slot cap, component upgrades, selling (50%), consumable-buff
+  handling (Aghs/Shard/Moon Shard → consume, no gold), boots
+  exclusivity.
+- **Counter-item probe** (`test_counter_items.py`): controlled-swap
+  experiment, 8 matchup hypotheses, dual-lens (ratio + scale-aware
+  delta) verdict.
+- Notebook (`notebook.qmd`) demos all of the above; README documents
+  the layer; committed across 6 commits (5f73cd4 → b3ae951). Fixed
+  /wrap skill to soft-warn on experiment-README placeholder rot; back-
+  filled v4/v5/v6 README bodies.
+
+### Findings
+- **The win head is REVERSE-CAUSAL for itemization.** A Zeus holding 6
+  luxury items at min 25 reads as 0.72 win prob because *having* them
+  means already snowballing. Maximizing it = "rush expensive items"
+  (the exact bias the user worried about). First build-optimizer
+  attempt with this objective produced degenerate junk.
+- **Odds ratio P(X|win)/P(X|loss) only flags FLEX items**, treats the
+  core build as neutral (both winners and losers build it) → builds 2
+  items and stops. Wrong objective for a full build.
+- **P(X|win,dur=t) is the right build objective** — descriptive
+  "imitate winning builds," duration-conditioned. Duration-conditioning
+  TEMPERS the expensive bias: it ranks 1500g Arcane Boots and 505g Null
+  Talisman above 5600g Divine Rapier at short durations. The optimizer
+  then naturally buys tempo items early and SELLS them for luxury as
+  their duration-conditioned value decays.
+- **Short-game final inventories are a natural experiment** for tempo
+  items (user's insight): a 15-min game ends before players sell their
+  Bracers, so tempo items survive in the final bag. Data confirmed:
+  Bracer 12× more common in short vs long games; v7 reproduced the full
+  duration-conditional itemization (tempo↓, luxury↑ with duration).
+- **Aghs consume mechanic** (user's note): consumable-buff items leave
+  the final inventory the model trained on, so P(item|win,dur) under-
+  states them at long durations — the late-game decline is partly the
+  consume mechanic. Handled by relabeling drop→consume (no gold).
+- **v7 learned counter-itemization from win-correlation alone**, no
+  matchup supervision: MKB vs Phantom Assassin DOUBLES (2.0×),
+  detection vs Riki/Clinkz 1.5×, cleave vs Phantom Lancer real but
+  smaller. Break (Silver Edge) is marginal but ORDERED CORRECTLY
+  (Bristleback 1.22× > PA 1.05×). Silence vs mobile: no signal. The
+  hard near-universal "must-build" counters are learnable; finesse
+  counters are not. 4/8 hypotheses clear the strict threshold.
+- Hero builds are hero-appropriate and distinct: Zeus → caster luxury
+  (Refresher/Octarine/Aghs); Anti-Mage → carry (Battle Fury/Manta/
+  Butterfly/Abyssal/BKB/Skadi).
+
+### Next
+- (Optional) Streamlit/Gradio wrapper for click-and-rerun queries
+  without re-rendering the notebook.
+- (Deferred) Design D — proper causal item estimation (propensity
+  weighting / DR) — blocked on item-timing data we don't have; the
+  duration-conditioned objective is the best honest signal available.
+- (Deferred) patch-7.40-exact item costs (OpenDota constants endpoint
+  only gives live-patch costs; build budget/timing is approximate).
+- (Carryover, deferred) The 5 architectural variants at
+  [[_meta/deferred-foundation-paths]].
+- (Carryover, deferred) DVC formalization, HCE-vs-prior-art ADR.
+- (Carryover, deferred) v8 to reweight outcome_cond if
+  item-rec-conditional-on-win underperforms in real use.
