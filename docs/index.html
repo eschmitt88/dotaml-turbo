@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>research repo</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --ink:#e6e9ef; --mut:#9aa4b2;
+    --line:#2a2f3a; --acc:#7aa2f7; --acc2:#9ece6a; --acc3:#e0af68; --acc4:#bb9af7;
+    --code:#1b1f27; --pill:#222735; --red:#f7768e;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  code,kbd,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  a{color:var(--acc);text-decoration:none;cursor:pointer} a:hover{text-decoration:underline}
+  .wrap{display:grid;grid-template-columns:240px minmax(0,1fr);max-width:1180px;margin:0 auto;}
+  nav{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    padding:22px 14px;border-right:1px solid var(--line);background:var(--panel);}
+  nav .brand{font-size:15px;font-weight:700;margin:0 0 1px;word-break:break-word}
+  nav .brandsub{color:var(--mut);font-size:11.5px;margin-bottom:16px}
+  nav a.lnk{display:flex;justify-content:space-between;align-items:center;color:var(--mut);
+    padding:6px 9px;border-radius:7px;font-size:13.5px}
+  nav a.lnk:hover{background:var(--panel2);color:var(--ink);text-decoration:none}
+  nav a.lnk.active{background:var(--panel2);color:var(--ink)}
+  nav a.lnk .ct{background:var(--pill);border-radius:999px;padding:0 7px;font-size:11px;color:var(--mut)}
+  nav .ghlink{margin-top:18px;font-size:12px}
+  main{padding:34px 42px 110px;min-width:0}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr}nav{position:static;height:auto;
+    display:flex;flex-wrap:wrap;gap:4px}nav .brand,nav .brandsub{width:100%}main{padding:24px 18px 70px}}
+  h1{font-size:27px;margin:0 0 6px} h2{font-size:20px;margin:30px 0 6px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h3{font-size:16px;margin:20px 0 6px} h4{font-size:14px;margin:16px 0 4px}
+  p{max-width:80ch} .lead{color:var(--mut)}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px}
+  .kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 16px}
+  .kpi b{font-size:21px;color:var(--acc)} .kpi small{display:block;color:var(--mut);font-size:11px}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+  tr:hover td{background:var(--panel)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:12px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;display:block}
+  .card:hover{border-color:var(--acc);text-decoration:none}
+  .card .t{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:3px;word-break:break-word}
+  .card .m{color:var(--mut);font-size:12px;line-height:1.45}
+  .tag{display:inline-block;border-radius:5px;padding:0 7px;font-size:11px;font-weight:600;margin:2px 4px 2px 0;
+    border:1px solid var(--line);background:var(--pill);color:var(--mut);white-space:nowrap}
+  .tag.s-done,.tag.s-active,.tag.s-implemented{background:rgba(158,206,106,.13);color:var(--acc2);border-color:rgba(158,206,106,.3)}
+  .tag.s-running,.tag.s-proposed,.tag.s-growing{background:rgba(122,162,247,.13);color:var(--acc);border-color:rgba(122,162,247,.3)}
+  .tag.s-abandoned,.tag.s-failed{background:rgba(247,118,142,.13);color:var(--red);border-color:rgba(247,118,142,.3)}
+  .tag.s-seedling,.tag.s-experimental{background:rgba(224,175,104,.13);color:var(--acc3);border-color:rgba(224,175,104,.3)}
+  .rel{font-weight:700} .rel-5,.rel-4{color:var(--acc2)} .rel-3{color:var(--acc3)} .rel-2,.rel-1,.rel-0{color:var(--mut)}
+  .crumb{color:var(--mut);font-size:13px;margin-bottom:8px}
+  .doc{max-width:80ch} .doc h1{font-size:24px} .doc h2{font-size:19px} .doc h3{font-size:15.5px}
+  .doc pre{background:var(--code);border:1px solid var(--line);border-radius:9px;padding:12px 14px;overflow:auto;font-size:12.5px}
+  .doc code{background:var(--code);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12.5px}
+  .doc pre code{background:none;border:0;padding:0}
+  .doc blockquote{border-left:3px solid var(--acc);margin:10px 0;padding:2px 0 2px 14px;color:var(--mut)}
+  .doc table{font-size:13px} .doc hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+  .doc a.wiki{color:var(--acc4)}
+  .fm{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:10px 0;font-size:13px}
+  .fm dl{display:grid;grid-template-columns:max-content 1fr;gap:3px 14px;margin:0}
+  .fm dt{color:var(--mut);font-family:ui-monospace,monospace;font-size:12px}
+  .fm dd{margin:0;word-break:break-word}
+  .muted{color:var(--mut)} .empty{color:var(--mut);padding:24px 0;font-style:italic}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--acc);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .err{background:rgba(247,118,142,.1);border:1px solid rgba(247,118,142,.3);border-radius:10px;padding:14px 16px;color:var(--ink)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:10px 0}
+  .metrics .mc{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 11px}
+  .metrics .mc b{display:block;font-size:16px;color:var(--acc);font-variant-numeric:tabular-nums}
+  .metrics .mc small{color:var(--mut);font-size:11px;font-family:ui-monospace,monospace;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="brand" id="navBrand">research repo</div>
+    <div class="brandsub mono" id="navSub">loading…</div>
+    <a class="lnk" href="#/" data-v="home"><span>Overview</span></a>
+    <a class="lnk" href="#/experiments" data-v="experiments"><span>Experiments</span><span class="ct" id="ctExp">·</span></a>
+    <a class="lnk" href="#/concepts" data-v="concepts"><span>Concepts</span><span class="ct" id="ctCon">·</span></a>
+    <a class="lnk" href="#/literature" data-v="literature"><span>Literature</span><span class="ct" id="ctLit">·</span></a>
+    <a class="lnk" href="#/mocs" data-v="mocs"><span>Maps of Content</span><span class="ct" id="ctMoc">·</span></a>
+    <a class="lnk" href="#/candidates" data-v="candidates"><span>Candidates</span><span class="ct" id="ctCan">·</span></a>
+    <a class="lnk" href="#/decisions" data-v="decisions"><span>Decisions</span><span class="ct" id="ctDec">·</span></a>
+    <a class="ghlink mono" id="ghLink" target="_blank" rel="noopener">↗ view on GitHub</a>
+  </nav>
+  <main id="view"><p><span class="spin"></span>Reading repository…</p></main>
+</div>
+
+<script>
+"use strict";
+/* ============================================================================
+   Convention-driven static viewer for a research repo.
+   Drop this file at docs/index.html in any repo following the framework
+   layout (literature/ concepts/ mocs/ experiments/ raw/_candidates/
+   docs/decisions/) and enable GitHub Pages from /docs. Zero build:
+   it auto-detects owner/repo from the Pages URL, reads the live file tree
+   in ONE GitHub API call, and pulls file bodies from the raw CDN.
+   Override for local testing with ?owner=&repo=&branch=.
+============================================================================ */
+const $ = s => document.querySelector(s);
+const view = $("#view");
+
+const CONFIG = (() => {
+  const q = new URLSearchParams(location.search);
+  let owner = q.get("owner"), repo = q.get("repo");
+  const branch = q.get("branch") || "main";
+  if ((!owner || !repo) && location.hostname.endsWith("github.io")) {
+    owner = owner || location.hostname.split(".")[0];
+    repo = repo || location.pathname.split("/").filter(Boolean)[0];
+  }
+  return { owner, repo, branch };
+})();
+const API = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}`;
+const RAW = `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}`;
+
+const state = { paths: [], bodies: new Map() };
+
+async function raw(path) {
+  if (state.bodies.has(path)) return state.bodies.get(path);
+  const r = await fetch(`${RAW}/${path}`);
+  const t = r.ok ? await r.text() : null;
+  state.bodies.set(path, t);
+  return t;
+}
+async function rawJSON(path) {
+  try { const t = await raw(path); return t ? JSON.parse(t) : null; } catch { return null; }
+}
+
+/* ---- flat-YAML frontmatter parser (the framework uses flat YAML only) ---- */
+function parseFM(text) {
+  const out = { fm: {}, body: text || "" };
+  if (!text || !text.startsWith("---")) return out;
+  const end = text.indexOf("\n---", 3);
+  if (end < 0) return out;
+  const head = text.slice(3, end).trim();
+  out.body = text.slice(end + 4).replace(/^\s*\n/, "");
+  let key = null;
+  for (const line of head.split("\n")) {
+    if (/^\s*#/.test(line) || !line.trim()) continue;
+    const li = line.match(/^\s*-\s+(.*)$/);
+    if (li && key) { (out.fm[key] = out.fm[key] || []).push(strip(li[1])); continue; }
+    const m = line.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
+    if (!m) continue;
+    key = m[1];
+    const v = m[2].trim();
+    if (v === "") out.fm[key] = out.fm[key] || [];
+    else if (/^\[.*\]$/.test(v)) out.fm[key] = v.slice(1, -1).split(",").map(s => strip(s.trim())).filter(Boolean);
+    else out.fm[key] = strip(v);
+  }
+  return out;
+}
+const strip = s => String(s).replace(/^["']|["']$/g, "").replace(/^\[\[|\]\]$/g, "");
+
+/* ---- compact markdown renderer (+ [[wikilink]] resolution) ---- */
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function inline(s) {
+  s = esc(s);
+  s = s.replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`);
+  s = s.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, tgt, al) =>
+    `<a class="wiki" href="${wikiHref(tgt.trim())}">${esc(al || tgt.trim())}</a>`);
+  s = s.replace(/!?\[([^\]]+)\]\(([^)]+)\)/g, (_, t, u) =>
+    /^https?:/.test(u) ? `<a href="${u}" target="_blank" rel="noopener">${t}</a>` : `<a href="${u}">${t}</a>`);
+  s = s.replace(/\b(https?:\/\/[^\s<)]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>");
+  return s;
+}
+function wikiHref(t) {
+  t = t.replace(/\.md$/, "");
+  if (t.startsWith("concepts/")) return `#/concept/${t.split("/").pop()}`;
+  if (t.startsWith("literature/")) return `#/note/${t}.md`;
+  if (t.startsWith("mocs/")) return `#/moc/${t.split("/").pop()}`;
+  return `#/concept/${t.split("/").pop()}`;
+}
+function md(src) {
+  const lines = (src || "").split("\n");
+  let html = "", i = 0, para = [], listType = null;
+  const flushPara = () => { if (para.length) { html += `<p>${inline(para.join(" "))}</p>`; para = []; } };
+  const closeList = () => { if (listType) { html += `</${listType}>`; listType = null; } };
+  while (i < lines.length) {
+    let ln = lines[i];
+    if (/^```/.test(ln)) {
+      flushPara(); closeList();
+      const buf = []; i++;
+      while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
+      i++; html += `<pre><code>${esc(buf.join("\n"))}</code></pre>`; continue;
+    }
+    if (/^\s*$/.test(ln)) { flushPara(); closeList(); i++; continue; }
+    let h = ln.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { flushPara(); closeList(); html += `<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`; i++; continue; }
+    if (/^\s*([-*_])\1{2,}\s*$/.test(ln)) { flushPara(); closeList(); html += "<hr>"; i++; continue; }
+    if (/^\s*>\s?/.test(ln)) { flushPara(); closeList();
+      const buf = []; while (i < lines.length && /^\s*>\s?/.test(lines[i])) buf.push(lines[i++].replace(/^\s*>\s?/, ""));
+      html += `<blockquote>${md(buf.join("\n"))}</blockquote>`; continue; }
+    let ul = ln.match(/^\s*[-*]\s+(.*)$/), ol = ln.match(/^\s*\d+\.\s+(.*)$/);
+    if (ul || ol) { flushPara();
+      const want = ul ? "ul" : "ol";
+      if (listType && listType !== want) closeList();
+      if (!listType) { listType = want; html += `<${want}>`; }
+      html += `<li>${inline((ul || ol)[1])}</li>`; i++; continue; }
+    closeList(); para.push(ln.trim()); i++;
+  }
+  flushPara(); closeList();
+  return html;
+}
+
+/* ---- path partitioning by convention ---- */
+const isMd = p => p.endsWith(".md");
+const notUnderscore = p => !p.split("/").pop().startsWith("_");
+const expDir = /^experiments\/(\d{4}-\d{2}-\d{2}-[^/]+)\//;
+function buckets() {
+  const P = state.paths;
+  const lit = P.filter(p => p.startsWith("literature/") && isMd(p) && notUnderscore(p));
+  const con = P.filter(p => /^concepts\/[^/]+\.md$/.test(p) && notUnderscore(p));
+  const moc = P.filter(p => /^mocs\/[^/]+\.md$/.test(p) && notUnderscore(p));
+  const can = P.filter(p => p.startsWith("raw/_candidates/") && isMd(p) && notUnderscore(p));
+  const dec = P.filter(p => p.startsWith("docs/decisions/") && isMd(p) && notUnderscore(p));
+  const exps = [...new Set(P.map(p => (p.match(expDir) || [])[1]).filter(Boolean))].sort().reverse();
+  return { lit, con, moc, can, dec, exps };
+}
+
+/* ---- small helpers ---- */
+const slug = p => p.split("/").pop().replace(/\.md$/, "");
+const tag = (v, cls) => v ? `<span class="tag ${cls ? cls + (""+v).toLowerCase() : ""}">${esc(""+v)}</span>` : "";
+const list = (arr, f) => Array.isArray(arr) ? arr.map(f).join("") : "";
+async function loadMany(paths) { return Promise.all(paths.map(async p => ({ path: p, ...parseFM(await raw(p)) }))); }
+function setActive(v){ document.querySelectorAll("nav a.lnk").forEach(a => a.classList.toggle("active", a.dataset.v === v)); }
+
+/* ============================ VIEWS ============================ */
+async function vHome() {
+  setActive("home");
+  const b = buckets();
+  const readme = parseFM(await raw("README.md") || "");
+  const claude = await raw("CLAUDE.md");
+  let title = CONFIG.repo, intro = "";
+  const h1 = (readme.body.match(/^#\s+(.+)$/m) || [])[1];
+  if (h1) title = h1;
+  intro = (readme.body.split(/\n#{1,6}\s/)[0] || "").replace(/^#.*$/m, "").trim().split("\n\n")[0]
+        || (claude ? (parseFM(claude).body.match(/## What this project is about\s+([^#]+)/) || [,""])[1].trim().split("\n\n")[0] : "");
+  view.innerHTML = `
+    <h1>${esc(title)}</h1>
+    <p class="lead">${intro ? inline(esc(intro)) : "A research repository following the framework layout."}</p>
+    <div class="kpi">
+      <div><b>${b.exps.length}</b><small>experiments</small></div>
+      <div><b>${b.con.length}</b><small>concepts</small></div>
+      <div><b>${b.lit.length}</b><small>literature notes</small></div>
+      <div><b>${b.moc.length}</b><small>maps of content</small></div>
+      <div><b>${b.can.length}</b><small>candidates</small></div>
+    </div>
+    ${b.exps.length ? `<h2>Recent experiments</h2><div id="expHome"><span class="spin"></span></div>` : ""}
+    ${b.moc.length ? `<h2>Maps of Content</h2><div class="grid">${list(b.moc, p =>
+      `<a class="card" href="#/moc/${slug(p)}"><div class="t">${esc(slug(p))}</div><div class="m">map of content</div></a>`)}</div>` : ""}
+    <p class="muted" style="margin-top:30px;font-size:12.5px">Live view of
+      <a href="${API.replace('api.github.com/repos','github.com')}" target="_blank" rel="noopener">${CONFIG.owner}/${CONFIG.repo}</a>
+      @ ${CONFIG.branch}. Reads the repo's structured files directly — no build step.</p>`;
+  if (b.exps.length) {
+    const rows = await expRows(b.exps.slice(0, 8));
+    $("#expHome").innerHTML = expTable(rows);
+  }
+}
+
+async function expRows(slugs) {
+  const items = await Promise.all(slugs.map(async s => {
+    const fm = parseFM(await raw(`experiments/${s}/README.md`) || "").fm;
+    return { s, fm };
+  }));
+  return items;
+}
+function expTable(items) {
+  if (!items.length) return `<p class="empty">No dated experiment folders yet.</p>`;
+  return `<table><thead><tr><th>date</th><th>experiment</th><th>status</th><th>hypothesis / result</th></tr></thead><tbody>${
+    items.map(({ s, fm }) => {
+      const summary = fm.result || fm.hypothesis || "";
+      return `<tr>
+        <td class="mono">${esc(fm.date || s.slice(0,10))}</td>
+        <td><a href="#/experiment/${encodeURIComponent(s)}">${esc(fm.slug || s.replace(/^\d{4}-\d{2}-\d{2}-/, ""))}</a></td>
+        <td>${tag(fm.status || "?", "s-")}</td>
+        <td>${esc(String(summary).slice(0, 160))}${String(summary).length > 160 ? "…" : ""}</td>
+      </tr>`;
+    }).join("")}</tbody></table>`;
+}
+
+async function vExperiments() {
+  setActive("experiments");
+  const b = buckets();
+  view.innerHTML = `<h1>Experiments</h1><p class="lead">${b.exps.length} dated experiment folder(s).</p><div id="x"><span class="spin"></span></div>`;
+  $("#x").innerHTML = expTable(await expRows(b.exps));
+}
+
+async function vExperiment(s) {
+  setActive("experiments");
+  const readme = await raw(`experiments/${s}/README.md`);
+  if (!readme) return notFound(`experiments/${s}/README.md`);
+  const { fm, body } = parseFM(readme);
+  const metrics = await rawJSON(`experiments/${s}/metrics.json`);
+  view.innerHTML = `
+    <div class="crumb"><a href="#/experiments">Experiments</a> / ${esc(s)}</div>
+    <h1>${esc(fm.slug || s)}</h1>
+    <div>${tag(fm.status, "s-")}${tag(fm.date)}${list(fm.tags, t => tag(t))}</div>
+    ${metrics ? `<h3>metrics.json</h3>${metricCards(metrics)}` : ""}
+    ${fmBlock(fm, ["related_concepts", "related_experiments", "respects"])}
+    <div class="doc">${md(body)}</div>`;
+}
+function metricCards(m) {
+  const scalars = Object.entries(m).filter(([k, v]) => typeof v === "number" || typeof v === "boolean");
+  const nested = m.final_probe_results && typeof m.final_probe_results === "object" ? Object.entries(m.final_probe_results) : [];
+  const pick = [...scalars, ...nested].slice(0, 12);
+  if (!pick.length) return `<p class="muted">metrics.json present (no scalar headline fields).</p>`;
+  return `<div class="metrics">${pick.map(([k, v]) =>
+    `<div class="mc"><b>${typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(4)) : v}</b><small>${esc(k)}</small></div>`).join("")}</div>`;
+}
+
+async function vConcepts() {
+  setActive("concepts");
+  const b = buckets();
+  const items = await loadMany(b.con);
+  items.sort((a, z) => (z.fm.added || "").localeCompare(a.fm.added || ""));
+  view.innerHTML = `<h1>Concepts</h1><p class="lead">${items.length} atomic ideas. Promote to a Map of Content when ≥5 cluster on a theme.</p>
+    <div class="grid">${items.map(it => `
+      <a class="card" href="#/concept/${slug(it.path)}">
+        <div class="t">${esc(slug(it.path))}</div>
+        <div class="m">${tag(it.fm.status, "s-")}
+          ${(it.fm.used_by && it.fm.used_by.length) ? `<span class="tag">used_by ${it.fm.used_by.length}</span>` : ""}
+          ${(it.fm.sources && it.fm.sources.length) ? `${it.fm.sources.length} source(s)` : '<span class="muted">no sources</span>'}</div>
+      </a>`).join("")}</div>`;
+}
+async function vConcept(s) {
+  setActive("concepts");
+  const path = `concepts/${s}.md`;
+  const text = await raw(path);
+  if (!text) return notFound(path);
+  const { fm, body } = parseFM(text);
+  view.innerHTML = `<div class="crumb"><a href="#/concepts">Concepts</a> / ${esc(s)}</div>
+    <h1>${esc(fm.name || s)}</h1><div>${tag(fm.status, "s-")}${list(fm.tags, t => tag(t))}</div>
+    ${fmBlock(fm, ["sources", "source_papers", "used_by", "related_concepts", "related_experiments"])}
+    <div class="doc">${md(body)}</div>`;
+}
+
+async function vLiterature() {
+  setActive("literature");
+  const b = buckets();
+  const items = await loadMany(b.lit);
+  const groups = { papers: [], posts: [], repos: [], other: [] };
+  for (const it of items) {
+    const k = it.path.split("/")[1];
+    (groups[k] || groups.other).push(it);
+  }
+  const sec = (name, arr) => !arr.length ? "" : `<h2>${name} (${arr.length})</h2><table><thead><tr><th>rel</th><th>title</th><th>status</th><th>year</th></tr></thead><tbody>${
+    arr.sort((a, z) => (+z.fm.relevance || 0) - (+a.fm.relevance || 0)).map(it => `<tr>
+      <td><span class="rel rel-${it.fm.relevance || 0}">${it.fm.relevance ?? "·"}</span></td>
+      <td><a href="#/note/${it.path}">${esc(it.fm.title || it.fm.name || slug(it.path))}</a></td>
+      <td>${tag(it.fm.status, "s-")}</td><td class="mono">${esc(it.fm.year || "")}</td></tr>`).join("")}</tbody></table>`;
+  view.innerHTML = `<h1>Literature</h1><p class="lead">${items.length} processed notes. Relevance is a 0–5 score.</p>
+    ${sec("Papers", groups.papers)}${sec("Repos", groups.repos)}${sec("Posts", groups.posts)}${sec("Other", groups.other)}`;
+}
+async function vNote(path) {
+  setActive("literature");
+  const text = await raw(path);
+  if (!text) return notFound(path);
+  const { fm, body } = parseFM(text);
+  view.innerHTML = `<div class="crumb"><a href="#/literature">Literature</a> / ${esc(path.replace("literature/", ""))}</div>
+    <h1>${esc(fm.title || fm.name || slug(path))}</h1>
+    <div>${tag(fm.kind)}${fm.relevance != null ? `<span class="tag">relevance ${fm.relevance}</span>` : ""}${tag(fm.status, "s-")}
+      ${list(fm.tags, t => tag(t))}</div>
+    ${fm.url ? `<p><a href="${fm.url}" target="_blank" rel="noopener">${esc(fm.url)}</a></p>` : ""}
+    ${fmBlock(fm, ["authors", "venue", "source", "related_concepts", "related_experiments"])}
+    <div class="doc">${md(body)}</div>`;
+}
+
+async function vMocs() {
+  setActive("mocs");
+  const b = buckets();
+  view.innerHTML = `<h1>Maps of Content</h1><p class="lead">${b.moc.length} theme map(s).</p>
+    <div class="grid">${b.moc.map(p => `<a class="card" href="#/moc/${slug(p)}"><div class="t">${esc(slug(p))}</div></a>`).join("") || `<p class="empty">No MoCs yet.</p>`}</div>`;
+}
+async function vMoc(s) {
+  setActive("mocs");
+  const text = await raw(`mocs/${s}.md`);
+  if (!text) return notFound(`mocs/${s}.md`);
+  const { fm, body } = parseFM(text);
+  view.innerHTML = `<div class="crumb"><a href="#/mocs">MoCs</a> / ${esc(s)}</div><h1>${esc(fm.title || s)}</h1>
+    ${fmBlock(fm, ["concepts", "tags"])}<div class="doc">${md(body)}</div>`;
+}
+
+async function vCandidates() {
+  setActive("candidates");
+  const b = buckets();
+  const items = await loadMany(b.can);
+  view.innerHTML = `<h1>Candidates</h1><p class="lead">${items.length} triage file(s) from /discover &amp; /digest, awaiting curation.</p>
+    <div class="grid">${items.map(it => `<a class="card" href="#/candidate/${encodeURIComponent(it.path)}">
+      <div class="t">${esc(slug(it.path))}</div><div class="m">${esc((it.fm.topic || it.fm.date || ""))}</div></a>`).join("") || `<p class="empty">No candidates.</p>`}</div>`;
+}
+async function vCandidate(path) {
+  setActive("candidates");
+  const text = await raw(path);
+  if (!text) return notFound(path);
+  const { body } = parseFM(text);
+  view.innerHTML = `<div class="crumb"><a href="#/candidates">Candidates</a> / ${esc(slug(path))}</div><div class="doc">${md(body)}</div>`;
+}
+
+async function vDecisions() {
+  setActive("decisions");
+  const b = buckets();
+  const items = await loadMany(b.dec);
+  view.innerHTML = `<h1>Decisions</h1><p class="lead">${items.length} architecture decision record(s).</p>
+    ${items.map(it => `<div class="card" style="margin:8px 0"><a href="#/decision/${encodeURIComponent(it.path)}">
+      <div class="t">${esc(slug(it.path))}</div></a></div>`).join("") || `<p class="empty">No ADRs yet.</p>`}`;
+}
+async function vDecision(path) {
+  setActive("decisions");
+  const text = await raw(path);
+  if (!text) return notFound(path);
+  view.innerHTML = `<div class="crumb"><a href="#/decisions">Decisions</a> / ${esc(slug(path))}</div><div class="doc">${md(parseFM(text).body)}</div>`;
+}
+
+/* ---- shared bits ---- */
+function fmBlock(fm, keys) {
+  const rows = keys.filter(k => fm[k] && (!Array.isArray(fm[k]) || fm[k].length)).map(k => {
+    const v = fm[k];
+    const val = Array.isArray(v) ? v.map(x => inline(esc(String(x)))).join(", ") : inline(esc(String(v)));
+    return `<dt>${k}</dt><dd>${val}</dd>`;
+  }).join("");
+  return rows ? `<div class="fm"><dl>${rows}</dl></div>` : "";
+}
+function notFound(path) {
+  view.innerHTML = `<div class="err"><strong>Not found:</strong> <code>${esc(path)}</code><br>
+    <span class="muted">It may not exist on <code>${CONFIG.branch}</code> yet.</span></div>`;
+}
+
+/* ============================ ROUTER ============================ */
+const routes = [
+  [/^\/?$/, vHome],
+  [/^\/experiments$/, vExperiments],
+  [/^\/experiment\/(.+)$/, m => vExperiment(decodeURIComponent(m[1]))],
+  [/^\/concepts$/, vConcepts],
+  [/^\/concept\/(.+)$/, m => vConcept(decodeURIComponent(m[1]))],
+  [/^\/literature$/, vLiterature],
+  [/^\/note\/(.+)$/, m => vNote(decodeURIComponent(m[1]))],
+  [/^\/mocs$/, vMocs],
+  [/^\/moc\/(.+)$/, m => vMoc(decodeURIComponent(m[1]))],
+  [/^\/candidates$/, vCandidates],
+  [/^\/candidate\/(.+)$/, m => vCandidate(decodeURIComponent(m[1]))],
+  [/^\/decisions$/, vDecisions],
+  [/^\/decision\/(.+)$/, m => vDecision(decodeURIComponent(m[1]))],
+];
+async function route() {
+  const h = location.hash.replace(/^#/, "") || "/";
+  for (const [re, fn] of routes) {
+    const m = h.match(re);
+    if (m) { try { await fn(m); } catch (e) { view.innerHTML = `<div class="err">Render error: ${esc(e.message)}</div>`; } window.scrollTo(0, 0); return; }
+  }
+  view.innerHTML = `<div class="err">Unknown route: <code>${esc(h)}</code></div>`;
+}
+
+/* ============================ BOOT ============================ */
+async function boot() {
+  if (!CONFIG.owner || !CONFIG.repo) {
+    view.innerHTML = `<div class="err">Could not detect the repository. Open this page via GitHub Pages,
+      or append <code>?owner=USER&amp;repo=REPO</code> for local testing.</div>`;
+    return;
+  }
+  $("#navBrand").textContent = CONFIG.repo;
+  $("#navSub").textContent = `${CONFIG.owner} · ${CONFIG.branch}`;
+  $("#ghLink").href = `https://github.com/${CONFIG.owner}/${CONFIG.repo}`;
+  try {
+    const r = await fetch(`${API}/git/trees/${CONFIG.branch}?recursive=1`);
+    if (!r.ok) throw new Error(`GitHub API ${r.status} (${r.status === 403 ? "rate limit — try again within the hour" : r.statusText})`);
+    const tree = await r.json();
+    state.paths = (tree.tree || []).filter(t => t.type === "blob").map(t => t.path);
+    const b = buckets();
+    $("#ctExp").textContent = b.exps.length; $("#ctCon").textContent = b.con.length;
+    $("#ctLit").textContent = b.lit.length; $("#ctMoc").textContent = b.moc.length;
+    $("#ctCan").textContent = b.can.length; $("#ctDec").textContent = b.dec.length;
+    document.title = `${CONFIG.repo} · research`;
+    window.addEventListener("hashchange", route);
+    await route();
+  } catch (e) {
+    view.innerHTML = `<div class="err"><strong>Could not read the repository.</strong><br>${esc(e.message)}</div>`;
+  }
+}
+boot();
+</script>
+</body>
+</html>
