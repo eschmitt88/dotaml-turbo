@@ -29,8 +29,8 @@ player_features:
   # NEW canonical clean parquet path.
   out_dir: "data/snapshots/7.40-2025-12-16/processed/player_features_prepatch_clean"
   raw_roots:
-    - "data/history/turbo"
-    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+    - "/home/eschmitt/projects/dota-datalake/turbo/history"
+    - "/home/eschmitt/projects/dota-datalake/turbo/snapshot-7.40"
 
 # Features — identical to prepatch-740.
 features:

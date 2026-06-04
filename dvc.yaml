@@ -24,7 +24,7 @@ stages:
     deps:
       - experiments/2026-05-15-plateau-baseline-740/build_features.py
       - splits.yaml
-      - data/snapshots/7.40-2025-12-16/raw
+      - /home/eschmitt/projects/dota-datalake/turbo/snapshot-7.40
     outs:
       - data/snapshots/7.40-2025-12-16/processed/train.parquet
       - data/snapshots/7.40-2025-12-16/processed/val.parquet

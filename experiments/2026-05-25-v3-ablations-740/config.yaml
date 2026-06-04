@@ -42,8 +42,8 @@ rich_cols:
   smoke_train_filename: "train_smoke.parquet"
   smoke_val_filename: "val_smoke.parquet"
   raw_roots:
-    - "data/history/turbo"
-    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+    - "/home/eschmitt/projects/dota-datalake/turbo/history"
+    - "/home/eschmitt/projects/dota-datalake/turbo/snapshot-7.40"
   feat_bounds:
     duration:        [0, 7200]
     kills:           [0, 100]
@@ -61,8 +61,8 @@ rich_cols:
 # Unmatched rows route to anonymous=0.
 account_sidecar:
   raw_roots:
-    - "data/history/turbo"
-    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+    - "/home/eschmitt/projects/dota-datalake/turbo/history"
+    - "/home/eschmitt/projects/dota-datalake/turbo/snapshot-7.40"
   prior_sidecar_train_path:
     "experiments/2026-05-19-player-embedding-prelim-740/sidecar/account_ids_train.parquet"
   prior_sidecar_val_path:

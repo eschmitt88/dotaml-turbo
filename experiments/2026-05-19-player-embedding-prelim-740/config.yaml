@@ -51,8 +51,8 @@ account_sidecar:
   smoke_val_filename: "account_ids_val_smoke.parquet"
   # Raw roots — same as build_features.py
   raw_roots:
-    - "data/history/turbo"
-    - "data/snapshots/7.40-2025-12-16/raw/turbo"
+    - "/home/eschmitt/projects/dota-datalake/turbo/history"
+    - "/home/eschmitt/projects/dota-datalake/turbo/snapshot-7.40"
 
 # Train subsetting (mirror parent for clean A/B)
 train_subset_size: 5000000
