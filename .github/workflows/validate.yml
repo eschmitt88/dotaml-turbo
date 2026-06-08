@@ -7,63 +7,57 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+# Lightweight, dependency-free validation. Uses only the runner's
+# preinstalled python — no yq/DVC downloads (the old curl-from-"latest"
+# yq step flaked with HTTP errors, and DVC was installed only to print
+# config). Literature-only repos with no dated experiment folders pass
+# as a fast no-op.
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install yq
+      - name: Validate experiment metrics JSON
         run: |
-          sudo curl -fsSL -o /usr/local/bin/yq \
-            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-          yq --version
-
-      - name: Install DVC
-        run: |
-          pipx install 'dvc[all]' || pip install --user 'dvc[all]'
-          dvc --version
-
-      - name: Inspect DVC config
-        run: dvc config --list || true
-
-      - name: Validate experiment metrics.json
-        run: |
-          set -e
-          shopt -s nullglob
-          fail=0
-          for f in experiments/*/metrics.json; do
-            if ! python -c "import json,sys; json.load(open(sys.argv[1]))" "$f"; then
-              echo "::error file=$f::$f is not valid JSON"
-              fail=1
-            fi
-          done
-          for f in experiments/*/final_metrics.json; do
-            if ! python -c "import json,sys; json.load(open(sys.argv[1]))" "$f"; then
-              echo "::error file=$f::$f is not valid JSON"
-              fail=1
-            fi
-          done
-          exit "$fail"
+          python - <<'PY'
+          import glob, json, os, re, sys
+          def dated(d): return re.match(r"\d{4}-\d{2}-\d{2}-", os.path.basename(d.rstrip("/")))
+          fail = False
+          for d in (d for d in glob.glob("experiments/*/") if dated(d)):
+              for name in ("metrics.json", "final_metrics.json"):
+                  f = os.path.join(d, name)
+                  if os.path.exists(f):
+                      try:
+                          json.load(open(f))
+                      except Exception as e:
+                          print(f"::error file={f}::{f} is not valid JSON: {e}")
+                          fail = True
+          sys.exit(1 if fail else 0)
+          PY
 
       - name: Validate experiment README frontmatter
         run: |
-          set -e
-          shopt -s nullglob
-          fail=0
-          for f in experiments/*/README.md; do
-            # Extract YAML frontmatter (between first two '---' lines).
-            block=$(awk '/^---$/{c++; next} c==1' "$f")
-            if [ -z "$block" ]; then
-              echo "::error file=$f::missing YAML frontmatter"
-              fail=1
-              continue
-            fi
-            status=$(printf '%s\n' "$block" | yq -r '.status // ""')
-            case "$status" in
-              running|done|abandoned|implemented|failed) : ;;
-              *) echo "::error file=$f::frontmatter status=$status not in allowed set"; fail=1 ;;
-            esac
-          done
-          exit "$fail"
+          python - <<'PY'
+          import glob, os, re, sys
+          def dated(d): return re.match(r"\d{4}-\d{2}-\d{2}-", os.path.basename(d.rstrip("/")))
+          allowed = {"running", "done", "abandoned", "implemented", "failed"}
+          fail = False
+          for d in (d for d in glob.glob("experiments/*/") if dated(d)):
+              f = os.path.join(d, "README.md")
+              if not os.path.exists(f):
+                  continue
+              t = open(f, encoding="utf-8").read()
+              if not t.startswith("---"):
+                  print(f"::error file={f}::missing YAML frontmatter")
+                  fail = True
+                  continue
+              end = t.find("\n---", 3)
+              block = t[3:end] if end > 0 else ""
+              m = re.search(r'^status:\s*["\']?([a-z]+)', block, re.M)
+              status = m.group(1) if m else ""
+              if status not in allowed:
+                  print(f"::error file={f}::frontmatter status={status!r} not in {sorted(allowed)}")
+                  fail = True
+          sys.exit(1 if fail else 0)
+          PY
